@@ -8,11 +8,12 @@ import WeatherStation from './WeatherStation'
 import ProtectedRoute from './ProtectedRoute';
 import { Switch, Route } from 'react-router-dom';
 import FetchUser from './FetchUser';
+import { Grid } from 'semantic-ui-react';
 
 class App extends Component {
   render() {
     return (
-      <div>
+      <Grid>
         <NavBar />
         <Flash />
         <FetchUser>
@@ -23,7 +24,7 @@ class App extends Component {
             <Route component={NoMatch} />
           </Switch>
         </FetchUser>
-      </div>
+      </Grid>
     );
   }
 }
