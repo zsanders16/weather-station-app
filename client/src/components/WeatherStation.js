@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Grid } from 'semantic-ui-react';
+import { Container, Grid } from 'semantic-ui-react';
 import CurrentConditions from './CurrentConditions';
 import Compare from './Compare';
 import Favorites from './Favorites'
@@ -8,17 +8,19 @@ import Favorites from './Favorites'
 class WeatherStation extends Component {
 
   showHome = () => (
-    <Grid.Row columns={16}>
-      <Grid.Column width={12} className='ws_area'>
-        <CurrentConditions />
-      </Grid.Column>
-      <Grid.Column width={4} className='ws_area'>
-        <Favorites />
-      </Grid.Column>
-    </Grid.Row>
+
+        <Grid.Row columns={16}>
+          <Grid.Column width={12} className='ws_area'>
+            <CurrentConditions />
+          </Grid.Column>
+          <Grid.Column width={4} className='ws_area'>
+            <Favorites />
+          </Grid.Column>
+        </Grid.Row>
+
   )
 
-  render(){
+  changeOnNav = () => {
     let { navbarItem } = this.props
     switch (navbarItem) {
         case 'home':
@@ -28,7 +30,16 @@ class WeatherStation extends Component {
         default:
           return <h1>Component has not been made yet</h1>
     }
+  }
 
+  render(){
+    return(
+      <Container>
+        <Grid>
+          {this.changeOnNav()}
+        </Grid>
+      </Container>
+    )
   }
 }
 
