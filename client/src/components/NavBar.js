@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { handleLogout } from '../actions/auth';
 import { withRouter } from 'react-router-dom';
-import { Grid, Menu, Input, Dropdown } from 'semantic-ui-react';
+import { Segment, Grid, Menu, Input, Dropdown } from 'semantic-ui-react';
 import { setNavbar} from '../actions/navbar';
 
 class NavBar extends Component {
@@ -19,7 +19,7 @@ class NavBar extends Component {
     const { activeItem } = this.state;
     if(user.id) {
       return(
-        <Menu pointing fluid>
+        <Menu.Menu>
           <Menu.Item name='home' active={activeItem === 'home'} onClick={this.handleItemClick} />
           <Menu.Item name='historical' active={activeItem === 'historical'} onClick={this.handleItemClick} />
           <Menu.Item name='local' active={activeItem === 'local'} onClick={this.handleItemClick} />
@@ -36,7 +36,7 @@ class NavBar extends Component {
               placeholder='Search...'
               onSubmit={this.handleSearch} />
           </Menu.Item>
-        </Menu>
+        </Menu.Menu>
       )
     }
   }
@@ -77,16 +77,6 @@ class NavBar extends Component {
             { this.leftNavs() }
             { this.rightNavs() }
         </Menu>
-
-
-
-
-        {/*}<Menu pointing secondary>
-          <Link to='/'>
-            <Menu.Item name='home' />
-          </Link>
-
-        </Menu> */}
       </div>
     )
   }
