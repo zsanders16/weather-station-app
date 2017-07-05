@@ -16,5 +16,5 @@
 .byebug_history
 
 # Ignore node_modules
-./arduino/node_modules
-./client/node_modules
+/arduino/node_modules
+/client/node_modules
