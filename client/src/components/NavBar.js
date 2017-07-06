@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { handleLogout } from '../actions/auth';
 import { withRouter } from 'react-router-dom';
-import { Segment, Grid, Menu, Input, Dropdown } from 'semantic-ui-react';
+import { Menu, Input, Dropdown } from 'semantic-ui-react';
 import { setNavbar} from '../actions/navbar';
 
 class NavBar extends Component {
@@ -15,7 +15,7 @@ class NavBar extends Component {
   }
 
   leftNavs = () => {
-    const { user, dispatch, history } = this.props;
+    const { user } = this.props;
     const { activeItem } = this.state;
     if(user.id) {
       return(
@@ -69,7 +69,6 @@ class NavBar extends Component {
   }
 
   render() {
-    const { activeItem } = this.state
     return (
       <div>
         <Menu pointing fluid>

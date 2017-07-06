@@ -9,6 +9,9 @@ import ProtectedRoute from './ProtectedRoute';
 import { Switch, Route } from 'react-router-dom';
 import FetchUser from './FetchUser';
 
+// NOTE: for testing only
+import WeatherApi from './WeatherApi'
+
 class App extends Component {
   render() {
     return (
@@ -20,6 +23,7 @@ class App extends Component {
             <ProtectedRoute exact path='/' component={WeatherStation} />
             <Route exact path='/login' component={Login} />
             <Route exact path='/register' component={Register} />
+            <Route exact path='/weather_api' component={WeatherApi} />
             <Route component={NoMatch} />
           </Switch>
         </FetchUser>

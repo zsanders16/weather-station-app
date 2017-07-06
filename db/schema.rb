@@ -10,10 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170705184133) do
+ActiveRecord::Schema.define(version: 20170706145215) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "addresses", force: :cascade do |t|
+    t.string "street1", null: false
+    t.string "street2"
+    t.string "city", null: false
+    t.string "state", null: false
+    t.string "zipcode", null: false
+    t.bigint "favorite_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["favorite_id"], name: "index_addresses_on_favorite_id"
+  end
+
+  create_table "favorites", force: :cascade do |t|
+    t.string "temperature", null: false
+    t.string "rel_humidity", null: false
+    t.string "pressure"
+    t.string "light_intensity"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_favorites_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "provider", default: "email", null: false
@@ -42,6 +65,17 @@ ActiveRecord::Schema.define(version: 20170705184133) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
+  end
+
+  create_table "weathers", force: :cascade do |t|
+    t.float "celsius", null: false
+    t.float "fahrenheit"
+    t.float "kelvin"
+    t.float "rel_humidity", null: false
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_weathers_on_user_id"
   end
 
 end
