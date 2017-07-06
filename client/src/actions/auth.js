@@ -40,8 +40,9 @@ export const handleLogin = (email, password, history) => {
         history.push('/');
       })
       .catch( res => {
-        const message = res.response.data.errors.full_messages.join(',');
-        dispatch(setFlash(message, 'error'));
+        console.log(res);
+        // const message = res.response.data.errors.full_messages.join(',');
+        dispatch(setFlash('Failed to log in. Please try again.', 'error'));
       })
   }
 }

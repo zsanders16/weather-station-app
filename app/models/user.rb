@@ -5,6 +5,11 @@ class User < ActiveRecord::Base
           :omniauthable
   include DeviseTokenAuth::Concerns::User
 
+
   has_one :favorite
   has_many :weathers
+
+
+  has_one :current_location, dependent: :destroy
+
 end

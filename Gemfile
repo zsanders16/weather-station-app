@@ -28,6 +28,8 @@ gem 'puma', '~> 3.7'
 gem 'omniauth'
 gem 'devise'
 gem 'devise_token_auth'
+gem 'dotenv-rails'
+gem 'geocoder'
 
 # Will Paginate
 gem 'will_paginate'
