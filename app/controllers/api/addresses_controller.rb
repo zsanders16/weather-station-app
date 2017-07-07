@@ -3,7 +3,6 @@ class AddressesController < ApplicationController
   before_action :set_address, only: [:show, :update, :destroy]
 
   def index
-    @favorite = current_user.favorites.find(params[:favorite_id])
     @addresses = @favorite.addresses.all
     render json: @addresses
   end
@@ -48,7 +47,17 @@ class AddressesController < ApplicationController
   end
 
   def address_params
-    params.require(:address)
-      .permit(:latitude, :longitude, :street, :city, :state, :zipcode)
+    address = params.require(:address)
+      .permit(:street1, :street2, :city, :state, :zipcode)
+
+    # format the address as a google string
+    # set the geolocation lat and lng from google
+    geo = Geocoder::search(address.format_geolocation)
+    binding.pry
+    address.latitude = geo.coordinates[0]
+    address.longitude = geo.coordinates[1]
+    address.address = geo.address
+
+    address
   end
 end

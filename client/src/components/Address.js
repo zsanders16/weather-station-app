@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form } from 'semantic-ui-react'
+import { Button, Form, Segment } from 'semantic-ui-react'
 import { connect } from 'react-redux';
 import { addressDelete, addressUpdate, addressCreate } from '../actions/address'
 
@@ -49,43 +49,46 @@ class Address extends Component {
   render() {
     let { street1, street2, city, state, zipcode } = this.state
     return (
-      <Form onSubmit={this.selectAddress}>
-        <Form.Input label='Street'
-                    id='street1'
-                    value={street1}
-                    placeholder='4800 N 2300 S'
-                    required
-                    onChange={this.onChange} />
-        <Form.Input label='Street'
-                    id='street2'
-                    value={street2}
-                    placeholder='APT #2334'
-                    onChange={this.onChange} />
-        <Form.Input label='City'
-                    id='city'
-                    value={city}
-                    placeholder='City'
-                    required
-                    onChange={this.onChange} />
-        <Form.Input label='State'
-                    id='state'
-                    value={state}
-                    placeholder='State'
-                    required
-                    onChange={this.onChange} />
-        <Form.Input label='Zip Code'
-                    id='zipcode'
-                    value={zipcode}
-                    placeholder='Zip Code'
-                    required
-                    onChange={this.onChange} />
-        <Button type='submit'>Submit</Button>
-      </Form>
+      <Segment>
+        <Form onSubmit={this.selectAddress}>
+          <Form.Input label='Street'
+                      id='street1'
+                      value={street1}
+                      placeholder='4800 N 2300 S'
+                      required
+                      onChange={this.onChange} />
+          <Form.Input label='Street'
+                      id='street2'
+                      value={street2}
+                      placeholder='APT #2334'
+                      onChange={this.onChange} />
+          <Form.Input label='City'
+                      id='city'
+                      value={city}
+                      placeholder='City'
+                      required
+                      onChange={this.onChange} />
+          <Form.Input label='State'
+                      id='state'
+                      value={state}
+                      placeholder='State'
+                      required
+                      onChange={this.onChange} />
+          <Form.Input label='Zip Code'
+                      id='zipcode'
+                      value={zipcode}
+                      placeholder='Zip Code'
+                      required
+                      onChange={this.onChange} />
+          <Button type='submit'>Submit</Button>
+        </Form>
+      </Segment>
     )
   }
 }
 
 const mapStateToProps = ( state ) => {
+  debugger
   return { addresses: this.state.addresses }
 }
 

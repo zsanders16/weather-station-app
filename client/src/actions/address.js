@@ -10,7 +10,7 @@ const ADDRESS_DELETE = 'ADDRESS_DELETE'
 
 export const address = () => {
   return (dispatch) => {
-    axios.get(`/user/${id}/addresses`)
+    axios.get(`/user/addresses`)
       .then( resp => {
         let { data: addresses, headers } = resp
         dispatch({ type: ADDRESS, addresses, headers })
@@ -24,7 +24,7 @@ export const address = () => {
 
 export const addressCreate = (address) => {
   return (dispatch) => {
-    axios.post(`/users/${id}/address`)
+    axios.post(`/users/address`)
       .then( resp => {
         let { data: address } = resp
         dispatch({ type: ADDRESS_CREATE, address })
@@ -46,7 +46,7 @@ export const addressEdit = (address_id) => {
 
 export const addressUpdate = (address) => {
   return (dispatch) => {
-    axios.patch(`/user/${id}/address`, address )
+    axios.patch(`/user/addresses/${address.id}`, address )
       .then( resp => {
         let { data: address } = resp
         dispatch({ type: ADDRESS_UPDATE, address })
@@ -60,9 +60,9 @@ export const addressUpdate = (address) => {
 
 export const addressDelete = (address_id) => {
   return (dispatch) => {
-    axios.delete(`/user/${id}/address/${address_id}`)
+    axios.delete(`/user/address/${address.id}`)
       .then( resp => {
-        if( resp.status = 200 ) {
+        if( resp.status === 200 ) {
           dispatch({ type: ADDRESS_DELETE, address_id })
           dispatch(setFlash('Address deleted!', 'success'))
         }

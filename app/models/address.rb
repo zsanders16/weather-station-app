@@ -1,19 +1,28 @@
+# == Schema Information
+#
+# Table name: addresses
+#
+#  id          :integer          not null, primary key
+#  address     :string           not null
+#  street1     :string           not null
+#  street2     :string           not null
+#  city        :string           not null
+#  state       :string           not null
+#  zipcode     :integer          not null
+#  favorite_id :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  latitude    :float
+#  longitude   :float
+#
+
 class Address < ApplicationRecord
-  validates_presence_of :street1, :street2, :city, :state, :zipcode
+  validates_presence_of :address, :street1, :city, :state, :zipcode, :latitude, :longitude
 
   belongs_to :favorite
 
-  geocoded_by :full_street_address
-  after_validation :geocode
-
-  reverse_geocoded_by :latitude, :longitude
-  after_validation :reverse_geocode
-
-  after_validation :geocode, if: lambda do |obj|
-    this.address.present? && this.address_changed?
-  end
-
-  def full_street_address
+  def format_geolocation
     "#{street1}, #{street2}, #{city}, #{state} #{zipcode}"
   end
+
 end
