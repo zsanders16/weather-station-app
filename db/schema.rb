@@ -16,11 +16,12 @@ ActiveRecord::Schema.define(version: 20170707004755) do
   enable_extension "plpgsql"
 
   create_table "addresses", force: :cascade do |t|
+    t.string "address", null: false
     t.string "street1", null: false
-    t.string "street2"
+    t.string "street2", null: false
     t.string "city", null: false
     t.string "state", null: false
-    t.string "zipcode", null: false
+    t.integer "zipcode", null: false
     t.bigint "favorite_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -40,10 +41,7 @@ ActiveRecord::Schema.define(version: 20170707004755) do
   end
 
   create_table "favorites", force: :cascade do |t|
-    t.string "temperature", null: false
-    t.string "rel_humidity", null: false
-    t.string "pressure"
-    t.string "light_intensity"
+    t.string "title", null: false
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -90,5 +88,6 @@ ActiveRecord::Schema.define(version: 20170707004755) do
     t.index ["user_id"], name: "index_weathers_on_user_id"
   end
 
+  add_foreign_key "addresses", "favorites"
   add_foreign_key "current_locations", "users"
 end
