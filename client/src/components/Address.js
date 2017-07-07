@@ -1,7 +1,7 @@
-import React, { component } from 'react';
+import React, { Component } from 'react';
 import { Button, Form } from 'semantic-ui-react'
 import { connect } from 'react-redux';
-import { addressDelete, addressEdit, addressCreate } from '../actions/address'
+import { addressDelete, addressUpdate, addressCreate } from '../actions/address'
 
 // NOTE:
 // Routes:
@@ -20,7 +20,7 @@ class Address extends Component {
     } else if( cmd === 'edit' ){
       // filter the addresses
       let address = this.props.addresses.find( (address) => {
-        parseInt(address.id,10) === parseInt(id,10)
+        return parseInt(address.id,10) === parseInt(id,10)
       })
       this.setState({ address })
     }
@@ -35,7 +35,7 @@ class Address extends Component {
 
   onSubmit = () => {
     let { dispatch, history } = this.props
-    let { id, cmd } = this.props.match
+    let { cmd } = this.props.match
     // NOTE: the 'cmd' should be received as part of the route
     if( cmd === 'create'){
       dispatch(addressCreate(this.state))

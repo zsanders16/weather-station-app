@@ -10,7 +10,7 @@ const ADDRESS_DELETE = 'ADDRESS_DELETE'
 
 export const address = () => {
   return (dispatch) => {
-    axios.get('/user/${id}/addresses')
+    axios.get(`/user/${id}/addresses`)
       .then( resp => {
         let { data: addresses, headers } = resp
         dispatch({ type: ADDRESS, addresses, headers })
@@ -19,20 +19,18 @@ export const address = () => {
       .catch( resp => {
         dispatch(setFlash('Addresses not found!', 'error'))
       })
-    }
   }
-  return
 }
 
 export const addressCreate = (address) => {
   return (dispatch) => {
-    axios.post('/users/${}/address')
-      .then( resp = > {
+    axios.post(`/users/${id}/address`)
+      .then( resp => {
         let { data: address } = resp
         dispatch({ type: ADDRESS_CREATE, address })
         dispatch(setFlash('Address created!', 'success'))
       })
-      .catch( resp = > {
+      .catch( resp => {
         dispatch(setFlash('Address not created!', 'error'))
       })
   }
@@ -48,7 +46,7 @@ export const addressEdit = (address_id) => {
 
 export const addressUpdate = (address) => {
   return (dispatch) => {
-    axios.patch('/user/${id}/address', address )
+    axios.patch(`/user/${id}/address`, address )
       .then( resp => {
         let { data: address } = resp
         dispatch({ type: ADDRESS_UPDATE, address })
@@ -62,7 +60,7 @@ export const addressUpdate = (address) => {
 
 export const addressDelete = (address_id) => {
   return (dispatch) => {
-    axios.delete('/user/${id}/address/${address_id}')
+    axios.delete(`/user/${id}/address/${address_id}`)
       .then( resp => {
         if( resp.status = 200 ) {
           dispatch({ type: ADDRESS_DELETE, address_id })
