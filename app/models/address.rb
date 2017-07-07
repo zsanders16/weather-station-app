@@ -10,6 +10,10 @@ class Address < ApplicationRecord
   after_validation :reverse_geocode
 
   after_validation :geocode, if: lambda do |obj|
-    obj.address.present? && obj.address_changed?
+    this.address.present? && this.address_changed?
+  end
+
+  def full_street_address
+    "#{street1}, #{street2}, #{city}, #{state} #{zipcode}"
   end
 end

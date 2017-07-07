@@ -2,7 +2,7 @@ const pg = require('pg')
 
 const config = {
   // user: 'arduino',
-  database: 'arduino',
+  database: 'weather_station_development',
   // password: 'password',
   host: 'localhost',
   port: 5432,

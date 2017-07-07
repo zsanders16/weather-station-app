@@ -17,6 +17,7 @@
 
 # Ignore node_modules
 /arduino/node_modules
+/arduino/src/node_modules
 /client/node_modules
 
 .env
