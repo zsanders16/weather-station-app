@@ -6,10 +6,7 @@ class User < ActiveRecord::Base
   include DeviseTokenAuth::Concerns::User
 
 
-  has_one :favorite
-  has_many :weathers
-
-
-  has_one :current_location, dependent: :destroy
-
+  has_one :favorite, dependent: :destroy
+  has_many :weathers, dependent: :destroy
+  has_many :addresses, dependent: :destroy
 end

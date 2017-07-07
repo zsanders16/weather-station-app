@@ -11,6 +11,7 @@ import FetchUser from './FetchUser';
 
 // NOTE: for testing only
 import WeatherApi from './WeatherApi'
+import Address from './Address'
 
 class App extends Component {
   render() {
@@ -24,6 +25,7 @@ class App extends Component {
             <Route exact path='/login' component={Login} />
             <Route exact path='/register' component={Register} />
             <Route exact path='/weather_api' component={WeatherApi} />
+            <Route exact path='/address' component={Address} />
             <Route component={NoMatch} />
           </Switch>
         </FetchUser>
