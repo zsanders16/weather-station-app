@@ -5,6 +5,7 @@ import CurrentConditions from './CurrentConditions';
 import Compare from './Compare';
 import Favorites from './Favorites'
 import CurrentLocation from './CurrentLocation'
+import CurrentLocationConditions from './CurrentLocationConditions'
 
 
 class WeatherStation extends Component {
@@ -13,6 +14,9 @@ class WeatherStation extends Component {
     <Grid.Row columns={16}>
       <Grid.Column width={16}>
         <CurrentLocation />
+      </Grid.Column>
+      <Grid.Column width={16}>
+        <CurrentLocationConditions />
       </Grid.Column>
       <Grid.Column width={12} className='ws_area'>
         <CurrentConditions />
