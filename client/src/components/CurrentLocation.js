@@ -1,7 +1,7 @@
 import React from 'react';
 import { Segment, Dimmer, Loader, Image } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { get_currentLocation, set_current_location, update_current_location } from '../actions/locations'
+import { set_current_location } from '../actions/locations'
 import CurrentAddress from './CurrentAddress'
 import Lat from './Lat'
 import Long from './Long'
@@ -16,23 +16,9 @@ class CurrentLocation extends React.Component{
 
   setPosition = (latitude, longitude) => {
     let { dispatch } = this.props
-    if(!this.props.current_location){
       dispatch(set_current_location(latitude, longitude))
-    }else{
-      if((!this.props.currentLocation.latitude === latitude && !this.props.currentLocation.longitude === longitude ))
-       dispatch(update_current_location(latitude, longitude))
     }
 
-    //  if(this.props.current_location){
-    //    if(this.props.currentLocation.latitude === latitude && this.props.currentLocation.longitude === longitude ){
-    //      break
-    //    }else{
-    //      update_current_location(latitude, longitude)
-    //    }
-    //  }else{
-    //    set_current_location(latitude, longitude)
-    //  }
-  }
 
   GetLocation = () => {
     if (navigator.geolocation) {
@@ -40,9 +26,14 @@ class CurrentLocation extends React.Component{
 
            let latitude = position.coords.latitude;
            let longitude = position.coords.longitude;
+           console.log( latitude)
+           console.log(longitude)
 
            this.setPosition(latitude, longitude)
     })
+
+  }else{
+    console.log('Your browser doesnt support  this')
   }
 }
 

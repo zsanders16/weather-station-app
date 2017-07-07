@@ -1,9 +1,6 @@
 class Api::CurrentLocationController < ApplicationController
-  before_action :set_current_location, only: [:index, :update, :destroy]
+  before_action :set_current_location, only: [:update, :manage_current_location]
 
-  def index
-    render json: @current_location
-  end
 
   def create
     current_location = current_user.build_current_location(current_location_params)
@@ -22,14 +19,20 @@ class Api::CurrentLocationController < ApplicationController
     end
   end
 
-  def destroy
-    @current_location.destroy
+
+  # custom methods
+  def manage_current_location
+    if @current_location.nil?
+      create
+    else
+      update
+    end
   end
 
   private
 
-    def set_action
-      @current_location = current_user.current_location.first
+    def set_current_location
+      @current_location = current_user.current_location
     end
 
     def current_location_params
