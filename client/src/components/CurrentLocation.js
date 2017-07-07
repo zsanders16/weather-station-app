@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment } from 'semantic-ui-react';
+import { Segment, Dimmer, Loader, Image } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { get_currentLocation, set_current_location, update_current_location } from '../actions/locations'
 import CurrentAddress from './CurrentAddress'
@@ -49,16 +49,18 @@ class CurrentLocation extends React.Component{
   render(){
     if(!this.props.currentLocation.address){
       return(
-        <p>Loading Current Location</p>
+        <Segment style={ {height: "100px"}}>
+          <Dimmer active>
+            <Loader size='medium'>Loading</Loader>
+          </Dimmer>
+        </Segment>
       )
     }else{
       const { address, latitude, longitude } = this.props.currentLocation
       return(
-        <Segment>
-          <h3>Your current location is:</h3>
+        <Segment padded='very' style={ {height: "100px"}} >
           <CurrentAddress address={address} />
-          <Lat latitude={latitude} />
-          <Long longitude={longitude} />
+
         </Segment>
       )
     }

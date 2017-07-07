@@ -2,7 +2,7 @@ import React from 'react'
 
 const CurrentAddress = (props) => {
   return (
-    <p>{props.address}</p>
+    <h3>Your Current Address is: {props.address}</h3>
   )
 }
 

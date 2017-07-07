@@ -37,7 +37,17 @@ ActiveRecord::Schema.define(version: 20170707004755) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_current_locations_on_user_id"
+  end
 
+  create_table "favorites", force: :cascade do |t|
+    t.string "temperature", null: false
+    t.string "rel_humidity", null: false
+    t.string "pressure"
+    t.string "light_intensity"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -69,7 +79,6 @@ ActiveRecord::Schema.define(version: 20170707004755) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
-
   create_table "weathers", force: :cascade do |t|
     t.float "celsius", null: false
     t.float "fahrenheit"
@@ -81,5 +90,5 @@ ActiveRecord::Schema.define(version: 20170707004755) do
     t.index ["user_id"], name: "index_weathers_on_user_id"
   end
 
-
+  add_foreign_key "current_locations", "users"
 end
