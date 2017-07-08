@@ -30,6 +30,7 @@ gem 'devise'
 gem 'devise_token_auth'
 gem 'dotenv-rails'
 gem 'geocoder'
+gem 'httparty'
 
 # Will Paginate
 gem 'will_paginate'

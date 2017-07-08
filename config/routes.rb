@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   namespace :api do
 
     post '/current_location', to: 'current_location#manage_current_location'
+    post '/location_forecast', to: 'forecasts#location_forecast'
 
     resources :current_location, except: :show
     resources :addresses, except: [:new, :edit]

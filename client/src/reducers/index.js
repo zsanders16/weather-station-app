@@ -6,6 +6,8 @@ import { locations } from './locations'
 import favorites from './favorites'
 import currentLocation from './currentLocation'
 import addresses from './addresses'
+import weather from './weather'
+
 
 const rootReducer = combineReducers({
   user,
@@ -15,6 +17,7 @@ const rootReducer = combineReducers({
   favorites,
   currentLocation,
   addresses,
+  weather,
 })
 
 export default rootReducer

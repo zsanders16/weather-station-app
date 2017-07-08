@@ -19,8 +19,7 @@ const QUERY_YEARLY = '/forecast/yearly'
 /* Local Methods */
 /* geolocation = array of integers */
 const points = ( geolocation ) => {
-  debugger
-  return `/points/${geolocation.latitude},${geolocation.longitude}`
+  return `/points/${geolocation[0]},${geolocation[1]}`
 }
 
 const forecast = ( geolocation ) => {
@@ -41,11 +40,11 @@ const yearly = ( geolocation ) => {
 
 /* Global Methods */
 export const weatherForecast = ( geolocation ) => {
+  let api = forecast(geolocation)
   return (dispatch) => {
-    axios.get(forecast(geolocation))
+    axios.post('/api/location_forecast', {api: api})
       .then( resp => {
-        debugger
-        dispatch({ type: WEATHER_FORECAST, data: resp.data })
+        dispatch({ type: WEATHER_FORECAST, data: resp.data.properties.periods, headers: resp.headers })
       })
       .catch( resp => {
         dispatch(setFlash('Weather Forecast Not Found!', 'error'))

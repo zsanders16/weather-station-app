@@ -7,9 +7,30 @@ import Favorites from './Favorites'
 import Address from './Address'
 import CurrentLocation from './CurrentLocation'
 import CurrentLocationConditions from './CurrentLocationConditions'
-
+import { set_current_location } from '../actions/locations'
 
 class WeatherStation extends Component {
+
+  componentDidMount() {
+    this.GetLocation()
+  }
+
+  setPosition = (latitude, longitude) => {
+    let { dispatch } = this.props
+      dispatch(set_current_location(latitude, longitude))
+  }
+
+  GetLocation = () => {
+    if (navigator.geolocation) {
+       navigator.geolocation.getCurrentPosition( (position) => {
+       let latitude = position.coords.latitude;
+       let longitude = position.coords.longitude;
+       this.setPosition(latitude, longitude)
+       })
+     }else{
+      console.log('Your browser doesnt support  this')
+    }
+  }
 
   showHome = () => (
     <Grid.Row columns={16}>
@@ -54,7 +75,8 @@ class WeatherStation extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {navbarItem: state.navbar};
+  return { navbarItem: state.navbar, weather: state.weather, currentLocation: state.currentLocation };
+
 }
 
 export default connect(mapStateToProps)(WeatherStation);
