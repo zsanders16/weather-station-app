@@ -3,7 +3,7 @@
 # Table name: addresses
 #
 #  id          :integer          not null, primary key
-#  address     :string           not null
+#  google      :string           not null
 #  street1     :string           not null
 #  street2     :string           not null
 #  city        :string           not null

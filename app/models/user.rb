@@ -38,4 +38,12 @@ class User < ActiveRecord::Base
   has_one :favorite, dependent: :destroy
   has_many :weathers, dependent: :destroy
   has_many :addresses, dependent: :destroy
+
+  after_create :create_favorite
+
+  private
+
+  def create_favorite
+    Favorite.create(title: 'My Favorite', user_id: self.id)
+  end
 end

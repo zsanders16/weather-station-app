@@ -22,9 +22,10 @@
 #                            GET|POST /omniauth/:provider/callback(.:format) devise_token_auth/omniauth_callbacks#redirect_callbacks
 #           omniauth_failure GET|POST /omniauth/failure(.:format)            devise_token_auth/omniauth_callbacks#omniauth_failure
 #                            GET      /api/auth/:provider(.:format)          redirect(301)
+#       api_current_location POST     /api/current_location(.:format)        api/current_location#manage_current_location
 # api_current_location_index GET      /api/current_location(.:format)        api/current_location#index
 #                            POST     /api/current_location(.:format)        api/current_location#create
-#       api_current_location PATCH    /api/current_location/:id(.:format)    api/current_location#update
+#                            PATCH    /api/current_location/:id(.:format)    api/current_location#update
 #                            PUT      /api/current_location/:id(.:format)    api/current_location#update
 #                            DELETE   /api/current_location/:id(.:format)    api/current_location#destroy
 #              api_addresses GET      /api/addresses(.:format)               api/addresses#index
@@ -33,8 +34,10 @@
 #                            PATCH    /api/addresses/:id(.:format)           api/addresses#update
 #                            PUT      /api/addresses/:id(.:format)           api/addresses#update
 #                            DELETE   /api/addresses/:id(.:format)           api/addresses#destroy
+#           api_weather_data GET      /api/weather/data(.:format)            api/weather#data
+#         api_weather_actual GET      /api/weather/actual(.:format)          api/weather#actual
 #                            GET      /*other(.:format)                      static#index
-#
+# 
 
 Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'api/auth'
@@ -46,6 +49,10 @@ Rails.application.routes.draw do
     resources :current_location, except: :show
     resources :addresses, except: [:new, :edit]
 
+    # Custom Routes for Weather Controller
+    get '/weather/data', to: 'weather#data', as: 'weather_data'
+    get '/weather/actual', to: 'weather#actual', as: 'weather_actual'
+    
   end
 
   #Do not place any routes below this one

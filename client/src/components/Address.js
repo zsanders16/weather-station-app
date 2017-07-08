@@ -14,10 +14,11 @@ import AddressAll from './AddressAll'
 class Address extends Component {
 
   componentDidMount = () => {
-    let { addresses: addressSet, dispatch } = this.props
+    let { addresses: addressSet, dispatch, history } = this.props
     // load addresses from the database
     if( addressSet.length <= 0 ) {
       dispatch(addresses())
+      history.push('/address/add')
     }
   }
 
