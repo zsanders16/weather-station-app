@@ -23,6 +23,7 @@ class NavBar extends Component {
           <Menu.Item name='home' active={activeItem === 'home'} onClick={this.handleItemClick} />
           <Menu.Item name='historical' active={activeItem === 'historical'} onClick={this.handleItemClick} />
           <Menu.Item name='local' active={activeItem === 'local'} onClick={this.handleItemClick} />
+          <Menu.Item as={ Link } to='/address/all' name='addresses' active={activeItem === 'address'} onClick={this.handleItemClick} />
             <Dropdown item text='Maps'>
               <Dropdown.Menu>
                 <Dropdown.Item name='barometric' onClick={this.handleItemClick}>Barometric</Dropdown.Item>

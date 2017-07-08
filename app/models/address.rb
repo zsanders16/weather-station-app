@@ -17,12 +17,7 @@
 #
 
 class Address < ApplicationRecord
-  validates_presence_of :address, :street1, :city, :state, :zipcode, :latitude, :longitude
+  validates_presence_of :google, :street1, :city, :state, :zipcode, :latitude, :longitude
 
   belongs_to :favorite
-
-  def format_geolocation
-    "#{street1}, #{street2}, #{city}, #{state} #{zipcode}"
-  end
-
 end

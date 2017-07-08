@@ -8,12 +8,12 @@ const ADDRESS_EDIT = 'ADDRESS_EDIT'
 const ADDRESS_UPDATE = 'ADDRESS_UPDATE'
 const ADDRESS_DELETE = 'ADDRESS_DELETE'
 
-export const address = () => {
+export const addresses = () => {
   return (dispatch) => {
-    axios.get(`/user/addresses`)
+    axios.get(`/api/addresses`)
       .then( resp => {
         let { data: addresses, headers } = resp
-        dispatch({ type: ADDRESS, addresses, headers })
+        dispatch({ type: ADDRESS, addresses, headers, headers: resp.headers })
         dispatch(setFlash('Addresses located!', 'success'))
       })
       .catch( resp => {
@@ -24,10 +24,10 @@ export const address = () => {
 
 export const addressCreate = (address) => {
   return (dispatch) => {
-    axios.post(`/users/address`)
+    axios.post(`/api/addresses`, address )
       .then( resp => {
         let { data: address } = resp
-        dispatch({ type: ADDRESS_CREATE, address })
+        dispatch({ type: ADDRESS_CREATE, address, headers: resp.headers })
         dispatch(setFlash('Address created!', 'success'))
       })
       .catch( resp => {
@@ -46,10 +46,10 @@ export const addressEdit = (address_id) => {
 
 export const addressUpdate = (address) => {
   return (dispatch) => {
-    axios.patch(`/user/addresses/${address.id}`, address )
+    axios.patch(`/api/addresses/${address.id}`, address )
       .then( resp => {
         let { data: address } = resp
-        dispatch({ type: ADDRESS_UPDATE, address })
+        dispatch({ type: ADDRESS_UPDATE, address, headers: resp.headers })
         dispatch(setFlash('Address updated!', 'success'))
       })
       .catch( resp => {
@@ -60,10 +60,10 @@ export const addressUpdate = (address) => {
 
 export const addressDelete = (address_id) => {
   return (dispatch) => {
-    axios.delete(`/user/address/${address.id}`)
+    axios.delete(`/api/addresses/${address_id}`)
       .then( resp => {
-        if( resp.status === 200 ) {
-          dispatch({ type: ADDRESS_DELETE, address_id })
+        if( resp.status === 204 ) {
+          dispatch({ type: ADDRESS_DELETE, address_id, headers: resp.headers })
           dispatch(setFlash('Address deleted!', 'success'))
         }
       })

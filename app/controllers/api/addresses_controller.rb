@@ -1,5 +1,5 @@
-class AddressesController < ApplicationController
-  before_action :set_favorite, only: [:show, :update, :destroy]
+class Api::AddressesController < ApplicationController
+  before_action :set_favorite, only: [:index, :show, :update, :destroy]
   before_action :set_address, only: [:show, :update, :destroy]
 
   def index
@@ -24,7 +24,8 @@ class AddressesController < ApplicationController
   end
 
   def create
-    address = @favorite.build_address(address_params)
+    favorite = current_user.favorite
+    address = favorite.addresses.new(address_params)
     if address.save
       render json: address
     else
@@ -39,7 +40,7 @@ class AddressesController < ApplicationController
   private
 
   def set_favorite
-    @favorite = current_user.favorites.find(params[:favorite_id])
+    @favorite = current_user.favorite
   end
 
   def set_address
@@ -47,17 +48,21 @@ class AddressesController < ApplicationController
   end
 
   def address_params
-    address = params.require(:address)
-      .permit(:street1, :street2, :city, :state, :zipcode)
-
     # format the address as a google string
     # set the geolocation lat and lng from google
-    geo = Geocoder::search(address.format_geolocation)
-    binding.pry
-    address.latitude = geo.coordinates[0]
-    address.longitude = geo.coordinates[1]
-    address.address = geo.address
+    geolocation = format_geolocation(params)
+    geo = Geocoder::coordinates(geolocation)
+    address = {}
+    address['latitude'] = geo[0]
+    address['longitude'] = geo[1]
+    address['google'] = geolocation
 
-    address
+    params['address'].merge!(address)
+    params.require(:address).permit(:street1, :street2, :city,
+      :state, :zipcode, :latitude, :longitude, :google)
+  end
+
+  def format_geolocation(params)
+    "#{params['street1']}, #{params['street2']}, #{params['city']}, #{params['state']} #{params['zipcode']}"
   end
 end

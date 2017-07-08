@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 20170707004755) do
   enable_extension "plpgsql"
 
   create_table "addresses", force: :cascade do |t|
-    t.string "address", null: false
+    t.string "google", null: false
     t.string "street1", null: false
     t.string "street2", null: false
     t.string "city", null: false

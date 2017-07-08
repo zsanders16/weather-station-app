@@ -1,47 +1,23 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { Grid, Segment, Message, Button, Divider } from 'semantic-ui-react'
-import Favorite from './Favorite'
-import { favoritesIndex } from '../actions/favorites'
+import AddressAll from './AddressAll'
+import { addresses } from '../actions/addresses'
 
 class Favorites extends Component {
   state = { favorites: [] }
 
   componentDidMount = () => {
-    let { favorites, dispatch } = this.props
-    // Place locations in local state
-    if( this.props.favorites ) {
-      this.setState({ ...this.props.favorites
-      })
-    }
-    if( favorites.length <= 0) {
-      // Set initial Favorites
-      dispatch(favoritesIndex())
+    let { addresses: addSet, favorites, dispatch } = this.props
+    // load addresses from the database
+    if( addSet.length <= 0 ) {
+      dispatch(addresses())
     }
   }
 
   displayFavorites = () => {
-    let { favorites } = this.props
-    if( favorites.length > 0 ){
-      // return favorites.map( ( loc ) => {
-      //   return ( <Favorite {...favorites} /> )
-      // })
-      return favorites.map( ( fav, i ) => {
-        return ( <Favorite key={i} favorite={favorites} /> )
-      })
-    } else {
-      return (
-        <Message>
-          <Message.Header>
-            Favorites Not Set
-          </Message.Header>
-          <Divider />
-          <p>
-            Please set a favorite<br />using the buttons below.
-          </p>
-        </Message>
-      )
-    }
+    return <AddressAll />
   }
 
   render(){
@@ -57,9 +33,24 @@ class Favorites extends Component {
         <Grid.Row>
           <Grid.Column>
             <Button.Group size='mini' floated='right'>
-              <Button icon='add' content='Add' />
-              <Button icon='remove' content='Remove' />
-              <Button icon='edit' content='edit'/>
+              <Button
+                icon='add'
+                content='Add'
+                as={ Link }
+                to={`/address/add`}
+              />
+              <Button
+                icon='remove'
+                content='Remove'
+                as={ Link }
+                to={`/address/all`}
+              />
+              <Button
+                icon='edit'
+                content='Delete'
+                as={ Link }
+                to={`/address/all`}
+              />
             </Button.Group>
           </Grid.Column>
         </Grid.Row>
@@ -70,7 +61,7 @@ class Favorites extends Component {
 
 const mapStateToProps = ( state ) => {
   // TODO: this is just a prototype
-  return { favorites: state.favorites }
+  return { favorites: state.favorites, addresses: state.addresses }
 }
 
 export default connect(mapStateToProps)(Favorites)

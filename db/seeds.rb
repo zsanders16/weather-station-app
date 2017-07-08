@@ -9,7 +9,7 @@
 user = User.create(email: 'test@test.com', password: 'password')
 fav = Favorite.create(title: 'My Favorites', user_id: user.id )
 address = {
-  address: '7400 S STATE ST ' + 'APT 2101',
+  google: '7400 S STATE ST ' + 'APT 2101',
   street1: '7400 S STATE ST',
   street2: 'APT 2101',
   city: 'Midvale',

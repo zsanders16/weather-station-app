@@ -5,6 +5,7 @@ import navbar from './navbar'
 import { locations } from './locations'
 import favorites from './favorites'
 import currentLocation from './currentLocation'
+import addresses from './addresses'
 
 const rootReducer = combineReducers({
   user,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
   navbar,
   locations,
   favorites,
-  currentLocation
+  currentLocation,
+  addresses,
 })
 
 export default rootReducer
