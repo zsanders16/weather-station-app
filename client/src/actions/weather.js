@@ -42,7 +42,6 @@ const yearly = ( geolocation ) => {
 export const weatherForecast = ( geolocation ) => {
   let api = forecast(geolocation)
   return (dispatch) => {
-    debugger
     axios.post('/open_weather_api', {api: api})
       .then( resp => {
         dispatch({ type: WEATHER_FORECAST, data: resp.data.properties.periods, headers: resp.headers })

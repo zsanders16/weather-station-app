@@ -3,7 +3,6 @@ class OpenWeatherApiController < ApplicationController
 
   def location_forecast
     response = HTTParty.get(params[:api])
-    binding.pry
     render json: response.body
   end
 
