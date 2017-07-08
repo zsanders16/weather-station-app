@@ -10,11 +10,36 @@ import { Switch, Route } from 'react-router-dom';
 import FetchUser from './FetchUser';
 import HomePage from './HomePage';
 
+import { connect } from 'react-redux'
+import { weatherForecast } from '../actions/weather'
+
 // NOTE: for testing only
 import WeatherApi from './WeatherApi'
 import Address from './Address'
 
 class App extends Component {
+
+  componentDidMount() {
+    this.GetLocation()
+  }
+
+  setPosition = (latitude, longitude) => {
+    let { dispatch } = this.props
+      dispatch(weatherForecast([latitude, longitude]))
+  }
+
+  GetLocation = () => {
+    if (navigator.geolocation) {
+       navigator.geolocation.getCurrentPosition( (position) => {
+       let latitude = position.coords.latitude;
+       let longitude = position.coords.longitude;
+       this.setPosition(latitude, longitude)
+       })
+     }else{
+      console.log('Your browser doesnt support  this')
+    }
+  }
+
   render() {
     return (
       <div>
@@ -36,4 +61,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect()(App);

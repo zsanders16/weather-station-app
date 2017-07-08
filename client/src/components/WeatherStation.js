@@ -9,6 +9,7 @@ import CurrentLocation from './CurrentLocation'
 import CurrentLocationConditions from './CurrentLocationConditions'
 import { set_current_location } from '../actions/locations'
 
+
 class WeatherStation extends Component {
 
   componentDidMount() {

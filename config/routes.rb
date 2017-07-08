@@ -37,7 +37,7 @@
 #           api_weather_data GET      /api/weather/data(.:format)            api/weather#data
 #         api_weather_actual GET      /api/weather/actual(.:format)          api/weather#actual
 #                            GET      /*other(.:format)                      static#index
-# 
+#
 
 Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'api/auth'
@@ -52,8 +52,10 @@ Rails.application.routes.draw do
     # Custom Routes for Weather Controller
     get '/weather/data', to: 'weather#data', as: 'weather_data'
     get '/weather/actual', to: 'weather#actual', as: 'weather_actual'
-    
+
   end
+
+    post '/open_weather_api', to: 'open_weather_api#location_forecast'
 
   #Do not place any routes below this one
   get '*other', to: 'static#index'
