@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import TodaysWeather from './TodaysWeather'
+import { Header, Segment } from 'semantic-ui-react'
 
 class HomePage extends Component {
   render() {
     return(
-      <h1>
-        HomePage
+      <Segment basic>
+        <Header as='h2'>HomePage</Header>
         <TodaysWeather/>
-      </h1>
+      </Segment>
     )
   }
 }

@@ -22,14 +22,19 @@ class WeatherStation extends Component {
   }
 
   GetLocation = () => {
-    if (navigator.geolocation) {
-       navigator.geolocation.getCurrentPosition( (position) => {
-       let latitude = position.coords.latitude;
-       let longitude = position.coords.longitude;
-       this.setPosition(latitude, longitude)
-       })
-     }else{
-      console.log('Your browser doesnt support  this')
+    let { latitude, longitude } = this.props.currentLocation
+    if(this.props.currentLocation){
+      this.setPosition(latitude, longitude)
+    }else{
+      if (navigator.geolocation) {
+         navigator.geolocation.getCurrentPosition( (position) => {
+         let latitude = position.coords.latitude;
+         let longitude = position.coords.longitude;
+         this.setPosition(latitude, longitude)
+         })
+      }else{
+        console.log('Your browser doesnt support  this')
+      }
     }
   }
 
