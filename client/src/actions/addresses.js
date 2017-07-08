@@ -8,13 +8,18 @@ const ADDRESS_EDIT = 'ADDRESS_EDIT'
 const ADDRESS_UPDATE = 'ADDRESS_UPDATE'
 const ADDRESS_DELETE = 'ADDRESS_DELETE'
 
-export const addresses = () => {
+export const addresses = ( history = null ) => {
   return (dispatch) => {
     axios.get(`/api/addresses`)
       .then( resp => {
-        let { data: addresses, headers } = resp
-        dispatch({ type: ADDRESS, addresses, headers, headers: headers })
-        dispatch(setFlash('Addresses located!', 'success'))
+        let { data: addresses } = resp
+        dispatch({ type: ADDRESS, addresses, headers: resp.headers })
+        if( addresses.length > 0 ) {
+          dispatch(setFlash('Addresses located!', 'success'))
+        }
+        if( history ){
+          history.push(`/address/all`)
+        }
       })
       .catch( resp => {
         dispatch(setFlash('Addresses not found!', 'error'))

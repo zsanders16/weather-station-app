@@ -17,12 +17,16 @@ class Favorites extends Component {
   }
 
   displayFavorites = () => {
-    if(this.props.addresses){
+    if( this.props.addresses.length > 0 ){
       return <AddressAll />
     }else{
-      <p>You have no favorites, please add one.</p>
+      return (
+        <Message>
+          <Message.Header>Please Create Your Favorites</Message.Header>
+          <p>You have no favorites, please add one. Click below!</p>
+        </Message>
+      )
     }
-
   }
 
   render(){
