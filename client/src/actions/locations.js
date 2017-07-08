@@ -23,3 +23,7 @@ export const set_current_location = (latitude, longitude) => {
         dispatch(setFlash('Failed To Set Current Location.', 'error'));
   });
 }
+
+export const set_lat_long = (location, dispatch) => {
+  dispatch({type: 'SET_CURRENT_LOCATION', data: location})
+}

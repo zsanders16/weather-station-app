@@ -6,11 +6,8 @@ import DayForecast from './DayForecast'
 class CurrentLocationConditions extends React.Component {
   render(){
     const { data} = this.props.weather
-    debugger
     return(
       <Segment raised>
-
-
       </Segment>
     )
   }

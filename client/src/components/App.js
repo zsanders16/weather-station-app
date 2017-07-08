@@ -9,9 +9,9 @@ import ProtectedRoute from './ProtectedRoute';
 import { Switch, Route } from 'react-router-dom';
 import FetchUser from './FetchUser';
 import HomePage from './HomePage';
-
 import { connect } from 'react-redux'
 import { weatherForecast } from '../actions/weather'
+import { set_lat_long } from '../actions/locations'
 
 // NOTE: for testing only
 import WeatherApi from './WeatherApi'
@@ -25,7 +25,8 @@ class App extends Component {
 
   setPosition = (latitude, longitude) => {
     let { dispatch } = this.props
-      dispatch(weatherForecast([latitude, longitude]))
+      dispatch(set_lat_long([latitude, longitude], dispatch))
+      dispatch(weatherForecast([latitude, longitude] ))
   }
 
   GetLocation = () => {

@@ -22,8 +22,9 @@ class WeatherStation extends Component {
   }
 
   GetLocation = () => {
+    debugger
     let { latitude, longitude } = this.props.currentLocation
-    if(this.props.currentLocation){
+    if(latitude){
       this.setPosition(latitude, longitude)
     }else{
       if (navigator.geolocation) {
