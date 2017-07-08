@@ -52,7 +52,7 @@ class WeatherStation extends Component {
   changeOnNav = () => {
     let { navbarItem } = this.props
     switch (navbarItem) {
-        case 'home':
+        case 'weather':
           return this.showHome();
         case 'historical':
           return <Compare />
@@ -75,7 +75,11 @@ class WeatherStation extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { navbarItem: state.navbar, weather: state.weather, currentLocation: state.currentLocation };
+  return { navbarItem: state.navbar,
+            weather: state.weather,
+            currentLocation: state.currentLocation,
+            location_weather: state.weather
+          };
 
 }
 

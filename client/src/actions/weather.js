@@ -57,7 +57,7 @@ export const weatherForecastHourly = ( geolocation ) => {
     axios.get(hourly(geolocation))
       .then( resp => {
         debugger
-        dispatch({ type: WEATHER_FORECAST_HOURLY, data: resp.data })
+        dispatch({ type: WEATHER_FORECAST_HOURLY, data: resp.data, headers: resp.headers })
       })
       .catch( resp => {
         dispatch(setFlash('Hourly Forecast Not Found!', 'error'))
@@ -70,7 +70,7 @@ export const weatherForecastMonthly = ( geolocation ) => {
     axios.get(monthly(geolocation))
       .then( resp => {
         debugger
-        dispatch({ type: WEATHER_FORECAST_MONTHLY, data: resp.data })
+        dispatch({ type: WEATHER_FORECAST_MONTHLY, data: resp.data, headers: resp.headers  })
       })
       .catch( resp => {
         dispatch(setFlash('Monthly Forecast Not Found!', 'error'))
@@ -83,7 +83,7 @@ export const weatherForecastYearly = ( geolocation ) => {
     axios.get(yearly(geolocation))
       .then( resp => {
         debugger
-        dispatch({ type: WEATHER_FORECAST_YEARLY, data: resp.data })
+        dispatch({ type: WEATHER_FORECAST_YEARLY, data: resp.data, headers: resp.headers  })
       })
       .catch( resp => {
         dispatch(setFlash('Yearly Forecast Not Found!', 'error'))

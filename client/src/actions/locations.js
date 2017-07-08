@@ -16,7 +16,7 @@ export const set_current_location = (latitude, longitude) => {
   return(dispatch) =>
     axios.post(`/api/current_location`, {current_location: {latitude: latitude, longitude: longitude}})
     .then( res => {
-      dispatch({type: 'SET_CURRENT_LOCATION', data: res.data})
+      dispatch({type: 'SET_CURRENT_LOCATION', data: res.data, headers: res.headers })
       dispatch(weatherForecast([latitude, longitude]))
     })
     .catch( res => {

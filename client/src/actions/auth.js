@@ -7,7 +7,7 @@ export const registerUser = (email, password, passwordConfirmation, history) => 
       .then( res => {
         let { data: { data: user }, headers } = res;
         dispatch({ type: 'LOGIN', user, headers });
-        history.push('/');
+        history.push('/weatherstation');
       })
       .catch( res => {
         const message = res.response.data.errors.join(',');
@@ -37,7 +37,7 @@ export const handleLogin = (email, password, history) => {
       .then( res => {
         let { data: { data: user }, headers } = res
         dispatch({ type: 'LOGIN', user, headers });
-        history.push('/');
+        history.push('/weatherstation');
       })
       .catch( res => {
         console.log(res);

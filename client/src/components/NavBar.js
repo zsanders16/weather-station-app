@@ -7,7 +7,7 @@ import { Menu, Input, Dropdown } from 'semantic-ui-react';
 import { setNavbar} from '../actions/navbar';
 
 class NavBar extends Component {
-  state = { activeItem: 'home' }
+  state = { activeItem: 'weather' }
 
   handleItemClick = (e, {name}) => {
     setNavbar(name, this.props.dispatch)
@@ -20,7 +20,7 @@ class NavBar extends Component {
     if(user.id) {
       return(
         <Menu.Menu>
-          <Menu.Item name='home' active={activeItem === 'home'} onClick={this.handleItemClick} />
+          <Menu.Item name='weather' active={activeItem === 'weather'} onClick={this.handleItemClick} />
           <Menu.Item name='historical' active={activeItem === 'historical'} onClick={this.handleItemClick} />
           <Menu.Item name='local' active={activeItem === 'local'} onClick={this.handleItemClick} />
           <Menu.Item as={ Link } to='/address/all' name='addresses' active={activeItem === 'address'} onClick={this.handleItemClick} />

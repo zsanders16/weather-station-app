@@ -13,7 +13,7 @@ export const addresses = () => {
     axios.get(`/api/addresses`)
       .then( resp => {
         let { data: addresses, headers } = resp
-        dispatch({ type: ADDRESS, addresses, headers, headers: resp.headers })
+        dispatch({ type: ADDRESS, addresses, headers, headers: headers })
         dispatch(setFlash('Addresses located!', 'success'))
       })
       .catch( resp => {
