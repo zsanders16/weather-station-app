@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Segment, Form, Checkbox, Radio } from 'semantic-ui-react'
+import { Grid, Segment, Form, Checkbox } from 'semantic-ui-react'
 import { sensorActual, sensorHistorical } from '../actions/sensor'
 import ReactHighcharts from 'react-highcharts'
 import Datetime from 'react-datetime'
@@ -20,14 +20,14 @@ class SensorActual extends Component {
     chart_type: {
       actual: {
         callback: sensorActual,
-        state: false,
+        state: true,
       },
       historical: {
         callback: sensorHistorical,
-        state: true,
+        state: false,
       },
     },
-    start_date: moment().subtract(1, 'day'),
+    start_date: moment().subtract(2, 'day'),
     // end_date: moment().add(1,'day'),
     end_date: moment(),
     limit: 30,
@@ -38,48 +38,122 @@ class SensorActual extends Component {
   postgresql = 'YYYY-MM-DD HH:mm:ss'
 
   componentDidMount = () => {
-    let { sensor, dispatch } = this.props
+    this.setHistoricalChartType()
+    this.setActualChartType()
+  }
+  //
+  // setChartTypes = () => {
+  //   let { sensor: { actual , historical }, dispatch } = this.props
+  //   let { chart_type, start_date, end_date } = this.state
+  //   // Collect any required data from remote database
+  //   if( !historical || historical.length <= 0 ){
+  //     // Check if activated
+  //     if( chart_type.historical.state ) {
+  //       dispatch(chart_type.historical.callback({
+  //         start_date: start_date.format(this.postgresql),
+  //         end_date: end_date.format(this.postgresql),
+  //       }))
+  //     }
+  //   }
+  //   if( !actual || actual.length <= 0 ){
+  //     if( chart_type.actual.state ) {
+  //       dispatch(chart_type.actual.callback({
+  //         start_date: start_date.format(this.postgresql),
+  //         end_date: end_date.format(this.postgresql),
+  //       }))
+  //     }
+  //   }
+  // }
+
+  setHistoricalChartType = () => {
+    let { sensor: { historical }, dispatch } = this.props
     let { chart_type, start_date, end_date } = this.state
-    if( sensor.length <= 0 ){
-      // NOTE: for testing only
-      // dispatch(sensorActual({start: this.timestamp()}))
-      dispatch(chart_type.historical.callback({
-        start_date: start_date.format(this.postgresql),
-        end_date: end_date.format(this.postgresql),
-      }))
+    // Collect any required data from remote database
+    if( !historical || historical.length <= 0 ){
+      // Check if activated
+      if( chart_type.historical.state ) {
+        dispatch(chart_type.historical.callback({
+          start_date: start_date.format(this.postgresql),
+          end_date: end_date.format(this.postgresql),
+        }))
+      }
     }
   }
 
-  setDataSeries = () => {
-    let { sensor } = this.props
-    let categories = []
-    if( sensor.length > 0 ) {
-      let data_C = this.props.sensor.historical.map( ( data ) => {
-        // return [ Date.parse(data.created_at).toString('mm:ss'), data.celsius ]
-        categories.push( moment(data.created_at).format('mm:ss') )
-        return data.celsius
-      })
-      // TODO: uncomment with actual time series
-      // this.state.xAxis.categories = categories
-      let data_F = this.props.sensor.historical.map( ( data ) => {
-        return data.fahrenheit
-      })
-      let { series } = this.state
-      series[0] = { name: 'Celsius', data: data_C }
-      series[1] = { name: 'Fahrenheit', data: data_F }
-    } else {
-      return `Missing Sensor Data`
+  setActualChartType = () => {
+    let { sensor: { actual }, dispatch } = this.props
+    let { chart_type, start_date, end_date } = this.state
+    if( !actual || actual.length <= 0 ){
+      if( chart_type.actual.state ) {
+        dispatch(chart_type.actual.callback({
+          start_date: start_date.format(this.postgresql),
+          end_date: end_date.format(this.postgresql),
+        }))
+      }
     }
   }
 
-  processSensorData = () => {
-    let series = []
-    // Process the sensor data types included from the sensor
-    // Data Types: actual or historical
-    let { sensor: data } = this.props
-    for( let dataType in data ) {
 
+  setChartData = () => {
+    let { sensor: { actual, historical } } = this.props
+    let { chart_type } = this.state
+    this.state.series = []
+    if( chart_type.historical.state ) {
+      if( historical && historical.length > 0 ) {
+        this.setDataSeries(historical, 'Hist.')
+      }
     }
+    if( chart_type.actual.state ) {
+      if( actual && actual.length > 0) {
+        this.setDataSeries(actual, 'Act.')
+      }
+    }
+  }
+
+  // historical is an array of data objects
+  setDataSeries = ( data, type = '' ) => {
+    let { series, views, chart_type } = this.state
+    let { categories } = this.state.xAxis
+    if( data && data.length > 0 ) {
+      // Grab each view, i.e. F,C,K
+      for( let view in views ){
+        if( views[view] ) {
+          switch(view) {
+            case 'celsius':
+              series.push({
+                name: type + ' - Celsius',
+                data: this.parseTempData( data, 'celsius', categories ),
+              })
+              break;
+            case 'fahrenheit':
+              series.push({
+                name: type + ' - Fahrenheit',
+                data: this.parseTempData( data, 'fahrenheit', categories ),
+              })
+              break;
+            case 'kelvin':
+              series.push({
+                name: type + ' - Kelvin',
+                data: this.parseTempData( data, 'kelvin', categories ),
+              })
+              break;
+            default:
+              series.push({
+                name: type + ' - Celsius',
+                data: this.parseTempData( data, 'celsius', categories ),
+              })
+          }
+        }
+      }
+    }
+  }
+
+  parseTempData = ( data, view, categories ) => {
+    return data.map( ( data ) => {
+      // TODO: Determine a set of categories that will work with all datasets types
+      // categories.push( moment(data.created_at).format('mm:ss') )
+      return data[view]
+    })
   }
 
   viewChanged = (event,data) => {
@@ -98,14 +172,21 @@ class SensorActual extends Component {
   }
 
   handleChartType = (event,data) => {
-    let { id } = data
+    let { id, checked } = data
     let chartType = this.state.chart_type
+
     chartType[id].state = !chartType[id].state
     this.setState({ chart_type: chartType })
+
+    if( id === 'actual' && checked === true ){
+      this.setActualChartType()
+    } else if( id === 'historical' && checked === true ) {
+      this.setHistoricalChartType()
+    }
   }
 
   render(){
-    this.setDataSeries()
+    this.setChartData()
     let { views, start_date, end_date, chart_type } = this.state
     return (
       <Segment>
@@ -175,8 +256,7 @@ class SensorActual extends Component {
 }
 
 const mapStateToProps = ( state ) => {
-  let start = Date.now()
-  return { sensor: state.sensor, dates: { start } }
+  return { sensor: state.sensor }
 }
 
 export default connect(mapStateToProps)(SensorActual)

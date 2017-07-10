@@ -4,9 +4,9 @@
 const sensor = ( state = {}, action ) => {
   switch( action.type ) {
     case 'SENSOR_ACTUAL':
-      return { ...state, actual: action.data }
+      return { actual: action.data, ...state }
     case 'SENSOR_DATA':
-      return { ...state, historical: action.data }
+      return { historical: action.data, ...state }
     default:
       return state
   }
