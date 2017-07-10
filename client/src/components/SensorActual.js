@@ -54,14 +54,14 @@ class SensorActual extends Component {
     let { sensor } = this.props
     let categories = []
     if( sensor.length > 0 ) {
-      let data_C = this.props.sensor.map( ( data ) => {
+      let data_C = this.props.sensor.historical.map( ( data ) => {
         // return [ Date.parse(data.created_at).toString('mm:ss'), data.celsius ]
         categories.push( moment(data.created_at).format('mm:ss') )
         return data.celsius
       })
       // TODO: uncomment with actual time series
       // this.state.xAxis.categories = categories
-      let data_F = this.props.sensor.map( ( data ) => {
+      let data_F = this.props.sensor.historical.map( ( data ) => {
         return data.fahrenheit
       })
       let { series } = this.state
@@ -72,9 +72,21 @@ class SensorActual extends Component {
     }
   }
 
+  processSensorData = () => {
+    let series = []
+    // Process the sensor data types included from the sensor
+    // Data Types: actual or historical
+    let { sensor: data } = this.props
+    for( let dataType in data ) {
+
+    }
+  }
+
   viewChanged = (event,data) => {
-    let { id, checked } = data
-    this.setState({ views: { [id]: checked }})
+    let { id } = data
+    let viewSelection = this.state.views
+    viewSelection[id] = !viewSelection[id]
+    this.setState({ views: viewSelection })
   }
 
   handleStartDate = ( moment ) => {
@@ -86,8 +98,10 @@ class SensorActual extends Component {
   }
 
   handleChartType = (event,data) => {
-    let { id, checked } = data
-    this.setState({ chart_type: { [id]: { status: checked }}})
+    let { id } = data
+    let chartType = this.state.chart_type
+    chartType[id].state = !chartType[id].state
+    this.setState({ chart_type: chartType })
   }
 
   render(){
@@ -102,12 +116,12 @@ class SensorActual extends Component {
               <Grid.Column width={8}>
                 <Form.Field>
                   <label>Chart Type</label>
-                  <Radio
+                  <Checkbox
                     id='actual'
                     label='Actual'
                     checked={chart_type.actual.state}
                     onChange={this.handleChartType} /> &nbsp;
-                  <Radio
+                  <Checkbox
                     id='historical'
                     label='Historical'
                     checked={chart_type.historical.state}
