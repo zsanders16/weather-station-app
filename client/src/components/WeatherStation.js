@@ -4,7 +4,7 @@ import { Container, Grid } from 'semantic-ui-react';
 import CurrentConditions from './CurrentConditions';
 import Compare from './Compare';
 import Favorites from './Favorites'
-import Address from './Address'
+import SensorActual from './SensorActual'
 import CurrentLocation from './CurrentLocation'
 import CurrentLocationConditions from './CurrentLocationConditions'
 import { set_current_location } from '../actions/locations'
@@ -56,10 +56,10 @@ class WeatherStation extends Component {
           return this.showHome();
         case 'historical':
           return <Compare />
-        case 'address':
-          return <Address />
-        default:
-          return <h1>Component has not been made yet</h1>
+        case 'sensor':
+          return <SensorActual />
+        // default:
+        //   return <h1>Component has not been made yet</h1>
     }
   }
 

@@ -23,7 +23,7 @@ class NavBar extends Component {
           <Menu.Item name='weather' active={activeItem === 'weather'} onClick={this.handleItemClick} />
           <Menu.Item name='historical' active={activeItem === 'historical'} onClick={this.handleItemClick} />
           <Menu.Item name='local' active={activeItem === 'local'} onClick={this.handleItemClick} />
-          <Menu.Item as={ Link } to='/address/all' name='addresses' active={activeItem === 'address'} onClick={this.handleItemClick} />
+          <Menu.Item as={ Link } to='/sensor/actual' name='sensor' active={activeItem === 'sensor'} onClick={this.handleItemClick} />
             <Dropdown item text='Maps'>
               <Dropdown.Menu>
                 <Dropdown.Item name='barometric' onClick={this.handleItemClick}>Barometric</Dropdown.Item>
@@ -73,7 +73,11 @@ class NavBar extends Component {
     return (
       <div>
         <Menu pointing fluid>
-            <Menu.Item header>Weather Station</Menu.Item>
+            <Menu.Item header
+              as={ Link }
+              to={`/weatherstation`} >
+              Weather Station
+            </Menu.Item>
             { this.leftNavs() }
             { this.rightNavs() }
         </Menu>
