@@ -14,7 +14,6 @@ import { weatherForecast } from '../actions/weather'
 import { set_lat_long } from '../actions/locations'
 
 // NOTE: for testing only
-import WeatherApi from './WeatherApi'
 import Address from './Address'
 
 class App extends Component {
@@ -53,7 +52,6 @@ class App extends Component {
             <ProtectedRoute path='/address' component={Address} />
             <Route exact path='/login' component={Login} />
             <Route exact path='/register' component={Register} />
-            <Route exact path='/weather_api' component={WeatherApi} />
             <Route component={NoMatch} />
           </Switch>
         </FetchUser>

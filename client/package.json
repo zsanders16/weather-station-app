@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.16.2",
+    "moment": "^2.18.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-geolocated": "^2.0.0",
@@ -15,7 +16,8 @@
     "redux-devise-axios": "^0.0.2",
     "redux-thunk": "^2.2.0",
     "semantic-ui-css": "^2.2.10",
-    "semantic-ui-react": "^0.70.0"
+    "semantic-ui-react": "^0.70.0",
+    "start": "^5.1.0"
   },
   "devDependencies": {
     "react-scripts": "1.0.10"

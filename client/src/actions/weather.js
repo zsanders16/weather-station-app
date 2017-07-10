@@ -44,6 +44,7 @@ export const weatherForecast = ( geolocation ) => {
   return (dispatch) => {
     axios.post('/open_weather_api', {api: api})
       .then( resp => {
+        debugger
         dispatch({ type: WEATHER_FORECAST, data: resp.data.properties.periods, headers: resp.headers })
       })
       .catch( resp => {
@@ -56,11 +57,10 @@ export const weatherForecastHourly = ( geolocation ) => {
   return (dispatch) => {
     axios.get(hourly(geolocation))
       .then( resp => {
-        debugger
         dispatch({ type: WEATHER_FORECAST_HOURLY, data: resp.data, headers: resp.headers })
       })
       .catch( resp => {
-        dispatch(setFlash('Hourly Forecast Not Found!', 'error'))
+        dispatch(setFlash('Hourly Forecast Not Found! ', 'error'))
       })
   }
 }

@@ -15,5 +15,5 @@ class Favorite < ApplicationRecord
   belongs_to :user
 
   has_many :geolocations
-  has_many :addresses
+  has_many :addresses, dependent: :destroy
 end
