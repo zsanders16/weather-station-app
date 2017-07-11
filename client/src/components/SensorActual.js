@@ -144,7 +144,7 @@ class SensorActual extends Component {
     this.setState({ settings })
 
     if( checked === true ){
-      this.setActualChartType()
+      setActualChartType(this)
     }
   }
   handleHistDisplay = (event,data) => {
@@ -155,7 +155,7 @@ class SensorActual extends Component {
     this.setState({ settings })
 
     if( checked === true ) {
-      this.setHistoricalChartType()
+      setHistoricalChartType(this)
     }
   }
 
