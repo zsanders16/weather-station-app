@@ -29,8 +29,8 @@ class SensorActual extends Component {
       },
       historical: {
         tempViews: {
-          celsius: true,
-          fahrenheit: false,
+          celsius: false,
+          fahrenheit: true,
           kelvin: false,
         },
         display: {
@@ -69,6 +69,18 @@ class SensorActual extends Component {
   // timestamp format for querying the remote database
   postgresql = 'YYYY-MM-DD HH:mm:ss'
 
+  validDates = () => {
+    // Must have the same duration between start and end dates
+    // Must have same month, day
+    // Year can be different
+    // Time does not matter
+    let { settings: { actual: act, historical: hist }} = this.state
+    let sameStartMonth = act.start_date.month() === hist.start_date.month()
+    let sameStartDay = act.start_date.date() === hist.start_date.date()
+    return sameStartMonth && sameStartDay
+    // return true
+  }
+
   componentDidMount = () => {
     this.setChartTypes()
   }
@@ -79,24 +91,28 @@ class SensorActual extends Component {
   }
 
   setHistoricalChartType = () => {
-    let { dispatch } = this.props
-    let { display, start_date, end_date } = this.state.settings.historical
-    if( display.state ) {
-      dispatch(display.callback({
-        start_date: start_date.format(this.postgresql),
-        end_date: end_date.format(this.postgresql),
-      }))
+    if(this.validDates()){
+      let { dispatch } = this.props
+      let { display, start_date, end_date } = this.state.settings.historical
+      if( display.state ) {
+        dispatch(display.callback({
+          start_date: start_date.format(this.postgresql),
+          end_date: end_date.format(this.postgresql),
+        }))
+      }
     }
   }
 
   setActualChartType = () => {
-    let { dispatch } = this.props
-    let { display, start_date, end_date } = this.state.settings.actual
-    if( display.state ) {
-      dispatch(display.callback({
-        start_date: start_date.format(this.postgresql),
-        end_date: end_date.format(this.postgresql),
-      }))
+    if(this.validDates()){
+      let { dispatch } = this.props
+      let { display, start_date, end_date } = this.state.settings.actual
+      if( display.state ) {
+        dispatch(display.callback({
+          start_date: start_date.format(this.postgresql),
+          end_date: end_date.format(this.postgresql),
+        }))
+      }
     }
   }
 
