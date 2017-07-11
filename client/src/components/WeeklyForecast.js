@@ -24,7 +24,9 @@ class WeeklyForecast extends React.Component {
   displayDays = (days) => {
     return days.map( (day) => {
       return(
-        <DayForecast key={day.number} data={day} />
+        <Grid.Column width={4}>
+          <DayForecast key={day.number} data={day} />
+        </Grid.Column>
       );
     });
   }
