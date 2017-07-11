@@ -1,17 +1,13 @@
 import React from 'react'
 import { Grid, Card, Icon, Image, Accordion } from 'semantic-ui-react'
 
-class DayForecast extends React.Component {
-
+class DayForecast extends React.Component{
 
   render(){
-
-    const { data } = this.props
-    debugger
+    let data = this.props.data
     return(
-      <Grid.Column width={4}>
         <Card>
-          <Image src={data.icon} />
+          <Image src={data.icon} width={100} centered />
           <Card.Content>
             <Card.Header>
               {data.name}
@@ -39,7 +35,6 @@ class DayForecast extends React.Component {
           </Accordion>
           </Card.Content>
         </Card>
-      </Grid.Column>
     )
   }
 }

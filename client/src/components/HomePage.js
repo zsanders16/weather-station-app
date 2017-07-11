@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TodaysWeather from './TodaysWeather'
 import { Header, Segment } from 'semantic-ui-react'
-import CurrentLocationConditions from './CurrentLocationConditions'
+import WeeklyForecast from './WeeklyForecast'
 
 class HomePage extends Component {
   render() {
@@ -9,7 +9,7 @@ class HomePage extends Component {
       <Segment basic>
         <Header as='h2'>HomePage</Header>
         <TodaysWeather/>
-        <CurrentLocationConditions />
+        <WeeklyForecast />
       </Segment>
     )
   }

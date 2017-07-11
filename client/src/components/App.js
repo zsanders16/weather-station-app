@@ -12,33 +12,32 @@ import HomePage from './HomePage';
 import { connect } from 'react-redux'
 import { weatherForecast } from '../actions/weather'
 import { set_lat_long } from '../actions/locations'
+import Charts from './Charts'
 
-// NOTE: for testing only
-import Address from './Address'
 
 class App extends Component {
 
-  componentDidMount() {
-    this.GetLocation()
-  }
-
-  setPosition = (latitude, longitude) => {
-    let { dispatch } = this.props
-      dispatch(set_lat_long([latitude, longitude], dispatch))
-      dispatch(weatherForecast([latitude, longitude] ))
-  }
-
-  GetLocation = () => {
-    if (navigator.geolocation) {
-       navigator.geolocation.getCurrentPosition( (position) => {
-       let latitude = position.coords.latitude;
-       let longitude = position.coords.longitude;
-       this.setPosition(latitude, longitude)
-       })
-     }else{
-      console.log('Your browser doesnt support  this')
-    }
-  }
+  // componentDidMount() {
+  //   this.GetLocation()
+  // }
+  //
+  // setPosition = (latitude, longitude) => {
+  //   let { dispatch } = this.props
+  //     dispatch(set_lat_long([latitude, longitude], dispatch))
+  //     dispatch(weatherForecast([latitude, longitude] ))
+  // }
+  //
+  // GetLocation = () => {
+  //   if (navigator.geolocation) {
+  //      navigator.geolocation.getCurrentPosition( (position) => {
+  //      let latitude = position.coords.latitude;
+  //      let longitude = position.coords.longitude;
+  //      this.setPosition(latitude, longitude)
+  //      })
+  //    }else{
+  //     console.log('Your browser doesnt support  this')
+  //   }
+  // }
 
   render() {
     return (
@@ -48,10 +47,10 @@ class App extends Component {
         <FetchUser>
           <Switch>
             <Route exact path='/' component={HomePage} />
-            <ProtectedRoute exact path='/weatherstation' component={WeatherStation} />
-            <ProtectedRoute path='/address' component={Address} />
             <Route exact path='/login' component={Login} />
             <Route exact path='/register' component={Register} />
+            <ProtectedRoute exact path='/weatherstation' component={WeatherStation} />
+            <ProtectedRoute path='/charts' component={Charts} />
             <Route component={NoMatch} />
           </Switch>
         </FetchUser>

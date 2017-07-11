@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { Grid, Segment, Message, Button, Divider } from 'semantic-ui-react'
+import { Grid, Segment, Message, Button } from 'semantic-ui-react'
 import AddressAll from './AddressAll'
 import { addresses } from '../actions/addresses'
 
@@ -9,11 +9,12 @@ class Favorites extends Component {
   state = { favorites: [] }
 
   componentDidMount = () => {
-    let { addresses: addSet, favorites, dispatch } = this.props
+    let { addresses: addSet, dispatch } = this.props
     // load addresses from the database
     if( addSet.length <= 0 ) {
       dispatch(addresses())
     }
+      
   }
 
   displayFavorites = () => {

@@ -44,7 +44,6 @@ export const weatherForecast = ( geolocation ) => {
   return (dispatch) => {
     axios.post('/open_weather_api', {api: api})
       .then( resp => {
-        debugger
         dispatch({ type: WEATHER_FORECAST, data: resp.data.properties.periods, headers: resp.headers })
       })
       .catch( resp => {

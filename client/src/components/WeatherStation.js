@@ -6,37 +6,40 @@ import Compare from './Compare';
 import Favorites from './Favorites'
 import Address from './Address'
 import CurrentLocation from './CurrentLocation'
-import CurrentLocationConditions from './CurrentLocationConditions'
+import WeeklyForecast from './WeeklyForecast'
 import { set_current_location } from '../actions/locations'
 
 
 class WeatherStation extends Component {
 
-  componentDidMount() {
-    this.GetLocation()
-  }
-
-  setPosition = (latitude, longitude) => {
-    let { dispatch } = this.props
-      dispatch(set_current_location(latitude, longitude))
-  }
-
-  GetLocation = () => {
-    let { latitude, longitude } = this.props.currentLocation
-    if(latitude){
-      this.setPosition(latitude, longitude)
-    }else{
-      if (navigator.geolocation) {
-         navigator.geolocation.getCurrentPosition( (position) => {
-         let latitude = position.coords.latitude;
-         let longitude = position.coords.longitude;
-         this.setPosition(latitude, longitude)
-         })
-      }else{
-        console.log('Your browser doesnt support  this')
-      }
-    }
-  }
+  // componentDidMount() {
+  //   //ensure you have your current location
+  //   if(!this.props.currentLocation.latitude){
+  //     this.getLocation()
+  //   }
+  //
+  //   //ensure you have weekly forecast data
+  //   if(this.props.weather){
+  //     this.getWeatherData(this.props.currentLocation.latitude, this.props.currentLocation.longitude)
+  //   }
+  // }
+  //
+  // setPosition = (latitude, longitude) => {
+  //   let { dispatch } = this.props
+  //     dispatch(set_current_location(latitude, longitude))
+  // }
+  //
+  // getLocation = () => {
+  //   if (navigator.geolocation) {
+  //      navigator.geolocation.getCurrentPosition( (position) => {
+  //      let latitude = position.coords.latitude;
+  //      let longitude = position.coords.longitude;
+  //      this.setPosition(latitude, longitude)
+  //      })
+  //   }else{
+  //     console.log('Your browser doesnt support  this')
+  //   }
+  // }
 
   showHome = () => (
     <Grid.Row columns={16}>
@@ -44,7 +47,7 @@ class WeatherStation extends Component {
         <CurrentLocation />
       </Grid.Column>
       <Grid.Column width={16}>
-        <CurrentLocationConditions />
+        <WeeklyForecast />
       </Grid.Column>
       <Grid.Column width={12} className='ws_area'>
         <CurrentConditions />
@@ -55,25 +58,13 @@ class WeatherStation extends Component {
     </Grid.Row>
   )
 
-  changeOnNav = () => {
-    let { navbarItem } = this.props
-    switch (navbarItem) {
-        case 'weather':
-          return this.showHome();
-        case 'historical':
-          return <Compare />
-        case 'address':
-          return <Address />
-        default:
-          return <h1>Component has not been made yet</h1>
-    }
-  }
+
 
   render(){
     return(
       <Container>
         <Grid>
-          {this.changeOnNav()}
+          {this.showHome()}
         </Grid>
       </Container>
     )
