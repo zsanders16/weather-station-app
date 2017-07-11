@@ -68,7 +68,6 @@ export const weatherForecastMonthly = ( geolocation ) => {
   return (dispatch) => {
     axios.get('/api/location_forecast', {api: monthly(geolocation)})
       .then( resp => {
-        debugger
         dispatch({ type: WEATHER_FORECAST_MONTHLY, data: resp.data, headers: resp.headers  })
       })
       .catch( resp => {
@@ -81,7 +80,6 @@ export const weatherForecastYearly = ( geolocation ) => {
   return (dispatch) => {
     axios.get('/api/location_forecast', {api: yearly(geolocation)})
       .then( resp => {
-        debugger
         dispatch({ type: WEATHER_FORECAST_YEARLY, data: resp.data, headers: resp.headers  })
       })
       .catch( resp => {
