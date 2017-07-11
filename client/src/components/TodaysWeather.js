@@ -13,7 +13,7 @@ class TodaysWeather extends Component {
       <Segment raised>
         <Grid centered columns={1} >
           <Grid.Row >
-            <Header as='h1'>Today's Weather</Header>
+            <Header as='h1'>Todays Weather</Header>
           </Grid.Row>
           <Grid.Row centered columns={4} >
             <Grid.Column >
