@@ -16,25 +16,27 @@ class Api::WeathersController < ApplicationController
   # params[:start_date]
   def actual
     weather = current_user.weathers.where(
-      "created_at >= :start_date",
-      { start_date: params[:start_date] }
+      "created_at >= to_timestamp(?,'YYYY-MM-DD HH24:MI:ss')", params[:start_date]
     )
+    if weather
+      render json: weather
+    else
+      render_errors(weather)
+    end
   end
 
   private
 
   def set_dates
-    @start_date = params[:start]
-    @end_date = params[:end]
+    @start_date = params[:start_date]
+    @end_date = params[:end_date]
   end
 
   def set_weather
     @weather = current_user.weathers.where(
-      "created_at >= :start_date AND created_at <= :end_date",
-      {
-        start_date: @start_date,
-        end_date: @end_date
-      }
+      "created_at >= to_timestamp(?,'YYYY-MM-DD HH24:MI:ss') " +
+      " AND created_at <= to_timestamp(?,'YYYY-MM-DD HH24:MI:ss')",
+      @start_date, @end_date
     ).order(created_at: :asc)
   end
 

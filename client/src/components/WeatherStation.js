@@ -4,7 +4,7 @@ import { Container, Grid } from 'semantic-ui-react';
 import CurrentConditions from './CurrentConditions';
 import Compare from './Compare';
 import Favorites from './Favorites'
-import Address from './Address'
+import SensorActual from './SensorActual'
 import CurrentLocation from './CurrentLocation'
 import WeeklyForecast from './WeeklyForecast'
 import { set_current_location } from '../actions/locations'

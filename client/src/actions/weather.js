@@ -54,7 +54,7 @@ export const weatherForecast = ( geolocation ) => {
 
 export const weatherForecastHourly = ( geolocation ) => {
   return (dispatch) => {
-    axios.get(hourly(geolocation))
+    axios.get('/api/location_forecast', {api: hourly(geolocation)})
       .then( resp => {
         dispatch({ type: WEATHER_FORECAST_HOURLY, data: resp.data, headers: resp.headers })
       })
@@ -66,7 +66,7 @@ export const weatherForecastHourly = ( geolocation ) => {
 
 export const weatherForecastMonthly = ( geolocation ) => {
   return (dispatch) => {
-    axios.get(monthly(geolocation))
+    axios.get('/api/location_forecast', {api: monthly(geolocation)})
       .then( resp => {
         debugger
         dispatch({ type: WEATHER_FORECAST_MONTHLY, data: resp.data, headers: resp.headers  })
@@ -79,7 +79,7 @@ export const weatherForecastMonthly = ( geolocation ) => {
 
 export const weatherForecastYearly = ( geolocation ) => {
   return (dispatch) => {
-    axios.get(yearly(geolocation))
+    axios.get('/api/location_forecast', {api: yearly(geolocation)})
       .then( resp => {
         debugger
         dispatch({ type: WEATHER_FORECAST_YEARLY, data: resp.data, headers: resp.headers  })
