@@ -11,13 +11,15 @@ class TodaysWeather extends Component {
   render() {
     return(
       <Segment raised>
-        <Header as='h1'>Today's Weather</Header>
-        <Grid >
-          <Grid.Row>
-            <Grid.Column width={8}>
+        <Grid centered columns={1} >
+          <Grid.Row >
+            <Header as='h1'>Today's Weather</Header>
+          </Grid.Row>
+          <Grid.Row centered columns={4} >
+            <Grid.Column >
               <DayForecast data={this.props.weather[0]} />
             </Grid.Column>
-            <Grid.Column width={8}>
+            <Grid.Column >
               <DayForecast data={this.props.weather[1]} />
             </Grid.Column>
           </Grid.Row>

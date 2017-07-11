@@ -3,6 +3,7 @@ import { Header, Segment, Form, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { handleLogin } from '../actions/auth';
 
+
 class Login extends Component {
   state = { email: '', password: '' };
 
@@ -56,5 +57,6 @@ class Login extends Component {
     );
   }
 }
+
 
 export default connect()(Login);

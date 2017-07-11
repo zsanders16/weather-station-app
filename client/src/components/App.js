@@ -13,6 +13,8 @@ import { connect } from 'react-redux'
 import { weatherForecast } from '../actions/weather'
 import { set_lat_long } from '../actions/locations'
 import Charts from './Charts'
+import { Link } from 'react-router-dom'
+import Address from './Address'
 
 
 class App extends Component {
@@ -41,6 +43,7 @@ class App extends Component {
 
   render() {
     return (
+
       <div>
         <NavBar />
         <Flash />
@@ -51,6 +54,7 @@ class App extends Component {
             <Route exact path='/register' component={Register} />
             <ProtectedRoute exact path='/weatherstation' component={WeatherStation} />
             <ProtectedRoute path='/charts' component={Charts} />
+            <ProtectedRoute path='/address' component={Address} />
             <Route component={NoMatch} />
           </Switch>
         </FetchUser>

@@ -14,7 +14,7 @@ class DayForecast extends React.Component{
             </Card.Header>
             <Card.Meta>
               <span >
-                From {data.startTime} to {data.endTime}
+                From { data.isDaytime ? <span>6 am to 6 pm</span> : <span>6 pm to 6 am</span> }
               </span>
             </Card.Meta>
             <Card.Description>

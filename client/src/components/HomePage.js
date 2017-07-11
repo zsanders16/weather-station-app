@@ -3,6 +3,7 @@ import TodaysWeather from './TodaysWeather'
 import { Header, Segment } from 'semantic-ui-react'
 import WeeklyForecast from './WeeklyForecast'
 
+
 class HomePage extends Component {
   render() {
     return(

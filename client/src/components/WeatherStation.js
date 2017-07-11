@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container, Grid } from 'semantic-ui-react';
-import CurrentConditions from './CurrentConditions';
 import Compare from './Compare';
 import Favorites from './Favorites'
 import SensorActual from './SensorActual'
@@ -48,9 +47,6 @@ class WeatherStation extends Component {
       </Grid.Column>
       <Grid.Column width={16}>
         <WeeklyForecast />
-      </Grid.Column>
-      <Grid.Column width={12} className='ws_area'>
-        <CurrentConditions />
       </Grid.Column>
       <Grid.Column width={4} className='ws_area'>
         <Favorites />
