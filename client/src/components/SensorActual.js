@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Segment, Form, Checkbox } from 'semantic-ui-react'
-import { sensorActual, sensorHistorical } from '../actions/sensor'
+import { sensorActual, sensorHistorical, sensorReset } from '../actions/sensor'
 import ReactHighcharts from 'react-highcharts'
 import Datetime from 'react-datetime'
 import moment from 'moment'
@@ -38,59 +38,40 @@ class SensorActual extends Component {
   postgresql = 'YYYY-MM-DD HH:mm:ss'
 
   componentDidMount = () => {
+    this.setChartTypes()
+  }
+
+  setChartTypes = () => {
     this.setHistoricalChartType()
     this.setActualChartType()
   }
-  //
-  // setChartTypes = () => {
-  //   let { sensor: { actual , historical }, dispatch } = this.props
-  //   let { chart_type, start_date, end_date } = this.state
-  //   // Collect any required data from remote database
-  //   if( !historical || historical.length <= 0 ){
-  //     // Check if activated
-  //     if( chart_type.historical.state ) {
-  //       dispatch(chart_type.historical.callback({
-  //         start_date: start_date.format(this.postgresql),
-  //         end_date: end_date.format(this.postgresql),
-  //       }))
-  //     }
-  //   }
-  //   if( !actual || actual.length <= 0 ){
-  //     if( chart_type.actual.state ) {
-  //       dispatch(chart_type.actual.callback({
-  //         start_date: start_date.format(this.postgresql),
-  //         end_date: end_date.format(this.postgresql),
-  //       }))
-  //     }
-  //   }
-  // }
 
   setHistoricalChartType = () => {
     let { sensor: { historical }, dispatch } = this.props
     let { chart_type, start_date, end_date } = this.state
     // Collect any required data from remote database
-    if( !historical || historical.length <= 0 ){
-      // Check if activated
+    // if( !historical || historical.length <= 0 ){
+    //   // Check if activated
       if( chart_type.historical.state ) {
         dispatch(chart_type.historical.callback({
           start_date: start_date.format(this.postgresql),
           end_date: end_date.format(this.postgresql),
         }))
       }
-    }
+    // }
   }
 
   setActualChartType = () => {
     let { sensor: { actual }, dispatch } = this.props
     let { chart_type, start_date, end_date } = this.state
-    if( !actual || actual.length <= 0 ){
+    // if( !actual || actual.length <= 0 ){
       if( chart_type.actual.state ) {
         dispatch(chart_type.actual.callback({
           start_date: start_date.format(this.postgresql),
           end_date: end_date.format(this.postgresql),
         }))
       }
-    }
+    // }
   }
 
 
@@ -164,11 +145,19 @@ class SensorActual extends Component {
   }
 
   handleStartDate = ( moment ) => {
+    // TODO: Clear the sensor data if Not checked
+    let { dispatch } = this.props
     this.setState({ start_date: moment })
+    dispatch(sensorReset())
+    this.setChartTypes()
   }
 
   handleEndDate = ( moment ) => {
+    // TODO: Clear the sensor data if Not checked
+    let { dispatch } = this.props
     this.setState({ end_date: moment })
+    dispatch(sensorReset())
+    this.setChartTypes()
   }
 
   handleChartType = (event,data) => {

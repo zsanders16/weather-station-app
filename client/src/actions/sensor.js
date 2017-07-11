@@ -3,6 +3,7 @@ import { setFlash } from './flash'
 
 const SENSOR_ACTUAL = 'SENSOR_ACTUAL'
 const SENSOR_DATA = 'SENSOR_DATA'
+const SENSOR_CLEAR = 'SENSOR_CLEAR'
 
 
 // dates = {
@@ -42,4 +43,8 @@ export const sensorHistorical = ( dates ) => {
         dispatch(setFlash('Sensor Data Not Loaded','error'))
       })
   }
+}
+
+export const sensorReset = () => {
+  return { type: SENSOR_CLEAR }
 }

@@ -7,6 +7,8 @@ const sensor = ( state = {}, action ) => {
       return { actual: action.data, ...state }
     case 'SENSOR_DATA':
       return { historical: action.data, ...state }
+    case 'SENSOR_CLEAR':
+      return { } // clear all the redux state data points
     default:
       return state
   }
