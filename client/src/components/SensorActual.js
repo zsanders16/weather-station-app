@@ -1,18 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Segment, Form, Checkbox, Divider, Header } from 'semantic-ui-react'
-import {
-  sensorActual,
-  sensorHistorical,
-  sensorReset,
-} from '../actions/sensor'
-import { clearObservations } from '../actions/observations'
+import { sensorActual, sensorHistorical, sensorReset } from '../actions/sensor'
+import { listObservations } from '../actions/stations'
 import ReactHighcharts from 'react-highcharts'
 import Datetime from 'react-datetime'
 import moment from 'moment'
 import {
-  sensorChartConfig,
-  sensorSettings,
+  sensorChartConfig, sensorSettings, validDates,
+  setActualChartType, setHistoricalChartType,
 } from '../charts/sensor'
 import Stations from './Stations'
 
