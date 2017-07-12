@@ -2,13 +2,15 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Segment, Form, Checkbox, Divider, Header } from 'semantic-ui-react'
 import { sensorActual, sensorHistorical, sensorReset } from '../actions/sensor'
+import { listObservations } from '../actions/stations'
 import ReactHighcharts from 'react-highcharts'
 import Datetime from 'react-datetime'
 import moment from 'moment'
 import {
   sensorChartConfig, sensorSettings, validDates,
   setActualChartType, setHistoricalChartType,
- } from '../charts/sensor'
+} from '../charts/sensor'
+import Stations from './Stations'
 
 import 'react-datetime/css/react-datetime.css'
 
@@ -16,6 +18,7 @@ class SensorActual extends Component {
 
   // Tracker for chart display options selected by the user
   state = {
+    stations: [],
     ...sensorChartConfig,
     ...sensorSettings,
   }
@@ -104,7 +107,7 @@ class SensorActual extends Component {
   handleActStartDate = ( moment ) => {
     let { dispatch } = this.props
     let settings = this.state.settings
-    settings.historical.start_date = moment
+    settings.actual.start_date = moment
     this.setState({ settings })
     dispatch(sensorReset())
     this.setChartTypes()
@@ -159,6 +162,17 @@ class SensorActual extends Component {
     }
   }
 
+  handleStation = ( station ) => {
+    let { stations } = this.state
+    let found = stations.find( (sta) => sta.id === station.id )
+    if( found ) {
+      let keep = stations.filter( (sta) => sta.id !== station.id )
+      this.setState({ stations: keep })
+    } else {
+      this.setState({ stations: [ station, ...stations ] })
+    }
+  }
+
   /*
    * Rendering of the Chart and the Control/Settings panel
    */
@@ -166,104 +180,111 @@ class SensorActual extends Component {
     this.setChartData()
     let { actual: act, historical: hist } = this.state.settings
     return (
-      <Segment basic compact>
-        <Segment>
-          <ReactHighcharts config={this.state} />
-        </Segment>
-        <Segment>
-          <Form>
-            <Grid>
-              <Grid.Row columns={2}>
-                <Grid.Column width={8}>
-                  <Header as='h4'>Actual Realtime Data</Header>
-                  <Divider />
-                  <Form.Field>
+      <Grid>
+        <Grid.Row columns={2}>
+          <Grid.Column width={10}>
+            <Segment>
+              <ReactHighcharts config={this.state} />
+            </Segment>
+            <Segment>
+            <Form>
+              <Grid>
+                <Grid.Row columns={2}>
+                  <Grid.Column width={8}>
+                    <Header as='h4'>Actual Realtime Data</Header>
+                    <Divider />
+                    <Form.Field>
+                      <label>Display</label>
+                      <Checkbox
+                        id='actual'
+                        label='Actual'
+                        checked={act.display.state}
+                        onChange={this.handleActDisplay} /> &nbsp;
+                    </Form.Field>
+                    <Form.Field>
+                      <label>Temperatures</label> &nbsp;
+                      <Checkbox
+                        id='celsius'
+                        label='Celsius'
+                        checked={act.tempViews.celsius}
+                        onChange={this.actViewChanged} /> &nbsp;
+                      <Checkbox
+                        id='fahrenheit'
+                        label='Fahrenheit'
+                        checked={act.tempViews.fahrenheit}
+                        onChange={this.actViewChanged} /> &nbsp;
+                      <Checkbox
+                        id='kelvin'
+                        label='Kelvin'
+                        checked={act.tempViews.kelvin}
+                        onChange={this.actViewChanged} />
+                    </Form.Field>
+                    <Form.Field>
+                      <label>Start</label>
+                      <Datetime compact
+                        value={act.start_date}
+                        input={true}
+                        onChange={this.handleActStartDate} />
+                      <label>End Date</label>
+                      <Datetime compact
+                        value={act.end_date}
+                        input={true}
+                        onChange={this.handleActEndDate} />
+                    </Form.Field>
+                  </Grid.Column>
+
+                  <Grid.Column width={8}>
+                    <Header as='h4'>Historical Data</Header>
+                    <Divider />
+                    <Form.Field>
                     <label>Display</label>
                     <Checkbox
-                      id='actual'
-                      label='Actual'
-                      checked={act.display.state}
-                      onChange={this.handleActDisplay} /> &nbsp;
-                  </Form.Field>
-                  <Form.Field>
-                    <label>Temperatures</label> &nbsp;
-                    <Checkbox
-                      id='celsius'
-                      label='Celsius'
-                      checked={act.tempViews.celsius}
-                      onChange={this.actViewChanged} /> &nbsp;
-                    <Checkbox
-                      id='fahrenheit'
-                      label='Fahrenheit'
-                      checked={act.tempViews.fahrenheit}
-                      onChange={this.actViewChanged} /> &nbsp;
-                    <Checkbox
-                      id='kelvin'
-                      label='Kelvin'
-                      checked={act.tempViews.kelvin}
-                      onChange={this.actViewChanged} />
-                  </Form.Field>
-                  <Form.Field>
-                    <label>Start</label>
-                    <Datetime compact
-                      value={act.start_date}
-                      input={true}
-                      onChange={this.handleActStartDate} />
-                    <label>End Date</label>
-                    <Datetime compact
-                      value={act.end_date}
-                      input={true}
-                      onChange={this.handleActEndDate} />
-                  </Form.Field>
-                </Grid.Column>
-
-                <Grid.Column width={8}>
-                  <Header as='h4'>Historical Data</Header>
-                  <Divider />
-                  <Form.Field>
-                  <label>Display</label>
-                  <Checkbox
-                    id='historical'
-                    label='Historical'
-                    checked={hist.display.state}
-                    onChange={this.handleHistDisplay} />
-                  </Form.Field>
-                  <Form.Field>
-                    <label>Temperatures</label> &nbsp;
-                    <Checkbox
-                      id='celsius'
-                      label='Celsius'
-                      checked={hist.tempViews.celsius}
-                      onChange={this.histViewChanged} /> &nbsp;
-                    <Checkbox
-                      id='fahrenheit'
-                      label='Fahrenheit'
-                      checked={hist.tempViews.fahrenheit}
-                      onChange={this.histViewChanged} /> &nbsp;
-                    <Checkbox
-                      id='kelvin'
-                      label='Kelvin'
-                      checked={hist.tempViews.kelvin}
-                      onChange={this.histViewChanged} />
-                  </Form.Field>
-                  <Form.Field>
-                    <label>Start</label>
-                    <Datetime compact
-                      value={hist.start_date}
-                      input={true}
-                      onChange={this.handleHistStartDate} />
-                    <label>End Date</label>
-                    <Datetime compact
-                      value={hist.end_date}
-                      input={true}
-                      onChange={this.handleHistEndDate} />
-                  </Form.Field>
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
-          </Form>
-        </Segment>
-      </Segment>
+                      id='historical'
+                      label='Historical'
+                      checked={hist.display.state}
+                      onChange={this.handleHistDisplay} />
+                    </Form.Field>
+                    <Form.Field>
+                      <label>Temperatures</label> &nbsp;
+                      <Checkbox
+                        id='celsius'
+                        label='Celsius'
+                        checked={hist.tempViews.celsius}
+                        onChange={this.histViewChanged} /> &nbsp;
+                      <Checkbox
+                        id='fahrenheit'
+                        label='Fahrenheit'
+                        checked={hist.tempViews.fahrenheit}
+                        onChange={this.histViewChanged} /> &nbsp;
+                      <Checkbox
+                        id='kelvin'
+                        label='Kelvin'
+                        checked={hist.tempViews.kelvin}
+                        onChange={this.histViewChanged} />
+                    </Form.Field>
+                    <Form.Field>
+                      <label>Start</label>
+                      <Datetime compact
+                        value={hist.start_date}
+                        input={true}
+                        onChange={this.handleHistStartDate} />
+                      <label>End Date</label>
+                      <Datetime compact
+                        value={hist.end_date}
+                        input={true}
+                        onChange={this.handleHistEndDate} />
+                    </Form.Field>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Form>
+          </Segment>
+          </Grid.Column>
+          <Grid.Column width={6}>
+            <Stations handleStation={this.handleStation} />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     )
   }
 }

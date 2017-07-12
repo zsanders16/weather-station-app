@@ -1,3 +1,6 @@
+import axios from 'axios'
+import { setFlash } from '../actions/flash'
+
 const STATION_URI = 'https://api.weather.gov'
 
 const STATION_LIST_ALL = 'STATION_LIST_ALL'
@@ -21,16 +24,16 @@ const station = ( stationId ) => {
 // Get a list of locations near the given coordiantes
 // closest are listed first
 const stationsNearBY = ( geolocation ) => {
-  return STATION_URI + points(geolocation)} + STATION_QUERY_NEAR_BY
+  return STATION_URI + points(geolocation) + STATION_QUERY_NEAR_BY
 }
 
-const stationsAll = ( geolocation, limit = 20, states = [] ) => {
+const stationsAll = ( geolocation, limit = 5, states = ['UT'] ) => {
   return STATION_URI + STATION_QUERY_LIST_ALL +
     `?limit=${limit}&states=` + states.join(',')
 }
 
 const observations = ( stationId, startDate, endDate, limit = 50 ) => {
-  return STATION_URI + station(stationId) + STATION_QUERY_OBSERVATIONS
+  return STATION_URI + station(stationId) + STATION_QUERY_OBSERVATIONS +
     `?limit=${limit}&start=${startDate}&end=${endDate}`
 }
 
@@ -39,8 +42,8 @@ export const listStationsNearBy = ( geolocation ) => {
     axios.post('/api/location_forecast', {api: stationsNearBY(geolocation)})
       .then( resp => {
         dispatch({
-          type: STATION_LIST_ALL,
-          data: resp.data.properties.periods,
+          type: STATION_NEAR_BY,
+          data: resp.data.features,
           headers: resp.headers
         })
       })
@@ -51,28 +54,32 @@ export const listStationsNearBy = ( geolocation ) => {
 }
 
 export const listStationsAll = ( geolocation ) => {
-  return (dispatch) => {
-    axios.post('/api/location_forecast', {api: stationsAll(geolocation)})
-      .then( resp => {
-        dispatch({
-          type: STATION_LIST_ALL,
-          data: resp.data.properties.periods,
-          headers: resp.headers
-        })
-      })
-      .catch( resp => {
-        dispatch(setFlash('Weather Forecast Not Found!', 'error'))
-      })
-  }
+  // return (dispatch) => {
+  //   axios.post('/api/location_forecast', {api: stationsAll(geolocation)})
+  //     .then( resp => {
+  //       dispatch({
+  //         type: STATION_LIST_ALL,
+  //         data: resp.data.features,
+  //         headers: resp.headers
+  //       })
+  //     })
+  //     .catch( resp => {
+  //       dispatch(setFlash('Weather Forecast Not Found!', 'error'))
+  //     })
+  // }
+  return({
+    type: STATION_LIST_ALL
+  })
 }
 
-export const listObservations = ( geolocation ) => {
+export const listObservations = ( stationId, startDate, endDate, limit ) => {
   return (dispatch) => {
-    axios.post('/api/location_forecast', {api: observations(geolocation)})
+    let uri = observations( stationId, startDate, endDate, limit )
+    axios.post('/api/location_forecast', { api: uri })
       .then( resp => {
         dispatch({
           type: STATION_LIST_OBSERVATIONS,
-          data: resp.data.properties.periods,
+          data: resp.data.features,
           headers: resp.headers
         })
       })

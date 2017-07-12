@@ -7,6 +7,7 @@ import currentLocation from './currentLocation'
 import addresses from './addresses'
 import weather from './weather'
 import sensor from './sensor'
+import stations from './stations'
 
 
 const rootReducer = combineReducers({
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   addresses,
   weather,
   sensor,
+  stations,
 })
 
 export default rootReducer
