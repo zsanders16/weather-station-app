@@ -106,9 +106,9 @@ class SensorActual extends Component {
       // Grab each view, i.e. F,C,K
       for( let view in settings.tempViews ){
         if( settings.tempViews[view] ) {
-          console.log(data[0])
+          // console.log(data[0])
           let seriesData = this.parseTempData( data, view )
-          console.log(seriesData[0])
+          // console.log(seriesData[0])
           series.push({
             name: type + ' - ' + view.charAt().toUpperCase() + view.substr(1),
             data: seriesData,
@@ -118,11 +118,18 @@ class SensorActual extends Component {
     }
   }
 
-  parseTempData = ( data, view ) => {
-    // ASC order
+  parseTempData = ( data, view, dir = 'ASC' ) => {
+    // ASC or DESC order
     return data.sort( (a, b) => {
-      return moment(a.updated_at).isBefore(b.updated_at) ? 1 :
-        moment(a.updated_at).isAfter(b.updated_at) ? -1 : 0
+      if( dir === 'ASC' ) {
+        // ASC
+        return moment(a.updated_at).isBefore(b.updated_at) ? -1 :
+          moment(a.updated_at).isAfter(b.updated_at) ? 1 : 0
+      } else {
+        // DESC
+        return moment(a.updated_at).isBefore(b.updated_at) ? 1 :
+          moment(a.updated_at).isAfter(b.updated_at) ? -1 : 0
+      }
     }).map( ( data ) => {
       let category = moment(data.created_at).valueOf()
       let point = data[view]

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import NoMatch from './NoMatch';
-import NavBar from './NavBar';
+import NavBar2 from './NavBar2';
 import Login from './Login';
 import Register from './Register';
 import Flash from './Flash';
@@ -45,7 +45,7 @@ class App extends Component {
     return (
 
       <div>
-        <NavBar />
+        <NavBar2 />
         <Flash />
         <FetchUser>
           <Switch>
