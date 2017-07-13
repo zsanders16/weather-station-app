@@ -1,10 +1,14 @@
 import moment from 'moment'
-import { sensorActual, sensorHistorical } from '../actions/sensor'
+import {
+  sensorActual,
+  // sensorHistorical,
+} from '../actions/sensor'
+import { listObservations } from '../actions/observations'
 
 
 export const sensorChartConfig = {
   chart: {
-    type: 'line'
+    type: 'spline'
   },
   title: {
     text: 'Temperature Data'
@@ -14,6 +18,10 @@ export const sensorChartConfig = {
   },
   xAxis: {
     type: 'datetime',
+    dateTimeLabelFormats: {
+      month: '%e. %b',
+      year: '%b',
+    },
     // NOTE: categories should be calculated from the sensor data
     // It normally will represent the data point on the x-axis
     // The line below is just an example data set for testing
@@ -28,7 +36,7 @@ export const sensorChartConfig = {
       align: 'left',
     },
     title: {
-      text: 'Time'
+      text: 'Date'
     }
   },
   yAxis: {
@@ -36,13 +44,23 @@ export const sensorChartConfig = {
       text: 'Temperature (Degrees)'
     }
   },
+  tooltip: {
+      headerFormat: '<b>{series.name}</b><br>',
+      pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+  },
   plotOptions: {
-    line: {
-      dataLabels: {
-        enabled: false
+    spline: {
+      marker: {
+        enabled: true
       },
       enablemousetracking: true
-    }
+    },
+    // line: {
+    //   dataLabels: {
+    //     enabled: false
+    //   },
+    //   enablemousetracking: true
+    // }
   },
   // NOTE: array of object pairs
   series: []
@@ -71,7 +89,8 @@ export const sensorSettings = {
         kelvin: false,
       },
       display: {
-        callback: sensorHistorical,
+        callback: listObservations,
+        // callback: sensorHistorical,
         state: true,
       },
       start_date: moment().subtract(4, 'day'),

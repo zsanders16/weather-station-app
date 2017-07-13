@@ -5,11 +5,9 @@ const STATION_URI = 'https://api.weather.gov'
 
 const STATION_LIST_ALL = 'STATION_LIST_ALL'
 const STATION_NEAR_BY = 'STATION_NEAR_BY'
-const STATION_LIST_OBSERVATIONS = 'STATION_LIST_OBSERVATIONS'
 
 const STATION_QUERY_LIST_ALL = '/stations' // /stations?limit=10 states=KS,MO
 const STATION_QUERY_NEAR_BY = '/stations' // /points/39.0693,-94.6716/stations
-const STATION_QUERY_OBSERVATIONS = '/observations'
 
 /* Local Methods */
 /* geolocation = array of integers */
@@ -18,7 +16,7 @@ const points = ( geolocation ) => {
 }
 
 const station = ( stationId ) => {
-  return `/station/${stationId}`
+  return `/stations/${stationId}`
 }
 
 // Get a list of locations near the given coordiantes
@@ -32,10 +30,7 @@ const stationsAll = ( geolocation, limit = 5, states = ['UT'] ) => {
     `?limit=${limit}&states=` + states.join(',')
 }
 
-const observations = ( stationId, startDate, endDate, limit = 50 ) => {
-  return STATION_URI + station(stationId) + STATION_QUERY_OBSERVATIONS +
-    `?limit=${limit}&start=${startDate}&end=${endDate}`
-}
+
 
 export const listStationsNearBy = ( geolocation ) => {
   return (dispatch) => {
@@ -54,31 +49,11 @@ export const listStationsNearBy = ( geolocation ) => {
 }
 
 export const listStationsAll = ( geolocation ) => {
-  // return (dispatch) => {
-  //   axios.post('/api/location_forecast', {api: stationsAll(geolocation)})
-  //     .then( resp => {
-  //       dispatch({
-  //         type: STATION_LIST_ALL,
-  //         data: resp.data.features,
-  //         headers: resp.headers
-  //       })
-  //     })
-  //     .catch( resp => {
-  //       dispatch(setFlash('Weather Forecast Not Found!', 'error'))
-  //     })
-  // }
-  return({
-    type: STATION_LIST_ALL
-  })
-}
-
-export const listObservations = ( stationId, startDate, endDate, limit ) => {
   return (dispatch) => {
-    let uri = observations( stationId, startDate, endDate, limit )
-    axios.post('/api/location_forecast', { api: uri })
+    axios.post('/api/location_forecast', {api: stationsAll(geolocation)})
       .then( resp => {
         dispatch({
-          type: STATION_LIST_OBSERVATIONS,
+          type: STATION_LIST_ALL,
           data: resp.data.features,
           headers: resp.headers
         })
@@ -87,4 +62,7 @@ export const listObservations = ( stationId, startDate, endDate, limit ) => {
         dispatch(setFlash('Weather Forecast Not Found!', 'error'))
       })
   }
+  // return({
+  //   type: STATION_LIST_ALL
+  // })
 }

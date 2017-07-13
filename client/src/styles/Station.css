@@ -1,0 +1,6 @@
+.underline {
+  border-bottom: 1px solid grey;
+}
+.underline:last-child {
+  border-bottom: 0;
+}

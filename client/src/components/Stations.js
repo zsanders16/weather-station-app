@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Segment } from 'semantic-ui-react'
+import { Grid, Segment, Button, Divider } from 'semantic-ui-react'
 import Station from './Station'
 import { listStationsAll } from '../actions/stations'
-
 
 class Stations extends Component {
   state = {
@@ -49,9 +48,32 @@ class Stations extends Component {
     }
   }
 
+  displayStationIdentifiers = () => {
+    let { coords } = this.state
+    if( coords && coords.length > 0 ) {
+      let strs = coords.map( coord => {
+        return coord.id
+      })
+      return ( <span>{strs.join(', ')}</span>)
+    }
+  }
+
   render(){
     return (
       <Segment compact>
+        <Grid padded={false}>
+          <Grid.Row columns={2}>
+            <Grid.Column width={6}>
+              <Button size='mini'
+                onClick={this.props.loadStations}>Load Stations</Button>
+            </Grid.Column>
+            <Grid.Column width={10}>
+              { this.displayStationIdentifiers() }
+            </Grid.Column>
+          </Grid.Row>
+          <br />
+        </Grid>
+        <Divider />
         { this.displayStations() }
       </Segment>
     )

@@ -8,9 +8,11 @@ import addresses from './addresses'
 import weather from './weather'
 import sensor from './sensor'
 import stations from './stations'
+import observations from './observations'
 
 
 const rootReducer = combineReducers({
+  observations,
   user,
   flash,
   locations,
