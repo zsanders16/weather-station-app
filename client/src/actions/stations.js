@@ -30,10 +30,7 @@ const stationsAll = ( geolocation, limit = 5, states = ['UT'] ) => {
     `?limit=${limit}&states=` + states.join(',')
 }
 
-const observations = ( stationId, startDate, endDate, limit = 50 ) => {
-  return STATION_URI + station(stationId) + STATION_QUERY_OBSERVATIONS +
-    `?limit=${limit}&start=${startDate}&end=${endDate}`
-}
+
 
 export const listStationsNearBy = ( geolocation ) => {
   return (dispatch) => {
@@ -52,31 +49,11 @@ export const listStationsNearBy = ( geolocation ) => {
 }
 
 export const listStationsAll = ( geolocation ) => {
-  // return (dispatch) => {
-  //   axios.post('/api/location_forecast', {api: stationsAll(geolocation)})
-  //     .then( resp => {
-  //       dispatch({
-  //         type: STATION_LIST_ALL,
-  //         data: resp.data.features,
-  //         headers: resp.headers
-  //       })
-  //     })
-  //     .catch( resp => {
-  //       dispatch(setFlash('Weather Forecast Not Found!', 'error'))
-  //     })
-  // }
-  return({
-    type: STATION_LIST_ALL
-  })
-}
-
-export const listObservations = ( stationId, startDate, endDate, limit ) => {
   return (dispatch) => {
-    let uri = observations( stationId, startDate, endDate, limit )
-    axios.post('/api/location_forecast', { api: uri })
+    axios.post('/api/location_forecast', {api: stationsAll(geolocation)})
       .then( resp => {
         dispatch({
-          type: STATION_LIST_OBSERVATIONS,
+          type: STATION_LIST_ALL,
           data: resp.data.features,
           headers: resp.headers
         })
