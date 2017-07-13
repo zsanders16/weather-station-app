@@ -1,12 +1,19 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Segment, Form, Checkbox, Divider, Header } from 'semantic-ui-react'
-import { sensorActual, sensorHistorical, sensorReset } from '../actions/sensor'
+import {
+  sensorActual,
+  sensorHistorical,
+  sensorReset,
+} from '../actions/sensor'
 import { listObservations, clearObservations } from '../actions/observations'
 import ReactHighcharts from 'react-highcharts'
 import Datetime from 'react-datetime'
 import moment from 'moment'
-import { sensorChartConfig, sensorSettings } from '../charts/sensor'
+import {
+  sensorChartConfig,
+  sensorSettings,
+} from '../charts/sensor'
 import Stations from './Stations'
 
 import 'react-datetime/css/react-datetime.css'
@@ -23,7 +30,27 @@ class SensorActual extends Component {
   // timestamp format for querying the remote database
   postgresql = 'YYYY-MM-DD HH:mm:ss'
 
+  /*
+   * Makes Async calls to the database and retrieve real-time
+   * temp information as it is pulled from the arduino
+   */
+  updateStatus = { canUpdate: true }
 
+  updateActual = ( waitPeriod = 10000 ) => {
+    // wait for 10 seconds tight at first
+    const dates = { start_date: moment().utc().format() }
+    this.setActualChartType()
+    console.log(`Updated: ${dates.start_date}`)
+    if( this.updateStatus.canUpdate )
+      setTimeout( () => this.updateActual(), waitPeriod )
+  }
+
+  /*
+   * Creation of the displayed elements
+   */
+  componentDidUnMount = () => {
+    this.updateStatus.canUpdate = false
+  }
 
   componentDidMount = () => {
     this.setChartTypes()
@@ -31,7 +58,7 @@ class SensorActual extends Component {
 
   setChartTypes = () => {
     this.setHistoricalChartType()
-    this.setActualChartType()
+    this.updateActual()
   }
 
   validDates = () => {

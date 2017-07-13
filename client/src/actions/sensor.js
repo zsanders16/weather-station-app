@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { setFlash } from './flash'
+import moment from 'moment'
 
 const SENSOR_ACTUAL = 'SENSOR_ACTUAL'
 const SENSOR_DATA = 'SENSOR_DATA'
@@ -24,7 +25,7 @@ export const sensorActual = ( dates ) => {
     axios.get(`/api/weather/actual?${searchString(dates)}`)
       .then( resp => {
         dispatch({ type: SENSOR_ACTUAL, data: resp.data, headers: resp.headers })
-        dispatch(setFlash('Sensor Data Loaded!','success'))
+        // dispatch(setFlash('Sensor Data Loaded!','success'))
       })
       .catch( resp => {
         dispatch(setFlash('Sensor Data Not Loaded','error'))

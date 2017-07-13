@@ -9,7 +9,6 @@ import ProtectedRoute from './ProtectedRoute';
 import { Switch, Route } from 'react-router-dom';
 import FetchUser from './FetchUser';
 import HomePage from './HomePage';
-import { connect } from 'react-redux'
 import { weatherForecast } from '../actions/weather'
 import { set_lat_long } from '../actions/locations'
 import Charts from './Charts'
@@ -63,4 +62,4 @@ class App extends Component {
   }
 }
 
-export default connect()(App);
+export default (App);

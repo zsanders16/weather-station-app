@@ -3,6 +3,16 @@ import { connect } from 'react-redux'
 import { Grid, Segment, Button, Divider } from 'semantic-ui-react'
 import Station from './Station'
 import { listStationsAll } from '../actions/stations'
+import styled from 'styled-components'
+
+const Output = styled(Segment)`
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+`
+const OutputText = styled.span`
+  font-size: 0.7rem;
+  color: blue;
+`
 
 class Stations extends Component {
   state = {
@@ -68,7 +78,11 @@ class Stations extends Component {
                 onClick={this.props.loadStations}>Load Stations</Button>
             </Grid.Column>
             <Grid.Column width={10}>
-              { this.displayStationIdentifiers() }
+              <Output>
+                <OutputText>
+                  { this.displayStationIdentifiers() }
+                </OutputText>
+              </Output>
             </Grid.Column>
           </Grid.Row>
           <br />
