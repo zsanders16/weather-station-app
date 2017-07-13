@@ -21,8 +21,6 @@ const Location = styled.p `
   text-overflow: ellipsis;
 `
 
-import '../styles/Station.css'
-
 const Station = ({ name, stationIdentifier, id, coords, handleShow, handleHide }) => {
   return (
     <Segment basic compact className="underline">
