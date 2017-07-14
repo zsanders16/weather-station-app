@@ -8,7 +8,7 @@ const observations = ( state = [], action ) => {
     case 'STATION_LIST_OBSERVATIONS':
       let data = parseDataSeries(action.data)
       let stationRegExp = /.*\/(\w{4,5})$/
-      let id = data.properties.station.match(stationRegExp)
+      let id = action.data[0].properties.station.match(stationRegExp)[1]
       // let id = action.id
       return [ ...state, { id, data } ]
     case 'STATION_LIST_CLEAR':

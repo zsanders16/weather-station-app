@@ -78,8 +78,8 @@ export const sensorSettings = {
         callback: sensorActual,
         state: true,
       },
-      start_date: moment().subtract(5, 'day'),
-      end_date: moment(),
+      start_date: moment().subtract(1, 'day'),
+      end_date: moment().add(1,'day'),
       limit: 30,
     },
     historical: {
@@ -93,8 +93,8 @@ export const sensorSettings = {
         // callback: sensorHistorical,
         state: true,
       },
-      start_date: moment().subtract(5, 'day'),
-      end_date: moment(),
+      start_date: moment().subtract(1, 'day'),
+      end_date: moment().add(1,'day'),
       limit: 30,
     },
   },
@@ -104,35 +104,35 @@ export const sensorSettings = {
 /*
  * Methods for running the actual Sensor Graph manupilations
  */
-export const validDates = ( that ) => {
-  let { settings: { actual: act, historical: hist }} = that.state
-  let sameStartMonth = act.start_date.month() === hist.start_date.month()
-  let sameStartDay = act.start_date.date() === hist.start_date.date()
-  return sameStartMonth && sameStartDay
-}
-
-export const setHistoricalChartType = ( that ) => {
-  if(validDates(that)){
-    let { dispatch } = that.props
-    let { display, start_date, end_date } = that.state.settings.historical
-    if( display.state ) {
-      dispatch(display.callback({
-        start_date: start_date.format(that.postgresql),
-        end_date: end_date.format(that.postgresql),
-      }))
-    }
-  }
-}
-
-export const setActualChartType = ( that ) => {
-  if(validDates(that)){
-    let { dispatch } = that.props
-    let { display, start_date, end_date } = that.state.settings.actual
-    if( display.state ) {
-      dispatch(display.callback({
-        start_date: start_date.format(that.postgresql),
-        end_date: end_date.format(that.postgresql),
-      }))
-    }
-  }
-}
+// export const validDates = ( that ) => {
+//   let { settings: { actual: act, historical: hist }} = that.state
+//   let sameStartMonth = act.start_date.month() === hist.start_date.month()
+//   let sameStartDay = act.start_date.date() === hist.start_date.date()
+//   return sameStartMonth && sameStartDay
+// }
+//
+// export const setHistoricalChartType = ( that ) => {
+//   if(validDates(that)){
+//     let { dispatch } = that.props
+//     let { display, start_date, end_date } = that.state.settings.historical
+//     if( display.state ) {
+//       dispatch(display.callback({
+//         start_date: start_date.format(that.postgresql),
+//         end_date: end_date.format(that.postgresql),
+//       }))
+//     }
+//   }
+// }
+//
+// export const setActualChartType = ( that ) => {
+//   if(validDates(that)){
+//     let { dispatch } = that.props
+//     let { display, start_date, end_date } = that.state.settings.actual
+//     if( display.state ) {
+//       dispatch(display.callback({
+//         start_date: start_date.format(that.postgresql),
+//         end_date: end_date.format(that.postgresql),
+//       }))
+//     }
+//   }
+// }

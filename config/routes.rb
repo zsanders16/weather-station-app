@@ -37,8 +37,10 @@
 #                            DELETE   /api/addresses/:id(.:format)           api/addresses#destroy
 #           api_weather_data GET      /api/weather/data(.:format)            api/weathers#data
 #         api_weather_actual GET      /api/weather/actual(.:format)          api/weathers#actual
+#    api_observation_request POST     /api/observations(.:format)            api/observations#observation_request
+#           open_weather_api POST     /open_weather_api(.:format)            open_weather_api#location_forecast
 #                            GET      /*other(.:format)                      static#index
-#
+# 
 
 Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'api/auth'
@@ -53,6 +55,9 @@ Rails.application.routes.draw do
     # Custom Routes for Weather Controller
     get '/weather/data', to: 'weathers#data', as: 'weather_data'
     get '/weather/actual', to: 'weathers#actual', as: 'weather_actual'
+
+    # Routes for re-routing to the weather service api for observations
+    post '/observations', to: 'observations#observation_request', as: 'observation_request'
 
   end
 

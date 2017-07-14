@@ -23,10 +23,11 @@ const observations = ( stationId, startDate, endDate, limit = 5 ) => {
 
 export const listObservations = ( station ) => {
   let { stationId, startDate, endDate, limit } = station
+  console.log(stationId)
   return (dispatch) => {
     let uri = observations( stationId, startDate, endDate, limit )
     console.log(uri)
-    axios.post('/api/location_forecast', { api: uri })
+    axios.post('/api/observations', {uri} )
       .then( resp => {
         dispatch({
           type: STATION_LIST_OBSERVATIONS,

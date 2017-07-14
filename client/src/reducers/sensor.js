@@ -4,9 +4,9 @@
 const sensor = ( state = {}, action ) => {
   switch( action.type ) {
     case 'SENSOR_ACTUAL':
-      return { actual: action.data, ...state }
+      return { ...state, actual: action.data }
     case 'SENSOR_DATA':
-      return { historical: action.data, ...state }
+      return { ...state, historical: action.data }
     case 'SENSOR_CLEAR':
       return { } // clear all the redux state data points
     default:

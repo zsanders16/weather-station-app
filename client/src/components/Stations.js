@@ -87,7 +87,6 @@ class Stations extends Component {
           </Grid.Row>
           <br />
         </Grid>
-        <Divider />
         { this.displayStations() }
       </Segment>
     )

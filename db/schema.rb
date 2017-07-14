@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170707004755) do
+ActiveRecord::Schema.define(version: 20170714121907) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,31 @@ ActiveRecord::Schema.define(version: 20170707004755) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_favorites_on_user_id"
+  end
+
+  create_table "historicals", force: :cascade do |t|
+    t.string "url"
+    t.float "lat"
+    t.float "lng"
+    t.string "station"
+    t.string "timestamp"
+    t.float "degC"
+    t.float "relativeHumidity"
+    t.float "heatIndex"
+    t.bigint "station_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["station_id"], name: "index_historicals_on_station_id"
+  end
+
+  create_table "stations", force: :cascade do |t|
+    t.string "url", null: false
+    t.float "lat", null: false
+    t.float "lng", null: false
+    t.string "stationIdentifier", null: false
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

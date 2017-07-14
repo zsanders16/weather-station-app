@@ -6,12 +6,13 @@ import styled from 'styled-components'
 import '../styles/Station.css'
 
 const GridRow = styled(Grid.Row)`
-  padding: 0 !important;
+  padding-top: 3% !important;
+  padding-bottom: 0 !important;
   margin: 0 !important;
-  &:nth-child(even) { border-bottom: 1px solid lightgrey; }
+  &:nth-child(odd) { border-top: 1px solid lightgrey; }
 `
 const Location = styled.p `
-  padding: 3px 0;
+  padding: 0;
   font-size: 0.rem;
   color: lightgrey;
   width: 250px;

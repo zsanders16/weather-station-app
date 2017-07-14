@@ -6,7 +6,7 @@ import {
   sensorHistorical,
   sensorReset,
 } from '../actions/sensor'
-import { listObservations, clearObservations } from '../actions/observations'
+import { clearObservations } from '../actions/observations'
 import ReactHighcharts from 'react-highcharts'
 import Datetime from 'react-datetime'
 import moment from 'moment'
@@ -35,6 +35,7 @@ class SensorActual extends Component {
    * temp information as it is pulled from the arduino
    */
   updateStatus = { canUpdate: true }
+  timer = null
 
   updateActual = ( waitPeriod = 10000 ) => {
     // wait for 10 seconds tight at first
@@ -42,14 +43,15 @@ class SensorActual extends Component {
     this.setActualChartType()
     console.log(`Updated: ${dates.start_date}`)
     if( this.updateStatus.canUpdate )
-      setTimeout( () => this.updateActual(), waitPeriod )
+      this.timmer = setTimeout( () => this.updateActual(), waitPeriod )
   }
 
   /*
    * Creation of the displayed elements
    */
-  componentDidUnMount = () => {
+  componentWillUnmount = () => {
     this.updateStatus.canUpdate = false
+    clearTimeout(this.timer)
   }
 
   componentDidMount = () => {
@@ -147,20 +149,24 @@ class SensorActual extends Component {
 
   parseTempData = ( data, view, dir = 'ASC' ) => {
     // ASC or DESC order
-    return data.sort( (a, b) => {
+    return data.map( ( data ) => {
+      // TODO: set all dates to the same year and month for displaying reasons
+      let { start_date } = this.state.settings.actual
+      let category = moment(data.created_at)
+      category.set('year', start_date.year())
+      category.set('month', start_date.month())
+      let point = data[view]
+      return [ category.valueOf(), point ]
+    }).sort( (a, b) => {
       if( dir === 'ASC' ) {
         // ASC
-        return moment(a.updated_at).isBefore(b.updated_at) ? -1 :
-          moment(a.updated_at).isAfter(b.updated_at) ? 1 : 0
+        return moment(a[0]).isBefore(b[0]) ? -1 :
+          moment(a[0]).isAfter(b[0]) ? 1 : 0
       } else {
         // DESC
-        return moment(a.updated_at).isBefore(b.updated_at) ? 1 :
-          moment(a.updated_at).isAfter(b.updated_at) ? -1 : 0
+        return moment(a[0]).isBefore(b[0]) ? 1 :
+          moment(a[0]).isAfter(b[0]) ? -1 : 0
       }
-    }).map( ( data ) => {
-      let category = moment(data.created_at).valueOf()
-      let point = data[view]
-      return [ category, point ]
     })
   }
 
