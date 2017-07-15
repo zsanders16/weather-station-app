@@ -11,11 +11,13 @@ const pool = require('./db')
 var five = require("johnny-five");
 var board = new five.Board();
 var seconds = 1000
+var minutes = seconds * 60
+var hours = minutes * 60
 
 board.on("ready", function() {
   var multi = new five.Multi({
     controller: "HTU21D",
-    freq: 5 * seconds,
+    freq: 1 * minutes,
   });
 
   multi.on("data", function() {

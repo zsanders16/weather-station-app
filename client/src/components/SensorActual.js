@@ -36,8 +36,10 @@ class SensorActual extends Component {
    */
   updateStatus = { canUpdate: true }
   timer = null
+  seconds = 1000
+  minutes = this.seconds * 60
 
-  updateActual = ( waitPeriod = 10000 ) => {
+  updateActual = ( waitPeriod = (10*this.seconds) ) => {
     // wait for 10 seconds tight at first
     const dates = { start_date: moment().utc().format() }
     this.setActualChartType()
