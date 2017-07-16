@@ -1,4 +1,4 @@
-const observationData = {
+const observationData = {   
     "@context": [
         "https://raw.githubusercontent.com/geojson/geojson-ld/master/contexts/geojson-base.jsonld",
         {
