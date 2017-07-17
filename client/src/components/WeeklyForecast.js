@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Dropdown, Grid, Segment, Dimmer, Loader, Header, Menu } from 'semantic-ui-react'
+import { Dropdown, Grid, Segment, Dimmer, Loader, Header, Card } from 'semantic-ui-react'
 import moment from 'moment'
 import DayForecast from './DayForecast'
 
@@ -14,18 +14,21 @@ const options = [
 ]
 
 class WeeklyForecast extends React.Component {
-  state = { forecastDays: 1 }
+  state = { forecastDays: 1, city: this.props.cities[0]}
 
 
+  componentDidMount() {
 
-
+  }
 
   //display each forecasted day
   displayDays = (days) => {
     return days.map( (day) => {
       return(
-        <Grid.Column width={4}>
-          <DayForecast key={day.number} data={day} />
+        <Grid.Column  key={day.number} width={4}>
+          <Card.Group style={{marginBottom: '10px'}}>
+            <DayForecast  data={day} />
+          </Card.Group>
         </Grid.Column>
       );
     });
@@ -33,20 +36,19 @@ class WeeklyForecast extends React.Component {
 
 
   //remove the current day from the api forecast
-  selectDays = () => {
-    let data = this.props.weather
+  selectDays = (city) => {
     let { forecastDays } = this.state
     let totalViews = forecastDays * 2
-    if(data){
+    if(city.days){
       let days = []
       if(moment().hour() < 18){
         for(let i=2;i<totalViews + 2;i++){
-          days.push(data[i])
+          days.push(city.days[i])
         }
         return this.displayDays(days)
       }else{
         for(let i=1;i<totalViews + 1;i++){
-          days.push(data[i])
+          days.push(city.days[i])
         }
         return this.displayDays(days)
       }
@@ -61,31 +63,53 @@ class WeeklyForecast extends React.Component {
     }
   }
 
+  //pull the correct city to display out of all cities in redux state
+  selectCity = () => {
+    let { cities, cityView } = this.props
+    let index = 0
+    cities.forEach( (city, i) => {
+      if(city.city === cityView){
+        index = i
+      }
+    })
+    return this.selectDays(cities[index])
+  }
+
   handleChange = (e, data) => {
     this.setState({ forecastDays: data.value})
   }
 
-  render(){
-    // let { days } = this.state
+  displayForecast = () => {
+    let { cityView } = this.props
     return(
       <Segment raised>
-
         <Grid>
           <Grid.Row centered>
-            <Header as='h1'>Forecast</Header>
-            <Dropdown onChange={this.handleChange} placeholder='Number of Days' search selection options={options} />
+            <Grid.Column width={10} textAlign='right'>
+              <Header as='h1'>Forecast for {cityView}</Header>
+            </Grid.Column>
+            <Grid.Column width={6} textAlign='right'>
+              <Dropdown onChange={this.handleChange} placeholder='Number of Days' search selection options={options} />
+            </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            {this.selectDays()}
+            {this.selectCity()}
           </Grid.Row>
         </Grid>
       </Segment>
     )
   }
+
+  render(){
+    return(
+      this.displayForecast()
+    )
+  }
 }
 
 const mapStateToProps = (state) => {
-  return { weather: state.weather }
+  return { cities: state.weatherForecasts.weekly, cityView: state.weatherForecasts.cityView }
+
 }
 
 export default connect(mapStateToProps)(WeeklyForecast);

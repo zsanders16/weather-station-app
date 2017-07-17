@@ -1,25 +1,29 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { Grid, Segment, Message, Button } from 'semantic-ui-react'
-import AddressAll from './AddressAll'
-import { addresses } from '../actions/addresses'
+import { Grid, Segment, Message, Button, Header, Divider, Modal } from 'semantic-ui-react'
+import { addressesGet, addCurrentToAddress } from '../actions/addresses'
+import AddressSingle from './AddressSingle'
+import AddressForm from './AddressForm'
 
 class Favorites extends Component {
-  state = { favorites: [] }
+  state = { favorites: [], modalOpen: false }
 
   componentDidMount = () => {
-    let { addresses: addSet, dispatch } = this.props
+    let { addresses, dispatch, currentLocation } = this.props
     // load addresses from the database
-    if( addSet.length <= 0 ) {
-      dispatch(addresses())
+    if( addresses.length === 0 ) {
+      dispatch(addCurrentToAddress(currentLocation.address, dispatch))
+      dispatch(addressesGet())
     }
-      
+
   }
 
   displayFavorites = () => {
-    if( this.props.addresses.length > 0 ){
-      return <AddressAll />
+    let { addresses } = this.props
+    if( addresses.length > 0 ){
+      return addresses.map( (address, i) => {
+        return <AddressSingle key={i} address={address} handleClose={this.handleClose} handleOpen={this.handleOpen} modalOpen={this.state.modalOpen} />
+      })
     }else{
       return (
         <Message>
@@ -30,48 +34,63 @@ class Favorites extends Component {
     }
   }
 
+
+
+  displayButtons = () => {
+    return(
+      <Segment basic >
+        <Header as='h2' textAlign='center'>Saved Locations</Header>
+        <Modal trigger={<Button
+            color='teal'
+            icon='add'
+            content='Add'
+            fluid
+            onClick={this.handleOpen}
+            />}
+          open={this.state.modalOpen}
+          onClose={this.handleClose}
+          >
+          <Modal.Header>Add a New Contact</Modal.Header>
+          <Modal.Content>
+            <Modal.Description>
+              <AddressForm handleClose={this.handleClose} handleOpen={this.handleOpen}/>
+            </Modal.Description>
+          </Modal.Content>
+        </Modal>
+      </Segment>
+    )
+  }
+
+  handleOpen = (e) => this.setState({
+    modalOpen: true,
+  })
+
+  handleClose = (e) => this.setState({
+    modalOpen: false,
+  })
+
   render(){
     return (
       <Grid>
         <Grid.Row>
           <Grid.Column>
-            <Segment raised className='fav-scroll'>
-              { this.displayFavorites() }
+            <Segment raised>
+            { this.displayButtons() }
+            <Divider />
+            { this.displayFavorites() }
             </Segment>
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row>
-          <Grid.Column>
-            <Button.Group size='mini' floated='right'>
-              <Button
-                icon='add'
-                content='Add'
-                as={ Link }
-                to={`/address/add`}
-              />
-              <Button
-                icon='remove'
-                content='Remove'
-                as={ Link }
-                to={`/address/all`}
-              />
-              <Button
-                icon='edit'
-                content='Delete'
-                as={ Link }
-                to={`/address/all`}
-              />
-            </Button.Group>
-          </Grid.Column>
-        </Grid.Row>
+
       </Grid>
     )
   }
 }
 
 const mapStateToProps = ( state ) => {
-  // TODO: this is just a prototype
-  return { favorites: state.favorites, addresses: state.addresses }
+  return { favorites: state.favorites,
+           addresses: state.addresses,
+           currentLocation: state.currentLocation }
 }
 
 export default connect(mapStateToProps)(Favorites)

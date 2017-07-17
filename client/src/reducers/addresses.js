@@ -1,11 +1,11 @@
 const addresses = ( state = [], action ) => {
   switch( action.type ) {
     case 'ADDRESS':
-      return action.addresses
+      return [ ...state, ...action.addresses]
 
     case 'ADDRESS_CREATE':
       // insert new address at the top of the list
-      return [ action.address, ...state ]
+      return [ ...state,  action.address]
 
     case 'ADDRESS_SHOW':
       // ids should be integers
@@ -25,7 +25,7 @@ const addresses = ( state = [], action ) => {
         return parseInt(action.address.id,10) !== parseInt(add.id,10)
       })
       // update the redux list with new
-      return [ action.address, ...filtered ]
+      return [ ...filtered, action.address ]
 
     case 'ADDRESS_DELETE':
       // remove the old address from the local list

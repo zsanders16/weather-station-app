@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { handleLogout } from '../actions/auth';
 import { withRouter } from 'react-router-dom';
-import { Menu, Input, Dropdown } from 'semantic-ui-react';
+import { Menu } from 'semantic-ui-react';
 
 class NavBar extends Component {
 
@@ -12,7 +12,7 @@ class NavBar extends Component {
     const { user } = this.props;
     if(user.id) {
       return(
-        <Menu.Menu position='left'>
+        <Menu.Menu >
             <Menu.Item as={Link} to='/weatherstation' name='Weather Station'/>
             <Menu.Item as={Link} to='/charts' name='Charts' />
         </Menu.Menu>

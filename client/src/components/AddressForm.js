@@ -1,26 +1,28 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
 import { Form, Button } from 'semantic-ui-react'
 import { addressCreate, addressUpdate } from '../actions/addresses'
 
 class AddressForm extends Component {
-  defaults = { street1: '', street2: '', city: '', state: '', zipcode: '' }
+  defaults = { street1: '', street2: '', city: '', state: '', zipcode: ''}
+
   state = { ...this.defaults }
 
   componentDidMount = () => {
     // address is passed down from HOC through props
-    let { address } = this.props
-    if( address ){
-      this.setState({ ...address })
+    let { item } = this.props
+    if( item ){
+      debugger
+
+      this.setState({ street1: item.address1, city: item.city, state: item.state, zipcode: item.zipcode})
     }
   }
 
   renderButton = () => {
     // cmd from HOC
-    let { id } = this.props
+
     // edit if 'id' exists
-    if( id ) {
+    if( this.props.item ) {
       return ( <Button type='submit'>Update</Button> )
     } else {
       return ( <Button type='submit'>Create</Button> )
@@ -33,19 +35,23 @@ class AddressForm extends Component {
   }
 
   onSubmit = () => {
-    let { id, dispatch, history } = this.props
-    // create if no id indicating to edit
-    if( !id ){
+    let { dispatch, item, handleClose } = this.props
+    debugger
+    if( !item){
       dispatch(addressCreate(this.state))
-    } else if ( id ) {
-      dispatch(addressUpdate(this.state))
+      this.setState({...this.defaults })
+      handleClose()
+    } else if ( item ) {
+      dispatch(addressUpdate(this.state, item.id))
+      this.setState({...this.defaults})
+      handleClose()
     }
-    // return to the HOC
-    history.push(`/address`)
   }
+
 
   render(){
     let { street1, street2, city, state, zipcode } = this.state
+    let { handleClose } = this.props
     return (
       <Form onSubmit={this.onSubmit}>
         <Form.Input
@@ -83,21 +89,11 @@ class AddressForm extends Component {
           required
           onChange={this.onChange} />
         { this.renderButton() }
-        <Button as={ Link } to={`/address/all`}>Cancel</Button>
+        <Button onClick={handleClose}>Cancel</Button>
       </Form>
     )
   }
 }
 
-const mapStateToProps = ( state, props ) => {
-  let { id } = props.match.params
-  let address = {}
-  if( id ) {
-    address = state.addresses.find( (address) => {
-      return parseInt(address.id,10) === parseInt(id,10)
-    })
-  }
-  return { address, id }
-}
 
-export default connect(mapStateToProps)(AddressForm)
+export default connect()(AddressForm)

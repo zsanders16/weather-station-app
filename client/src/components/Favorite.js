@@ -3,6 +3,8 @@ import { Segment } from 'semantic-ui-react'
 
 class Favorite extends Component {
 
+  
+
   render(){
     return (
       <Segment basic >

@@ -9,11 +9,8 @@ import ProtectedRoute from './ProtectedRoute';
 import { Switch, Route } from 'react-router-dom';
 import FetchUser from './FetchUser';
 import HomePage from './HomePage';
-import { weatherForecast } from '../actions/weather'
-import { set_lat_long } from '../actions/locations'
 import Charts from './Charts'
-import { Link } from 'react-router-dom'
-import Address from './Address'
+
 
 
 class App extends Component {
@@ -24,8 +21,8 @@ class App extends Component {
   //
   // setPosition = (latitude, longitude) => {
   //   let { dispatch } = this.props
-  //     dispatch(set_lat_long([latitude, longitude], dispatch))
-  //     dispatch(weatherForecast([latitude, longitude] ))
+  //   dispatch(set_lat_long([latitude, longitude], dispatch))
+  //   dispatch(weatherForecastWeekly([latitude, longitude], 'current' ))
   // }
   //
   // GetLocation = () => {
@@ -53,7 +50,6 @@ class App extends Component {
             <Route exact path='/register' component={Register} />
             <ProtectedRoute exact path='/weatherstation' component={WeatherStation} />
             <ProtectedRoute path='/charts' component={Charts} />
-            <ProtectedRoute path='/address' component={Address} />
             <Route component={NoMatch} />
           </Switch>
         </FetchUser>
@@ -62,4 +58,4 @@ class App extends Component {
   }
 }
 
-export default (App);
+export default App;
