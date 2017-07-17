@@ -9,10 +9,12 @@ import weatherForecasts from './weatherForecasts'
 import sensor from './sensor'
 import stations from './stations'
 import observations from './observations'
+import humidities from './humidities'
 
 
 const rootReducer = combineReducers({
   observations,
+  humidities,
   user,
   flash,
   locations,

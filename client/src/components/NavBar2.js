@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import {
-  Menu,
+  Menu, Dropdown,
 } from 'semantic-ui-react'
 import { handleLogout } from '../actions/auth'
 
@@ -33,12 +33,20 @@ class NavBar2 extends Component {
               to="/weatherstation"
               active={activeItem === 'forecast'}
               onClick={this.handleItemClick} />
-            <Menu.Item
-              name='charts'
-              as={ Link }
-              to="/charts"
-              active={activeItem === 'charts'}
-              onClick={this.handleItemClick} />
+            <Dropdown.Menu item text='Charts'>
+              <Menu.Item
+                name='Temperature'
+                as={ Link }
+                to="/charts/temperatures"
+                active={activeItem === 'temperatures'}
+                onClick={this.handleItemClick} />
+              <Menu.Item
+                name='Humidity'
+                as={ Link }
+                to='/charts/humidities'
+                active={activeItem === 'humidities'}
+                onClick={this.handleItemClick} />
+            </Dropdown.Menu>
           </Menu.Menu>
           :
           null
