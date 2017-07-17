@@ -38,6 +38,9 @@
 #           api_weather_data GET      /api/weather/data(.:format)            api/weathers#data
 #         api_weather_actual GET      /api/weather/actual(.:format)          api/weathers#actual
 #    api_observation_request POST     /api/observations(.:format)            api/observations#observation_request
+#      api_humidities_actual GET      /api/humidities/actual(.:format)       api/humidities#actual
+#  api_humidities_historical GET      /api/humidities/historical(.:format)   api/humidities#historical
+#  api_humidities_comparison GET      /api/humidities/comparison(.:format)   api/humidities#comparison
 #           open_weather_api POST     /open_weather_api(.:format)            open_weather_api#location_forecast
 #                            GET      /*other(.:format)                      static#index
 # 
@@ -59,9 +62,14 @@ Rails.application.routes.draw do
     # Routes for re-routing to the weather service api for observations
     post '/observations', to: 'observations#observation_request', as: 'observation_request'
 
+    # Routes for the Humidity Controller
+    get '/humidities/actual', to: 'humidities#actual', as: 'humidities_actual'
+    get '/humidities/historical', to: 'humidities#historical', as: 'humidities_historical'
+    get 'humidities/comparison', to: 'humidities#comparison', as: 'humidities_comparison'
+
   end
 
-    post '/open_weather_api', to: 'open_weather_api#location_forecast'
+  post '/open_weather_api', to: 'open_weather_api#location_forecast'
 
   #Do not place any routes below this one
   get '*other', to: 'static#index'

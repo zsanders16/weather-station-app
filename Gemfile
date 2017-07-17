@@ -43,6 +43,7 @@ group :development, :test do
   gem 'pry'
   gem 'faker'
   gem 'annotate'
+  gem 'yard'
 
 end
 
