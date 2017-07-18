@@ -3,17 +3,22 @@ class Api::HumiditiesController < ApplicationController
   before_action :set_stations
 
   def actual
-    rh_json = {}
+    rh_json = { actual: []}
     # Acquire the arduino time points
     @humidities = Weather.select(:rel_humidity, :created_at)
       .where(
         "created_at >= to_timestamp(?,'YYYY-MM-DD HH24:MI:ss') " +
         " AND created_at <= to_timestamp(?,'YYYY-MM-DD HH24:MI:ss') ",
-        @dates)
-    rh_json[:actual] = @humidities
+        @dates[:start], @dates[:end])
+    @humidities.each do |rec|
+      rh_json[:actual] << {
+        rel_humidity: rec.rel_humidity,
+        created_at: rec.created_at
+      }
+    end
 
     # Return the json dataset
-    render json: JSON.generate(@humidites)
+    render json: JSON.generate(rh_json)
   end
 
   def historic
@@ -31,15 +36,19 @@ class Api::HumiditiesController < ApplicationController
 
   def comparison
     # holder for the relative_humidity sets
-    rh_json = {}
+    rh_json = { actual: [], historical: [] }
 
     # Acquire the arduino time points
-    @humidities = Weather.select(:rel_humidity, :created_at)
-      .where('created_at > ? && created_at < ?', @dates)
-    rh_json[:actual] = @humidities
+    humidities = Weather.select(:rel_humidity, :created_at)
+      .where('created_at > ? && created_at < ?', @dates[:start],@dates[:end])
+    humidities.each_char do |rec|
+      rh_json[:actual] << {
+        rel_humidity: rec.rel_humidity,
+        created_at: rec.created_at
+      }
+    end
 
     # Acquire the remote data for a specific set of stations
-    rh_json[:historical] = []
     @stations.each do |station|
       response = HTTParty.get(station)
       json = JSON.parse response.body

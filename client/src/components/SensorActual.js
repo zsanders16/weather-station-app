@@ -39,7 +39,7 @@ class SensorActual extends Component {
     // wait for 10 seconds tight at first
     const dates = { start_date: moment().utc().format() }
     this.setActualChartType()
-    console.log(`Updated: ${dates.start_date}`)
+    // console.log(`Updated: ${dates.start_date}`)
     if( this.updateStatus.canUpdate )
       this.timmer = setTimeout( () => this.updateActual(), waitPeriod )
   }
@@ -135,7 +135,8 @@ class SensorActual extends Component {
         if( settings.tempViews[view] ) {
           // console.log(data[0])
           let seriesData = this.parseTempData( data, view )
-          // console.log(seriesData[0])
+          // This must be done to eliminate race conditions form happening
+          // in the render method
           series.push({
             name: type + ' - ' + view.charAt().toUpperCase() + view.substr(1),
             data: seriesData,

@@ -20,7 +20,13 @@ const Flash = ({ flash, dispatch }) => {
       >
         { flash.message }
         { fadeFlash(dispatch) }
-        <Button onClick={ () => dispatch(clearFlash()) }> X </Button>
+        <Button
+          onClick={ () => dispatch(clearFlash()) }
+          size='mini'
+          basic
+          floated='right'>
+          Close!
+        </Button>
       </div>
     )
   } else {

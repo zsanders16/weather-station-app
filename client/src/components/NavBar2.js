@@ -33,20 +33,22 @@ class NavBar2 extends Component {
               to="/weatherstation"
               active={activeItem === 'forecast'}
               onClick={this.handleItemClick} />
-            <Dropdown.Menu item text='Charts'>
-              <Menu.Item
-                name='Temperature'
-                as={ Link }
-                to="/charts/temperatures"
-                active={activeItem === 'temperatures'}
-                onClick={this.handleItemClick} />
-              <Menu.Item
-                name='Humidity'
-                as={ Link }
-                to='/charts/humidities'
-                active={activeItem === 'humidities'}
-                onClick={this.handleItemClick} />
-            </Dropdown.Menu>
+            <Dropdown item text='Charts'>
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  as={ Link }
+                  to="/charts/temperatures"
+                  onClick={this.handleItemClick} >
+                  Temperatures
+                </Dropdown.Item>
+                <Dropdown.Item
+                  as={ Link }
+                  to='/charts/humidities'
+                  onClick={this.handleItemClick} >
+                  Humidities
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </Menu.Menu>
           :
           null

@@ -9,8 +9,10 @@ const observations = ( state = [], action ) => {
       let data = parseDataSeries(action.data)
       let stationRegExp = /.*\/(\w{4,5})$/
       let id = action.data[0].properties.station.match(stationRegExp)[1]
+      // remove old/existing data sets for a station
+      let new_state = state.filter( station => station.id !== id )
       // let id = action.id
-      return [ ...state, { id, data } ]
+      return [ ...new_state, { id, data } ]
     case 'STATION_LIST_CLEAR':
       return []
     default:

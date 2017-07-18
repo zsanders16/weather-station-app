@@ -30,10 +30,7 @@ const settingsHumidities = {
   exporting: {
     enabled: false
   },
-  series: [{
-    name: '',
-    data: () => {} // NOTE: should be an array of objects {name, data}
-  }]
+  series: null
 }
 
 export default settingsHumidities
