@@ -253,7 +253,7 @@ class SensorActual extends Component {
       let keep = stations.filter( (sta) => sta.id !== station.id )
       this.setState({ stations: keep })
     } else {
-      this.setState({ stations: [ station, ...stations ] })
+      this.setState({ stations: [ ...stations, station ] })
     }
   }
 
