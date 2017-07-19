@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Grid, Segment, Header, Button } from 'semantic-ui-react'
-import DayForecast from './DayForecast'
+import CurrentForecast from './CurrentForecast'
 import moment from 'moment'
+
 
 class TodaysWeather extends Component {
   state = {city: this.props.cities[0], view: 0, time: 'day'}
@@ -27,18 +28,18 @@ class TodaysWeather extends Component {
     this.setState({city: cities[index]})
   }
 
-  changeView = () => {
+  changeView = ( flag ) => {
     let { view } = this.state
-    if( view === 0 ){
+    if( flag === 'Night' ){
       this.setState({view: 1, time: 'night'})
-    }else if ( view === 1) {
+    }else if ( flag === 'Day') {
       this.setState({view: 0, time: 'day'})
     }
   }
 
   buttonValue = () => {
     let { time } = this.state
-    if(time === 'day'){
+    if( time === 'day'){
       return 'Night'
     }else if( time === 'night'){
       return 'Day'
@@ -51,14 +52,18 @@ class TodaysWeather extends Component {
     let { city, view } = this.state
     return(
       <Segment raised>
-        <Grid centered columns={1} >
-          <Grid.Row >
-            <Header as='h1'>Today's Weather in {cityView}</Header>
-            <Button size='small' color='teal' onClick={this.changeView}>{this.buttonValue()}</Button>
+        <Grid centered >
+          <Grid.Row columns={1}>
+            <Grid.Column width={16} textAlign='center'>
+              <Header as='h1'>Today's Weather in {cityView}</Header>
+            </Grid.Column>
           </Grid.Row>
-          <Grid.Row centered columns={4} >
-            <Grid.Column >
-              <DayForecast data={city.days[view]} />
+          <Grid.Row centered columns={1}>
+            <Grid.Column width={16}>
+              <CurrentForecast
+                data={city.days[view]}
+                changeView={this.changeView}
+                buttonValue={this.buttonValue} />
             </Grid.Column>
           </Grid.Row>
         </Grid>

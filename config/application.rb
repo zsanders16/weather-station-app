@@ -18,6 +18,10 @@ Bundler.require(*Rails.groups)
 
 module WeatherStation
   class Application < Rails::Application
+
+    # Brennick: Loader for normal non model classes
+    config.autoload_paths << File.join(Rails.root, "app", "lib")
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
 

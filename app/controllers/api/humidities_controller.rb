@@ -1,4 +1,6 @@
 class Api::HumiditiesController < ApplicationController
+  include Humidities
+  
   before_action :set_dates
   before_action :set_stations
 
@@ -21,13 +23,18 @@ class Api::HumiditiesController < ApplicationController
     render json: JSON.generate(rh_json)
   end
 
-  def historic
+  def historical
+    base_url = 'https://api.weather.gov'
+
     # Acquire the remote data for a specific set of stations
     rh_json = { historical: [] }
     @stations.each do |station|
-      response = HTTParty.get(station)
+      uri = base_url + "/stations/#{station}/observations?" \
+        "startTime=#{@dates[:start]}&endTime=#{@dates[:end]}&limit=25"
+      response = HTTParty.get(uri)
       parser = HumidityParser.new(response.body)
       rh_json[:historical] << parser.rel_humidities
+      # rh_json[:historical] << response.body
     end
 
     # Return the json dataset
@@ -69,6 +76,8 @@ class Api::HumiditiesController < ApplicationController
   end
 
   def set_stations
-    @stations = params[:stations]
+    if params[:stations]
+      @stations = params[:stations].split(',')
+    end
   end
 end

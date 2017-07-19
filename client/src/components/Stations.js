@@ -27,16 +27,21 @@ class Stations extends Component {
 
   handleShow = ( id, coords ) => {
     let { handleStation } = this.props
+    let { coords: stations } = this.state
     handleStation({ id, coords })
-    this.setState({ coords: [{ id, coords }, ...this.state.coords] })
+    const found = stations.find( station => station.id === id )
+    if( !found ) {
+      this.setState({ coords: [ ...stations, { id, coords } ] })
+    } else {
+      let keepers = stations.filter( sta => sta.id !== id )
+      this.setState({ coords: keepers })
+    }
   }
 
   handleHide = ( id, coords ) => {
     let { handleStation } = this.props
     handleStation({ id, coords })
-    let newCoords = this.state.coords.filter( (station) => {
-      return station.id !== id
-    })
+    let newCoords = this.state.coords.filter( station => station.id !== id )
     this.setState({ coords: newCoords })
   }
 
