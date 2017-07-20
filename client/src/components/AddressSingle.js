@@ -11,16 +11,15 @@ class AddressSingle extends React.Component {
 
   componentDidMount() {
       let { address, dispatch, weatherForecasts} = this.props
-      for(let i=0;i<weatherForecasts.weekly.length;i++){
-          debugger
-        if(weatherForecasts.weekly[i].city.toLowerCase() === address.city.toLowerCase()){
-          debugger
-          break
-        }
-          debugger
-          dispatch(weatherForecastWeekly([address.latitude, address.longitude], address.city))
 
+      let existCity = weatherForecasts.weekly.filter( (loc) => {
+        return loc.city === address.city
+      })
+
+      if(existCity.length <= 0){
+        dispatch(weatherForecastWeekly([address.latitude, address.longitude], address.city))
       }
+
   }
 
   getWeather = (address) => {

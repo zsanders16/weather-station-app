@@ -51,7 +51,6 @@ export const addCurrentToAddress = (combinedAddress, dispatch) => {
   let state = fullAddress[2].substring(1,3)
   let zipcode = fullAddress[2].substring(3,9)
   let address = {google: combinedAddress, address: locAddress, city: city, state: state, zipcode: zipcode}
-  debugger
   dispatch( {type: 'ADDRESS_CREATE', address } )
 }
 
