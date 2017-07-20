@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Grid, Button, Divider } from 'semantic-ui-react';
+import { Container, Grid, Button, Divider, Segment, Checkbox, Label } from 'semantic-ui-react';
 import Compare from './Compare';
 import Favorites from './Favorites'
 import SensorActual from './SensorActual'
@@ -156,13 +156,23 @@ class WeatherStation extends Component {
     this.setState({series: tempData})
   }
 
-  setClickLow = () => {
-    this.setState({byTemp: 'low'}, this.setSeriesState)
+  changeByTemp = () => {
+    let { byTemp } = this.state
+    if(byTemp === 'high'){
+      this.setState({byTemp: 'low' }, this.setSeriesState)
+    }else if(byTemp === 'low'){
+      this.setState({byTemp: 'high'}, this.setSeriesState)
+    }
+
   }
 
-  setClickHigh = () => {
-    this.setState({byTemp: 'high'}, this.setSeriesState)
-  }
+  // setClickLow = () => {
+  //   this.setState({byTemp: 'low'}, this.setSeriesState)
+  // }
+
+  // setClickHigh = () => {
+  //   this.setState({byTemp: 'high'}, this.setSeriesState)
+  // }
 
 
   showCompare = () => {
@@ -172,11 +182,15 @@ class WeatherStation extends Component {
       <Grid.Row >
         <ForecastChart series={series} byTemp={byTemp} />
         <Grid.Column width={4}>
-          <Button.Group>
+          <Segment textAlign='center'>
+            <Label horizontal color='teal' >High</Label><Checkbox slider onChange={this.changeByTemp} /><Label horizontal color='blue' >Low</Label>
+          </Segment>
+
+          {/* <Button.Group>
             <Button primary onClick={this.setClickHigh}>Highs</Button>
             <Button.Or />
             <Button secondary onClick={this.setClickLow}>Lows</Button>
-          </Button.Group>
+          </Button.Group> */}
           <Divider />
           {this.displayToggles()}
         </Grid.Column>

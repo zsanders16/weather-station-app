@@ -12,9 +12,8 @@ class AddressForm extends Component {
     // address is passed down from HOC through props
     let { item } = this.props
     if( item ){
-      debugger
 
-      this.setState({ street1: item.address1, city: item.city, state: item.state, zipcode: item.zipcode})
+      this.setState({ street1: item.street1, city: item.city, state: item.state, zipcode: item.zipcode})
     }
   }
 

@@ -7,7 +7,6 @@ class ForecastChart extends React.Component{
   state = {
     chart: {type: 'area'},
     title: {text: 'Comparison of Temperature by City'},
-    subtitle: {text: 'Temperature by City'},
     xAxis: {allowDecimals: false,
             type: 'datetime',
             
@@ -18,7 +17,7 @@ class ForecastChart extends React.Component{
                             }
                     }
             },
-    tooltip: {pointFormat: `{series.name} will hava a ${this.props.byTemp} of <b>{point.y:,.0f}° F`},
+    tooltip: {pointFormat: `{series.name} will hava a high of <b>{point.y:,.0f}° F`},
     plotOptions: {area: {pointStart: 1,
                           pointInterval: 24 * 3600 * 1000, // one day
                           marker: {enabled: false,
@@ -45,7 +44,8 @@ class ForecastChart extends React.Component{
                           
                       }
                 }
-        this.setState({series: nextProps.series, plotOptions: options} )
+        let displayString = `{series.name} will hava a ${nextProps.byTemp} of <b>{point.y:,.0f}° F`
+        this.setState({series: nextProps.series, plotOptions: options, tooltip: {pointFormat: displayString} } )
       }
     }else{
       this.setState({series: []})
