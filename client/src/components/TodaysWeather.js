@@ -46,10 +46,24 @@ class TodaysWeather extends Component {
     }
   }
 
+  displayCurrentForecast = () => {
+    let { city, view } = this.state
+    return(
+      <CurrentForecast 
+        data={city.days[view]}
+        changeView={this.changeView}
+        buttonValue={this.buttonValue} />  
+    )
+  }
+
+  displayLoader = () => {
+    debugger
+  }
 
   render(){
     let { cityView } = this.props
-    let { city, view } = this.state
+    let { city, view, weather } = this.state
+    debugger
     return(
       <Segment raised>
         <Grid centered >
@@ -60,10 +74,7 @@ class TodaysWeather extends Component {
           </Grid.Row>
           <Grid.Row centered columns={1}>
             <Grid.Column width={16}>
-              <CurrentForecast
-                data={city.days[view]}
-                changeView={this.changeView}
-                buttonValue={this.buttonValue} />
+              { weather > 0 ? this.displayCurrentForecast() : this.displayLoader()}
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -73,8 +84,11 @@ class TodaysWeather extends Component {
 }
 
 
-const mapStateToProps = (state) => {
-  return{ cities: state.weatherForecasts.weekly, cityView: state.weatherForecasts.cityView }
+const mapStateToProps = (state) => {  
+  debugger
+  return{ cities: state.weatherForecasts.weekly, 
+          cityView: state.weatherForecasts.cityView,
+          weather: state.weekly[0] }
 }
 
 

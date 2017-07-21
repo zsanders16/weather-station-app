@@ -15,9 +15,9 @@ const points = ( geolocation ) => {
   return `/points/${geolocation[0]},${geolocation[1]}`
 }
 
-const station = ( stationId ) => {
-  return `/stations/${stationId}`
-}
+// const station = ( stationId ) => {
+//   return `/stations/${stationId}`
+// }
 
 // Get a list of locations near the given coordiantes
 // closest are listed first

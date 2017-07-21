@@ -1,11 +1,45 @@
 import React from 'react'
 import { Segment, Image, Button, Header, List, Icon } from 'semantic-ui-react'
 import moment from 'moment'
+import styled from 'styled-components';
 
 const CurrentForecast = ({ data, changeView }) => {
   const date = moment(data.startTime)
+
+  let background = ''
+  
+  if(data.isDaytime){
+    if(data.detailedForecast.includes('rain')){
+      background = 'rainyDay'
+    }else if(data.detailedForecast.includes('snow')){
+      background = 'snowyDay'
+    }else if(data.detailedForecast.includes('windy')){
+      background = 'windyDay'
+    }else{
+      background = 'clearDay'
+    }
+  }else{
+    if(data.detailedForecast.includes('rain')){
+      background = 'rainyNight'
+    }else if(data.detailedForecast.includes('snow')){
+      background = 'snowyNight'
+    }else if(data.detailedForecast.includes('windy')){
+      background = 'windyNight'
+    }else{
+      background = 'clearNight'
+    }
+  }
+
+  let imgString = require(`../images/${background}.gif`)
+
+  const BackGroundStyle = styled.div`
+    background: url(${imgString});
+    background-repeat: no-repeat;
+    background-position: center; 
+  `
+  
   return(
-    <Segment basic>
+    <BackGroundStyle basic>
       <Image src={data.icon} width={100} centered shape='circular'/>
       <Segment basic textAlign='center'>
         <Button.Group size='mini' compact>
@@ -45,7 +79,7 @@ const CurrentForecast = ({ data, changeView }) => {
           </List.Item>
         </List>
       </Segment>
-    </Segment>
+    </BackGroundStyle>
   )
 }
 

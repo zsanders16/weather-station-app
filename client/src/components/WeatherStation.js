@@ -6,35 +6,40 @@ import Favorites from './Favorites'
 import SensorActual from './SensorActual'
 import CurrentLocation from './CurrentLocation'
 import WeeklyForecast from './WeeklyForecast'
-import { set_current_location } from '../actions/locations'
+import { setCurrentLocation } from '../actions/locations'
 import TodaysWeather from './TodaysWeather'
 import ToggleFavoriteLocation  from './ToggleFavoriteLocation'
 import ForecastChart from './ForecastChart'
+import styled from 'styled-components';
+import { weatherForecastWeekly } from '../actions/weatherForecasts'
 
-
+const AppBackground = styled.div`
+    background: url(${require('../images/mainBackground.jpg')});
+  `
 
 class WeatherStation extends Component {
-  state = {cityView: 'Salt Lake City', view: true, citySeries: [], series: [], byTemp: 'high' }
+  state = {cityView: '', view: true, citySeries: [], series: [], byTemp: 'high' }
 
   componentDidMount() {
-    //ensure you have your current location
-    let { currentLocation, cityView } = this.props
+    //ensure you have your current location    
+    let { currentLocation, cityView, dispatch } = this.props
     if(!currentLocation.latitude){
+
       this.getLocation()
+    }else{
+
+      dispatch(setCurrentLocation(currentLocation.latitude, currentLocation.longitude, () => this.setState({cityView: cityView }) ), )
     }
-    this.setState({cityView: cityView })
-
-
   }
+
 
   //calls you currently don't have weather for current location it call set_current_location action
   setPosition = (latitude, longitude) => {
-    let { dispatch, weather } = this.props
-      if(weather.length){
-        dispatch(set_current_location(latitude, longitude))
-      }else{
-        dispatch(set_current_location(latitude, longitude, false))
-      }
+    let { dispatch, weatherForecasts } = this.props
+    dispatch(setCurrentLocation(latitude, longitude))
+    if(weatherForecasts.weekly[0].length > 0){
+      dispatch(weatherForecastWeekly([latitude, longitude]))
+    }
   }
 
   //Gets user lat long and calls setPosition
@@ -62,22 +67,20 @@ class WeatherStation extends Component {
     return (
       <Grid.Row >
         <Grid.Column width={12} >
-          <WeeklyForecast cityView={this.state.cityView}/>
+           {/* <WeeklyForecast cityView={this.state.cityView}/>  */}
         </Grid.Column>
         <Grid.Column width={4} className='ws_area'>
-          <Favorites updateDisplay={this.updateDisplay}/>
+           {/* <Favorites updateDisplay={this.updateDisplay}/>  */}
         </Grid.Column>
       </Grid.Row>
     )
   }
-
 
   catchToggle = (e) => {
     let { weatherForecasts } = this.props
     let { citySeries } = this.state
     let exists = false
     let changedCity = e.target.innerText
-
 
     citySeries.forEach( (city) => {
       if(city === changedCity ){
@@ -105,7 +108,6 @@ class WeatherStation extends Component {
     })
   }
 
-
   setSeriesState = () => {
     let { weatherForecasts } = this.props
     let { citySeries, byTemp } = this.state
@@ -129,8 +131,6 @@ class WeatherStation extends Component {
                 dayInfo.push(obj.temperature)
               }
             }
-            
-            
           })
         })
 
@@ -163,17 +163,7 @@ class WeatherStation extends Component {
     }else if(byTemp === 'low'){
       this.setState({byTemp: 'high'}, this.setSeriesState)
     }
-
   }
-
-  // setClickLow = () => {
-  //   this.setState({byTemp: 'low'}, this.setSeriesState)
-  // }
-
-  // setClickHigh = () => {
-  //   this.setState({byTemp: 'high'}, this.setSeriesState)
-  // }
-
 
   showCompare = () => {
     let { weekly } = this.props.weatherForecasts
@@ -183,14 +173,8 @@ class WeatherStation extends Component {
         <ForecastChart series={series} byTemp={byTemp} />
         <Grid.Column width={4}>
           <Segment textAlign='center'>
-            <Label horizontal color='teal' >High</Label><Checkbox slider onChange={this.changeByTemp} /><Label horizontal color='blue' >Low</Label>
+            <Label horizontal color='blue' primary >High</Label><Checkbox slider onChange={this.changeByTemp} /><Label horizontal color='black' >Low</Label>
           </Segment>
-
-          {/* <Button.Group>
-            <Button primary onClick={this.setClickHigh}>Highs</Button>
-            <Button.Or />
-            <Button secondary onClick={this.setClickLow}>Lows</Button>
-          </Button.Group> */}
           <Divider />
           {this.displayToggles()}
         </Grid.Column>
@@ -201,47 +185,45 @@ class WeatherStation extends Component {
   render(){
     let { view } = this.state
     return (
-      <Container>
-        <Grid>
-          <Grid.Row >
-            <Grid.Column width={16}>
-              <CurrentLocation />
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Column width={16}>
-              <TodaysWeather/>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row >
-            <Grid.Column width={10}>
-            </Grid.Column>
-            <Grid.Column width={6}>
-              <Button.Group>
-                <Button primary onClick={this.setViewToTrue}>Forecast</Button>
-                <Button.Or />
-                <Button secondary onClick={this.setViewToFalse}>Compare</Button>
-              </Button.Group>
-            </Grid.Column>
-          </Grid.Row>
-          { view ? this.showForecast() : this.showCompare()}
-        </Grid>
-      </Container>
+      <AppBackground>
+        <Container>
+          <Grid>
+            <Grid.Row >
+              <Grid.Column width={16}>
+                  <CurrentLocation />  
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column width={16}>
+                  <TodaysWeather/>  
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row >
+              <Grid.Column width={10}>
+              </Grid.Column>
+              <Grid.Column width={6}>
+                 <Button.Group>
+                  <Button primary onClick={this.setViewToTrue}>Forecast</Button>
+                  <Button.Or />
+                  <Button secondary onClick={this.setViewToFalse}>Compare</Button>
+                </Button.Group> 
+              </Grid.Column>
+            </Grid.Row>
+             { view ? this.showForecast() : this.showCompare()} 
+          </Grid>
+        </Container>
+      </AppBackground>
     )
-
   }
 }
 
 const mapStateToProps = (state) => {
-  return { navbarItem: state.navbar,
-            weather: state.weather,
-            currentLocation: state.currentLocation,
-            location_weather: state.weather,
+  return { 
+            currentLocation: state.currentLocation,            // location_weather: state.weather,
             addresses: state.addresses,
             cityView: state.weatherForecasts.cityView,
             weatherForecasts: state.weatherForecasts
           };
-
 }
 
 export default connect(mapStateToProps)(WeatherStation);

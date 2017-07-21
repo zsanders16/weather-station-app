@@ -14,7 +14,7 @@ export const sensorChartConfig = {
     text: 'Temperature Data'
   },
   subtitle: {
-    text: 'Actual data taken from Arduino Device (every 5 sec.)'
+    text: 'Actual data taken from Arduino Device (every minute)'
   },
   xAxis: {
     type: 'datetime',
@@ -36,7 +36,7 @@ export const sensorChartConfig = {
       align: 'left',
     },
     title: {
-      text: 'Date'
+      text: 'Date (UTC)'
     }
   },
   yAxis: {

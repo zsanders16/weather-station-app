@@ -16,7 +16,8 @@ class Api::WeathersController < ApplicationController
   # params[:start_date]
   def actual
     weather = current_user.weathers.where(
-      "created_at >= to_timestamp(?,'YYYY-MM-DD HH24:MI:ss')", params[:start_date]
+      # "created_at >= to_timestamp(?,'YYYY-MM-DD HH24:MI:ss')", params[:start_date]
+      "created_at >= ?", params[:start_date]
     )
     if weather
       render json: weather
@@ -34,8 +35,10 @@ class Api::WeathersController < ApplicationController
 
   def set_weather
     @weather = current_user.weathers.where(
-      "created_at >= to_timestamp(?,'YYYY-MM-DD HH24:MI:ss') " +
-      " AND created_at <= to_timestamp(?,'YYYY-MM-DD HH24:MI:ss')",
+      # "created_at >= to_timestamp(?,'YYYY-MM-DD HH24:MI:ss') " +
+      # " AND created_at <= to_timestamp(?,'YYYY-MM-DD HH24:MI:ss')",
+      "created_at >= ? " \
+      " AND created_at <= ? ",
       @start_date, @end_date
     ).order(created_at: :asc)
   end

@@ -1,38 +1,37 @@
-# @author Brennick Langston
-# @version 0.0.1
+module Humidities
+  extend ActiveSupport::Concern
 
-module Humidities extend ActiveSupport::Concern
+  URI_BASE = 'https://api.weather.gov'
 
-  # Parser for humidity data acquired from the weather services remote api.
-  # Parser for observation format only received as a json object
-  class HumidityParser
-
-    # Instantiation of the object
-    # @param json [String] body of json text from remote api
-    def initialize( json )
-      # do the initial parsing from json text to a ruby hash
-      @observations = JSON.parse json if !json.nil?
+  def self.parse_humidities( json )
+    rh = []
+    features = JSON.parse(json)['features']
+    station = features[0]['properties']['station'].match(/.*?(\w{4,5})$/)[1]
+    features.each do |feature|
+      rh << [
+        # DateTime.parse(feature['properties']['timestamp']).to_time.to_i,
+        feature['properties']['timestamp'],
+        feature['properties']['relativeHumidity']['value'].to_f.round(2)
+      ]
     end
+    # sorted = rh.sort do |a, b|
+    #   a[0] <=> b[0]
+    # end
+    # data = { name: station, data: sorted }
+    # return data
+    { name: station, data: rh }
+  end
 
-    def rel_humidities
-      # Timezone::Lookup.config(:google) do |c|
-      #   c.api_key = ENV['GOOGLE_TIMEZONE_API']
-      #   c.client_id = ENV['GOOGLE_CLIENT_ID'] # if using 'Google for Work'
-      # end
-      # geo = @observations['features'][0]['geometry']['coordinates']
-      # timezone = Timezone.lookup(geo[0], geo[1])
-      # local = timezone.utc_to_local
-      # # holde r for the relative humidity objects
-      # rh = []
-      # # loop through the observation features and extract the need info
-      # @observations['features'].each do |feature|
-      #   rh << {
-      #     station: feature['properties']['station'].match(/.*\/(\w{4,5})$/)[1],
-      #     created_at: local,
-      #     rel_humidity: feature['properties']['relativeHumidity']['value']
-      #   }
-      # end
-      # rh
+  def self.create_uri(station,dates)
+    uri_station = "/stations/#{station}/observations"
+    uri_query = "?startTime=#{dates[:start]}&endTime=#{dates[:end]}&limit=25"
+    URI_BASE + uri_station + uri_query
+  end
+
+  def self.date_to_timezone( date )
+    Timezone::Lookup.config(:google) do |c|
+      c.api_key = ENV['']
+      c.client_id = ENV[''] # if using 'Google for Work'
     end
   end
 end

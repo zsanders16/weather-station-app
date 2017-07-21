@@ -3,12 +3,12 @@ const humidities = ( state = {}, action ) => {
     case 'HUMIDITIES_MOST_RECENT':
       return {
         ...state,
-        ...action.data
+        actual: action.data.actual
       }
     case 'HUMIDITIES_HISTORICAL':
       return {
         ...state,
-        ...action.data
+        historical: action.data.historical
       }
     default:
       return state

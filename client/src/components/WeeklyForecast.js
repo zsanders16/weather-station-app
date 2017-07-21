@@ -16,7 +16,6 @@ const options = [
 class WeeklyForecast extends React.Component {
   state = { forecastDays: 1, city: this.props.cities[0]}
 
-
   componentDidMount() {
 
   }
@@ -36,43 +35,48 @@ class WeeklyForecast extends React.Component {
 
 
   //remove the current day from the api forecast
-  selectDays = (city) => {
-    let { forecastDays } = this.state
+  selectDays = (city = null) => {
+    let { forecastDays, viewState } = this.state
     let totalViews = forecastDays * 2
-    if(city.days){
-      let days = []
-      if(moment().hour() < 18){
-        for(let i=2;i<totalViews + 2;i++){
-          days.push(city.days[i])
-        }
-        return this.displayDays(days)
-      }else{
-        for(let i=1;i<totalViews + 1;i++){
-          days.push(city.days[i])
-        }
-        return this.displayDays(days)
+
+    let days = []
+    if(moment().hour() < 18){
+      for(let i=2;i<totalViews + 2;i++){
+        days.push(city.days[i])
       }
+      return this.displayDays(days)
     }else{
-      return(
-        <Grid.Column width={15}>
-          <Dimmer active>
-            <Loader content='Loading' />
-          </Dimmer>
-        </Grid.Column>
-      )
+      for(let i=1;i<totalViews + 1;i++){
+        days.push(city.days[i])
+      }
+      return this.displayDays(days)
     }
   }
 
   //pull the correct city to display out of all cities in redux state
   selectCity = () => {
     let { cities, cityView } = this.props
-    let index = 0
-    cities.forEach( (city, i) => {
-      if(city.city === cityView){
-        index = i
-      }
-    })
-    return this.selectDays(cities[index])
+    if(cities.length > 0){
+      let index = 0
+      cities.forEach( (city, i) => {
+        if(city.city === cityView){
+          index = i
+        }
+      })
+      return this.selectDays(cities[index])
+    }else{
+      return(
+        <Grid.Column width={16}>
+          <Segment style={{height: '150px'}}>
+          <Dimmer active>
+            <Loader indeterminate>Getting Forecast Data</Loader>
+          </Dimmer>
+        </Segment>
+        </Grid.Column>
+      )
+    }
+
+    
   }
 
   handleChange = (e, data) => {

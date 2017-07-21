@@ -1,4 +1,4 @@
-const settingsHumidities = {
+export const settingsHumidities = {
   chart: {
     type: 'spline',
     // animation: 'Highcharts.svg',
@@ -25,7 +25,7 @@ const settingsHumidities = {
       align: 'left',
     },
     title: {
-      text: 'Date and Time Range'
+      text: 'Dates (UTC)'
     },
   },
   yAxis: {
@@ -35,8 +35,12 @@ const settingsHumidities = {
         value: 0,
         width: 1,
         color: '#808080',
-      }]
-    }
+      }],
+    },
+  },
+  tooltip: {
+      headerFormat: '<b>{series.name}</b><br>',
+      pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
   },
   legend: {
     enabled: true
@@ -44,7 +48,13 @@ const settingsHumidities = {
   exporting: {
     enabled: false
   },
+  plotOptions: {
+    spline: {
+      marker: {
+        enabled: true,
+      },
+      enablemousetracking: true,
+    },
+  },
   series: null
 }
-
-export default settingsHumidities

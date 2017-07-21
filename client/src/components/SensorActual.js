@@ -1,16 +1,21 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Segment, Form, Checkbox, Divider, Header } from 'semantic-ui-react'
-import { sensorActual, sensorHistorical, sensorReset } from '../actions/sensor'
-import { listObservations } from '../actions/stations'
+import {
+  // sensorActual,
+  // sensorHistorical,
+  sensorReset,
+} from '../actions/sensor'
+import { clearObservations } from '../actions/observations'
 import ReactHighcharts from 'react-highcharts'
 import Datetime from 'react-datetime'
 import moment from 'moment'
 import {
-  sensorChartConfig, sensorSettings, validDates,
-  setActualChartType, setHistoricalChartType,
+  sensorChartConfig,
+  sensorSettings,
 } from '../charts/sensor'
 import Stations from './Stations'
+import GridArea from './GridArea'
 
 import 'react-datetime/css/react-datetime.css'
 
@@ -35,7 +40,7 @@ class SensorActual extends Component {
   seconds = 1000
   minutes = this.seconds * 60
 
-  updateActual = ( waitPeriod = (10*this.seconds) ) => {
+  updateActual = ( waitPeriod = (1*this.minutes) ) => {
     // wait for 10 seconds tight at first
     const dates = { start_date: moment().utc().format() }
     this.setActualChartType()
@@ -77,8 +82,10 @@ class SensorActual extends Component {
         stations.forEach( (sta) => {
           dispatch(display.callback({
             stationId: sta.id,
-            startDate: start_date.utc().format(),
-            endDate: end_date.utc().format(),
+            // startDate: start_date.utc().format(),
+            // endDate: end_date.utc().format(),
+            startDate: start_date.toISOString(),
+            endDate: end_date.toISOString(),
             // startDate: start_date.format(this.postgresql),
             // endDate: end_date.format(this.postgresql),
             limit: 30,
@@ -94,8 +101,10 @@ class SensorActual extends Component {
       let { display, start_date, end_date } = this.state.settings.actual
       if( display.state ) {
         dispatch(display.callback({
-          start_date: start_date.format(this.postgresql),
-          end_date: end_date.format(this.postgresql),
+          // start_date: start_date.format(this.postgresql),
+          // end_date: end_date.format(this.postgresql),
+          start_date: start_date.format(),
+          end_date: end_date.format(),
         }))
       }
     }
@@ -192,34 +201,38 @@ class SensorActual extends Component {
     let { dispatch } = this.props
     let settings = this.state.settings
     settings.actual.start_date = moment
-    this.setState({ settings })
-    dispatch(sensorReset())
-    this.setChartTypes()
+    this.setState({ settings }, () => {
+      this.setActualChartType()
+      this.setChartTypes()
+    })
   }
   handleHistStartDate = ( moment ) => {
     let { dispatch } = this.props
     let settings = this.state.settings
     settings.historical.start_date = moment
-    this.setState({ settings })
-    dispatch(sensorReset())
-    this.setChartTypes()
+    this.setState({ settings }, () => {
+      this.setHistoricalChartType()
+      this.setChartTypes()
+    })
   }
 
   handleActEndDate = ( moment ) => {
     let { dispatch } = this.props
     let settings = this.state.settings
     settings.actual.end_date = moment
-    this.setState({ settings })
-    dispatch(sensorReset())
-    this.setChartTypes()
+    this.setState({ settings }, () => {
+      this.setActualChartType()
+      this.setChartTypes()
+    })
   }
   handleHistEndDate = ( moment ) => {
     let { dispatch } = this.props
     let settings = this.state.settings
     settings.historical.end_date = moment
-    this.setState({ settings })
-    dispatch(sensorReset())
-    this.setChartTypes()
+    this.setState({ settings }, () => {
+      this.setHistoricalChartType()
+      this.setChartTypes()
+    })
   }
 
   // Change the charts that will be displayed on the graph
@@ -270,7 +283,7 @@ class SensorActual extends Component {
     this.setChartData()
     let { actual: act, historical: hist } = this.state.settings
     return (
-      <Grid>
+      <GridArea>
         <Grid.Row columns={2}>
           <Grid.Column width={10}>
             <Segment>
@@ -310,7 +323,7 @@ class SensorActual extends Component {
                         onChange={this.actViewChanged} />
                     </Form.Field>
                     <Form.Field>
-                      <label>Start</label>
+                      <label>Start Date</label>
                       <Datetime compact
                         value={act.start_date}
                         input={true}
@@ -353,7 +366,7 @@ class SensorActual extends Component {
                         onChange={this.histViewChanged} />
                     </Form.Field>
                     <Form.Field>
-                      <label>Start</label>
+                      <label>Start Date</label>
                       <Datetime compact
                         value={hist.start_date}
                         input={true}
@@ -376,7 +389,7 @@ class SensorActual extends Component {
               loadStations={this.loadStations} />
           </Grid.Column>
         </Grid.Row>
-      </Grid>
+      </GridArea>
     )
   }
 }

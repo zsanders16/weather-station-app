@@ -1,6 +1,6 @@
 class Api::HumiditiesController < ApplicationController
   include Humidities
-  
+
   before_action :set_dates
   before_action :set_stations
 
@@ -9,9 +9,12 @@ class Api::HumiditiesController < ApplicationController
     # Acquire the arduino time points
     @humidities = Weather.select(:rel_humidity, :created_at)
       .where(
-        "created_at >= to_timestamp(?,'YYYY-MM-DD HH24:MI:ss') " +
-        " AND created_at <= to_timestamp(?,'YYYY-MM-DD HH24:MI:ss') ",
-        @dates[:start], @dates[:end])
+        # "created_at >= to_timestamp(?,'YYYY-MM-DD HH24:MI:ss') " +
+        # " AND created_at <= to_timestamp(?,'YYYY-MM-DD HH24:MI:ss') ",
+        "created_at >= ? " +
+        " AND created_at <= ? ",
+        @dates[:start], @dates[:end] )
+        # Time.now.utc - 1.hour, Time.now.utc )
     @humidities.each do |rec|
       rh_json[:actual] << {
         rel_humidity: rec.rel_humidity,
@@ -24,17 +27,11 @@ class Api::HumiditiesController < ApplicationController
   end
 
   def historical
-    base_url = 'https://api.weather.gov'
-
     # Acquire the remote data for a specific set of stations
     rh_json = { historical: [] }
     @stations.each do |station|
-      uri = base_url + "/stations/#{station}/observations?" \
-        "startTime=#{@dates[:start]}&endTime=#{@dates[:end]}&limit=25"
-      response = HTTParty.get(uri)
-      parser = HumidityParser.new(response.body)
-      rh_json[:historical] << parser.rel_humidities
-      # rh_json[:historical] << response.body
+      response = HTTParty.get(Humidities.create_uri(station,@dates))
+      rh_json[:historical] << Humidities.parse_humidities(response.body)
     end
 
     # Return the json dataset

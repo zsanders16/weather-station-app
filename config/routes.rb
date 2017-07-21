@@ -65,7 +65,7 @@ Rails.application.routes.draw do
     # Routes for the Humidity Controller
     get '/humidities/actual', to: 'humidities#actual', as: 'humidities_actual'
     get '/humidities/historical', to: 'humidities#historical', as: 'humidities_historical'
-    get 'humidities/comparison', to: 'humidities#comparison', as: 'humidities_comparison'
+    get '/humidities/comparison', to: 'humidities#comparison', as: 'humidities_comparison'
 
   end
 

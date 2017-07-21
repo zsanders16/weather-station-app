@@ -11,23 +11,24 @@ import { settingsHumidities } from '../charts/humidities'
 import {
   loadInitialSeriesData,
   loadNewData,
-  loadHistoricalData,
+  loadHistoricalDataSeries,
 } from '../actions/humidities'
 
 // Custom Styled Elements
+import GridArea from './GridArea'
 const ChartArea = styled(Segment)`
   width: 100% !important;
 `
 
 class Humidities extends Component {
   state = {
+    stations: [],
     refreshPeriod: 60000, // 1 minute intervals
-    stations: [], // holder for the selected stations
-    dates: { // holder for constant updated dates
+    dates: {
       startDate: null,
       endDate: null,
     },
-    ...settingsHumidities // Highcharts settings for graph
+    ...settingsHumidities
   }
   callback = null
 
@@ -37,8 +38,9 @@ class Humidities extends Component {
 
   componentDidMount = () => {
     let { series, dispatch } = this.props
+    let { dates } = this.state
     if( !series || series.length <= 0 ) {
-      dispatch(loadInitialSeriesData(null, this.refreshDataSeries))
+      dispatch(loadInitialSeriesData(dates, this.refreshDataSeries))
     }
   }
 
@@ -46,84 +48,50 @@ class Humidities extends Component {
     let { dispatch } = this.props
     let { dates } = this.state
     if( !dates.startDate ) {
-      dates.endDate = moment()
+      dates.endDate = moment().utc()
       dates.startDate = dates.endDate.clone().subtract(2, 'minutes')
     } else if( dates.endDate ){
       // set time span to just the last dataset
       dates.startDate = dates.endDate.clone()
-      dates.endDate = moment()
+      dates.endDate = moment().utc()
     }
-    dispatch(loadNewData(dates, () => this.updateSingleDataSeries(dates,'actual') ))
+    dispatch(loadNewData(dates))
+    this.updateDataSeries(dates)
     this.callback = setTimeout(this.refreshDataSeries, this.state.refreshPeriod)
   }
 
-  updateSingleDataSeries = ( dates, dataSetType = 'actual' ) => {
+  updateDataSeries = ( dates ) => {
     let { humidities } = this.props
     let { series } = this.state
-    let newHumidities = [], dataSet = { data: [] }
+    let newHumidities = [], actual = { data: [] }, historical = []
     // create the new data set of values to update with
-    humidities[dataSetType].forEach( set => {
+    humidities.actual.forEach( set => {
       newHumidities.push( [
         // NOTE: Needed format for Highcharts displaying of data and time
-        //       Unix Milliseconds
         moment(set.created_at).valueOf(),
         set.rel_humidity
       ])
     })
-
-    // filter old set of values
+    // locate the old actual data set of values
     if( series )
-      dataSet = series.filter( set => set.name !== dataSetType )
+      actual = series.find( set => set.name === 'Actual' )
+    // filter out the historical data sets
+    if( actual && series )
+      historical = series.filter( set => set.name !== 'Actual' )
     // update the entire dataset
     // TODO: update the existing dataset and shorten it, so length is same
     this.setState({
       series: [
-        ...dataSet,
+        // reload the historical data sets
+        ...historical,
+        // update the new actual data set
         {
-          name: dataSetType.charAt(0).toUpperCase() + dataSetType.substr(1),
+          name: 'Actual',
           data: [
-            ...dataSet.data,
+            ...actual.data,
             ...newHumidities
           ].sort(this.sortDates)
         }
-      ],
-      dates: dates
-     })
-  }
-
-  updateMultipleDataSeries = ( dates, dataSetType = 'historical' ) => {
-    let { humidities } = this.props
-    let { series } = this.state
-    let newHumidities = [], dataSet = []
-    // create the new data set of values to update with
-    humidities[dataSetType].forEach ( subSet => {
-      // process each subset individually
-      const subHumidities = []
-      subSet.forEach( set => {
-        console.log(set.created_at)
-        subHumidities.push( [
-          // NOTE: Needed format for Highcharts displaying of data and time
-          //       Unix Milliseconds
-          moment(set.created_at).valueOf(),
-          set.rel_humidity
-        ])
-      })
-      // Add new data set object
-      newHumidities.push({
-        name: dataSetType.charAt(0).toUpperCase() + dataSetType.substr(1),
-        data: subHumidities.sort(this.sortDates)
-      })
-    })
-
-    // remove old set of values
-    if( series )
-      dataSet = series.filter( set => set.name !== dataSetType )
-    // update the entire dataset
-    // TODO: update the existing dataset and shorten it, so length is same
-    this.setState({
-      series: [
-        ...dataSet,
-        ...newHumidities
       ],
       dates: dates
      })
@@ -135,12 +103,7 @@ class Humidities extends Component {
       moment(a[0]).isAfter(b[0]) ? 1 : 0
   }
 
-  /*
-   * Stations object handling methods
-   */
-
-  // Can accept a flag for adding and subtractign stations from the dataset
-  handleStation = ( station, flag = 'add' ) => {
+  handleStation = ( station ) => {
     let { stations } = this.state
     let found = stations.find( (sta) => sta.id === station.id )
     if( found ) {
@@ -153,20 +116,46 @@ class Humidities extends Component {
 
   loadStations = () => {
     let { dispatch } = this.props
-    let { stations } = this.state
-    let dates = { // get most recent data
-      startDate: moment().subtract(1,'hours'),
-      endDate: moment()
-    }
-    // Remotely acquire the data sets for each Station
-    dispatch(loadHistoricalData(dates,stations, () => {
-      this.updateMultipleDataSeries(dates, 'historical')
+    let { stations, dates } = this.state
+    let stationSet = stations.map( sta => sta.id )
+    dispatch(loadHistoricalDataSeries(stationSet, dates, () => {
+      this.updateHistoricalDataSeries()
     }))
   }
 
+  updateHistoricalDataSeries = () => {
+    let { humidities } = this.props
+    let { series } = this.state
+    let keepers = []
+    // change the date format of the values
+    let historicals = humidities.historical.map ( histSet => {
+      return {
+        name: histSet.name,
+        data: histSet.data.map( set => {
+          return [
+            moment(set[0]).valueOf(),
+            set[1]
+          ]
+        }).sort(this.sortDates)
+      }
+
+    })
+    // let historicals = humidities.historical
+    if( series )
+      keepers = this.state.series.filter( set => set.name === 'Actual' )
+    this.setState({
+      series: [
+        ...keepers,
+        ...historicals,
+      ],
+    })
+    console.log(`Updating the historical data seriesl locally`)
+  }
+
+
   render(){
     return (
-      <Grid>
+      <GridArea>
         <Grid.Row columns={2}>
           <Grid.Column width={10}>
             <ChartArea>
@@ -179,7 +168,7 @@ class Humidities extends Component {
               loadStations={this.loadStations} />
           </Grid.Column>
         </Grid.Row>
-      </Grid>
+      </GridArea>
     )
   }
 }
