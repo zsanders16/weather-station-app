@@ -7,6 +7,8 @@
 
 // include the required api for postgresql
 const pool = require('./db')
+const moment = require('moment')
+
 
 var five = require("johnny-five");
 var board = new five.Board();
@@ -25,13 +27,15 @@ board.on("ready", function() {
     pool.query(
       // create the query string for inserting the data points
       'INSERT INTO weathers (celsius, fahrenheit, kelvin, rel_humidity, created_at, updated_at, user_id ) ' +
-      'VALUES ($1,$2,$3,$4, current_timestamp, current_timestamp, $5 )', // placeholders for data points
+      'VALUES ($1,$2,$3,$4,$5,$6,$7 )', // placeholders for data points
       // actual data points
       [
         this.temperature.celsius,
         this.temperature.fahrenheit,
         this.temperature.kelvin,
         this.hygrometer.relativeHumidity.toPrecision(4),
+        moment().utc(),
+        moment().utc(),
         1,
       ],
       // do any error handling

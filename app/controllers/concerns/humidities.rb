@@ -9,16 +9,10 @@ module Humidities
     station = features[0]['properties']['station'].match(/.*?(\w{4,5})$/)[1]
     features.each do |feature|
       rh << [
-        # DateTime.parse(feature['properties']['timestamp']).to_time.to_i,
         feature['properties']['timestamp'],
         feature['properties']['relativeHumidity']['value'].to_f.round(2)
       ]
     end
-    # sorted = rh.sort do |a, b|
-    #   a[0] <=> b[0]
-    # end
-    # data = { name: station, data: sorted }
-    # return data
     { name: station, data: rh }
   end
 

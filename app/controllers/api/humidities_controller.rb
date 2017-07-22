@@ -8,11 +8,7 @@ class Api::HumiditiesController < ApplicationController
     rh_json = { actual: []}
     # Acquire the arduino time points
     @humidities = Weather.select(:rel_humidity, :created_at)
-      .where(
-        # "created_at >= to_timestamp(?,'YYYY-MM-DD HH24:MI:ss') " +
-        # " AND created_at <= to_timestamp(?,'YYYY-MM-DD HH24:MI:ss') ",
-        "created_at >= ? " +
-        " AND created_at <= ? ",
+      .where("created_at >= ? AND created_at <= ? ",
         @dates[:start], @dates[:end] )
         # Time.now.utc - 1.hour, Time.now.utc )
     @humidities.each do |rec|
