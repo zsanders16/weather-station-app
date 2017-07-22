@@ -16,10 +16,10 @@ const station = ( stationId ) => {
 }
 
 
-const observations = ( stationId, startDate, endDate, limit = 5 ) => {
+const observations = ( stationId, startDate, endDate, limit = 30 ) => {
   return STATION_URI + station(stationId) + STATION_QUERY_OBSERVATIONS +
-    // `?limit=${limit}&startTime=${startDate}&endTime=${endDate}`
-    `?startTime=${startDate}&endTime=${endDate}`
+    `?limit=${limit}&startTime=${startDate}&endTime=${endDate}`
+    // `?startTime=${startDate}&endTime=${endDate}`
 }
 
 export const listObservations = ( station ) => {

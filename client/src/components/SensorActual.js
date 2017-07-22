@@ -103,8 +103,10 @@ class SensorActual extends Component {
         dispatch(display.callback({
           // start_date: start_date.format(this.postgresql),
           // end_date: end_date.format(this.postgresql),
-          start_date: start_date.format(),
-          end_date: end_date.format(),
+          // start_date: start_date.format(),
+          // end_date: end_date.format(),
+          start_date: start_date.utc().format(),
+          end_date: end_date.utc().format(),
         }))
       }
     }
@@ -160,11 +162,13 @@ class SensorActual extends Component {
     return data.map( ( data ) => {
       // TODO: set all dates to the same year and month for displaying reasons
       let { start_date } = this.state.settings.actual
-      let category = moment(data.created_at)
-      category.set('year', start_date.year())
-      category.set('month', start_date.month())
-      let point = data[view]
-      return [ category.valueOf(), point ]
+      let created_at = moment(data.created_at)
+      // created_at.set('year', start_date.year())
+      // created_at.set('month', start_date.month())
+      if( created_at.isSameOrAfter(start_date) ) {
+        let point = data[view]
+        return [ created_at.valueOf(), point ]
+      }
     }).sort( (a, b) => {
       if( dir === 'ASC' ) {
         // ASC
