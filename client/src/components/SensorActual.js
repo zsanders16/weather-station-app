@@ -16,6 +16,7 @@ import {
 } from '../charts/sensor'
 import Stations from './Stations'
 import GridArea from './GridArea'
+import DatePicker from './DatePicker'
 
 import 'react-datetime/css/react-datetime.css'
 
@@ -280,6 +281,19 @@ class SensorActual extends Component {
     this.setHistoricalChartType()
   }
 
+  dateCallbackSetter = ( callback ) => {
+    let { dataType, dateType, getter } = callback()
+    this.setState({
+      settings: {
+        ...this.state.settings,
+        [dataType]: {
+          ...this.state.settings[dataType],
+          [dateType]: getter, // set the callback as the date value
+        },
+      },
+    })
+  }
+
   /*
    * Rendering of the Chart and the Control/Settings panel
    */
@@ -332,11 +346,19 @@ class SensorActual extends Component {
                         value={act.start_date}
                         input={true}
                         onChange={this.handleActStartDate} />
+                      <DatePicker
+                        dataType='actual'
+                        dateType='start_date'
+                        dateCallbackSetter={this.dateCallbackSetter} />
                       <label>End Date</label>
                       <Datetime compact
                         value={act.end_date}
                         input={true}
                         onChange={this.handleActEndDate} />
+                      <DatePicker
+                        dataType='actual'
+                        dateType='end_date'
+                        dateCallbackSetter={this.dateCallbackSetter} />
                     </Form.Field>
                   </Grid.Column>
 
@@ -371,6 +393,10 @@ class SensorActual extends Component {
                     </Form.Field>
                     <Form.Field>
                       <label>Start Date</label>
+                      <DatePicker
+                        dataType='historical'
+                        dateType='start_date'
+                        dateCallbackSetter={this.dateCallbackSetter} />
                       <Datetime compact
                         value={hist.start_date}
                         input={true}
@@ -380,6 +406,10 @@ class SensorActual extends Component {
                         value={hist.end_date}
                         input={true}
                         onChange={this.handleHistEndDate} />
+                      <DatePicker
+                        dataType='historical'
+                        dateType='end_date'
+                        dateCallbackSetter={this.dateCallbackSetter} />
                     </Form.Field>
                   </Grid.Column>
                 </Grid.Row>
