@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Segment, Form, Checkbox, Divider, Header } from 'semantic-ui-react'
+import {
+  Grid, Segment,
+  Form, Checkbox,
+  Divider, Header,
+  Loader,
+} from 'semantic-ui-react'
 import {
   // sensorActual,
   // sensorHistorical,
@@ -168,9 +173,14 @@ class SensorActual extends Component {
     let { start_date } = this.props.datePicker.actual
     return data.map( ( data ) => {
       let created_at = moment.utc(data.created_at)
+      if(created_at.isSameOrAfter(start_date)) {
         let point = data[view]
         return [ created_at.valueOf(), point ]
+      } else {
+        null
+      }
     })
+    .filter( set => set !== null )
     .sort( (a, b) => {
       if( dir === 'ASC' ) {
         // ASC
@@ -293,6 +303,11 @@ class SensorActual extends Component {
         <Grid.Row columns={2}>
           <Grid.Column width={10}>
             <Segment>
+              { this.state.series.length <= 0 &&
+                <Loader
+                  active
+                  content='Please wait while data updates! This may take up to a minute.' />
+              }
               <ReactHighcharts config={this.state} />
             </Segment>
             <Segment>

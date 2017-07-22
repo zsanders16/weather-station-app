@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Segment } from 'semantic-ui-react'
+import { Grid, Segment, Loader } from 'semantic-ui-react'
 import ReactHighcharts from 'react-highcharts'
 import styled from 'styled-components'
 import moment from 'moment'
@@ -159,6 +159,11 @@ class Humidities extends Component {
         <Grid.Row columns={2}>
           <Grid.Column width={10}>
             <ChartArea>
+              { !this.state.series &&
+                <Loader
+                  active
+                  content='Please wait while data loads! This may take up to a minute.' />
+              }
               <ReactHighcharts config={this.state} />
             </ChartArea>
           </Grid.Column>

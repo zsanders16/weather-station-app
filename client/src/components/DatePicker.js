@@ -6,15 +6,19 @@ import moment from 'moment'
 import { setDatePickerDate } from '../actions/datePicker'
 
 class DatePicker extends Component {
-  state = { date: moment.utc() }
+  state = { date: null }
 
   componentDidMount = () => {
     let { dispatch, dataType, dateType } = this.props
-    if( dateType === 'start_date' )
-      this.setState({ date: moment.utc().subtract(1,'hours') }, () => {
-        dispatch(setDatePickerDate( this.state.date, dataType, dateType ))
-      })
-    dispatch(setDatePickerDate( this.state.date, dataType, dateType ))
+    let initial_date = null
+    if( dateType === 'start_date' ) {
+      initial_date = moment.utc().subtract(1,'hours')
+    } else {
+      initial_date = moment.utc()
+    }
+    this.setState({ date: initial_date }, () => {
+      dispatch(setDatePickerDate( this.state.date, dataType, dateType ))
+    })
   }
 
   handleDateChange = ( moment ) => {
