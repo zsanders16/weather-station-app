@@ -1,31 +1,27 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import Datetime from 'react-datetime'
 import moment from 'moment'
 
+import { setDatePickerDate } from '../actions/datePicker'
+
 class DatePicker extends Component {
-  state = { date: null }
+  state = { date: moment.utc() }
 
   componentDidMount = () => {
-    let { dateCallbackSetter } = this.props
-    if( typeof dateCallbackSetter === 'function' )
-      // this callback setter is passed down from its parent component
-      dateCallbackSetter(this.selectedDateCallback)
+    let { dispatch, dataType, dateType } = this.props
+    if( dateType === 'start_date' )
+      this.setState({ date: moment.utc().subtract(1,'hours') }, () => {
+        dispatch(setDatePickerDate( this.state.date, dataType, dateType ))
+      })
+    dispatch(setDatePickerDate( this.state.date, dataType, dateType ))
   }
 
   handleDateChange = ( moment ) => {
-    this.setState({ date: moment })
-  }
-
-  // Callback Function used for accessing/returning the current selected date
-  // to the parent component
-  // @return {object} with attributes; date, dataType, dateType
-  selectedDateCallback = () => {
-    let { dataType, dateType } = this.props
-    return {
-      getter: this.selectedDate, // gives access to the component's set date
-      dataType: dataType, // set by parent component, neede for tracking
-      dateType: dateType, // set by parent component, neede for tracking
-    }
+    let { dispatch, dataType, dateType } = this.props
+    this.setState({ date: moment }, () => {
+      dispatch(setDatePickerDate( this.state.date, dataType, dateType ))
+    })
   }
 
   selectedDate = () => {
@@ -33,14 +29,17 @@ class DatePicker extends Component {
   }
 
   render() {
-    let { date } = this.state
     return (
       <Datetime compact
-        value={ date ? date : moment() }
+        value={ this.state.date }
         input={true}
         onChange={this.handleDateChange} />
     )
   }
 }
 
-export default DatePicker
+const mapStateToProps = ( state, props ) => {
+  return { datePicker: state.datePicker }
+}
+
+export default connect(mapStateToProps)(DatePicker)

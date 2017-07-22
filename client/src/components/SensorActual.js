@@ -42,8 +42,8 @@ class SensorActual extends Component {
   minutes = this.seconds * 60
 
   updateActual = ( waitPeriod = (1*this.minutes) ) => {
-    // wait for 10 seconds tight at first
-    const dates = { start_date: moment().utc().format() }
+    // // wait for 10 seconds tight at first
+    // const dates = { start_date: moment().utc().format() }
     this.setActualChartType()
     // console.log(`Updated: ${dates.start_date}`)
     if( this.updateStatus.canUpdate )
@@ -68,16 +68,20 @@ class SensorActual extends Component {
   }
 
   validDates = () => {
-    let { settings: { actual: act, historical: hist }} = this.state
-    let sameStartMonth = act.start_date.month() === hist.start_date.month()
-    let sameStartDay = act.start_date.date() === hist.start_date.date()
-    return sameStartMonth && sameStartDay
+    // let { settings: { actual: act, historical: hist }} = this.state
+    if( this.props.datePicker.actual ) {
+      let { datePicker: { actual: act, historical: hist }} = this.props
+      let sameStartMonth = act.start_date.month() === hist.start_date.month()
+      let sameStartDay = act.start_date.date() === hist.start_date.date()
+      return sameStartMonth && sameStartDay
+    }
   }
 
   setHistoricalChartType = () => {
     if(this.validDates()){
       let { dispatch } = this.props
-      let { display, start_date, end_date } = this.state.settings.historical
+      let { display } = this.state.settings.historical
+      let { start_date, end_date } = this.props.datePicker.historical
       let { stations } = this.state
       if( display.state ) {
         stations.forEach( (sta) => {
@@ -99,15 +103,16 @@ class SensorActual extends Component {
   setActualChartType = () => {
     if(this.validDates()){
       let { dispatch } = this.props
-      let { display, start_date, end_date } = this.state.settings.actual
+      let { display } = this.state.settings.actual
+      let { start_date, end_date } = this.props.datePicker.actual
       if( display.state ) {
         dispatch(display.callback({
           // start_date: start_date.format(this.postgresql),
           // end_date: end_date.format(this.postgresql),
           // start_date: start_date.format(),
           // end_date: end_date.format(),
-          start_date: start_date.utc().format(),
-          end_date: end_date.utc().format(),
+          start_date: start_date.format(),
+          end_date: end_date.format(),
         }))
       }
     }
@@ -160,17 +165,13 @@ class SensorActual extends Component {
 
   parseTempData = ( data, view, dir = 'ASC' ) => {
     // ASC or DESC order
+    let { start_date } = this.props.datePicker.actual
     return data.map( ( data ) => {
-      // TODO: set all dates to the same year and month for displaying reasons
-      let { start_date } = this.state.settings.actual
-      let created_at = moment(data.created_at)
-      // created_at.set('year', start_date.year())
-      // created_at.set('month', start_date.month())
-      if( created_at.isSameOrAfter(start_date) ) {
+      let created_at = moment.utc(data.created_at)
         let point = data[view]
         return [ created_at.valueOf(), point ]
-      }
-    }).sort( (a, b) => {
+    })
+    .sort( (a, b) => {
       if( dir === 'ASC' ) {
         // ASC
         return moment(a[0]).isBefore(b[0]) ? -1 :
@@ -202,43 +203,43 @@ class SensorActual extends Component {
   }
 
   // Change the Timestamps being used to query the data to display
-  handleActStartDate = ( moment ) => {
-    let { dispatch } = this.props
-    let settings = this.state.settings
-    settings.actual.start_date = moment
-    this.setState({ settings }, () => {
-      this.setActualChartType()
-      this.setChartTypes()
-    })
-  }
-  handleHistStartDate = ( moment ) => {
-    let { dispatch } = this.props
-    let settings = this.state.settings
-    settings.historical.start_date = moment
-    this.setState({ settings }, () => {
-      this.setHistoricalChartType()
-      this.setChartTypes()
-    })
-  }
-
-  handleActEndDate = ( moment ) => {
-    let { dispatch } = this.props
-    let settings = this.state.settings
-    settings.actual.end_date = moment
-    this.setState({ settings }, () => {
-      this.setActualChartType()
-      this.setChartTypes()
-    })
-  }
-  handleHistEndDate = ( moment ) => {
-    let { dispatch } = this.props
-    let settings = this.state.settings
-    settings.historical.end_date = moment
-    this.setState({ settings }, () => {
-      this.setHistoricalChartType()
-      this.setChartTypes()
-    })
-  }
+  // handleActStartDate = ( moment ) => {
+  //   let { dispatch } = this.props
+  //   let settings = this.state.settings
+  //   settings.actual.start_date = moment
+  //   this.setState({ settings }, () => {
+  //     this.setActualChartType()
+  //     this.setChartTypes()
+  //   })
+  // }
+  // handleHistStartDate = ( moment ) => {
+  //   let { dispatch } = this.props
+  //   let settings = this.state.settings
+  //   settings.historical.start_date = moment
+  //   this.setState({ settings }, () => {
+  //     this.setHistoricalChartType()
+  //     this.setChartTypes()
+  //   })
+  // }
+  //
+  // handleActEndDate = ( moment ) => {
+  //   let { dispatch } = this.props
+  //   let settings = this.state.settings
+  //   settings.actual.end_date = moment
+  //   this.setState({ settings }, () => {
+  //     this.setActualChartType()
+  //     this.setChartTypes()
+  //   })
+  // }
+  // handleHistEndDate = ( moment ) => {
+  //   let { dispatch } = this.props
+  //   let settings = this.state.settings
+  //   settings.historical.end_date = moment
+  //   this.setState({ settings }, () => {
+  //     this.setHistoricalChartType()
+  //     this.setChartTypes()
+  //   })
+  // }
 
   // Change the charts that will be displayed on the graph
   handleActDisplay = (event,data) => {
@@ -279,19 +280,6 @@ class SensorActual extends Component {
     let { dispatch } = this.props
     dispatch(clearObservations())
     this.setHistoricalChartType()
-  }
-
-  dateCallbackSetter = ( callback ) => {
-    let { dataType, dateType, getter } = callback()
-    this.setState({
-      settings: {
-        ...this.state.settings,
-        [dataType]: {
-          ...this.state.settings[dataType],
-          [dateType]: getter, // set the callback as the date value
-        },
-      },
-    })
   }
 
   /*
@@ -342,23 +330,13 @@ class SensorActual extends Component {
                     </Form.Field>
                     <Form.Field>
                       <label>Start Date</label>
-                      <Datetime compact
-                        value={act.start_date}
-                        input={true}
-                        onChange={this.handleActStartDate} />
                       <DatePicker
                         dataType='actual'
-                        dateType='start_date'
-                        dateCallbackSetter={this.dateCallbackSetter} />
+                        dateType='start_date' />
                       <label>End Date</label>
-                      <Datetime compact
-                        value={act.end_date}
-                        input={true}
-                        onChange={this.handleActEndDate} />
                       <DatePicker
                         dataType='actual'
-                        dateType='end_date'
-                        dateCallbackSetter={this.dateCallbackSetter} />
+                        dateType='end_date' />
                     </Form.Field>
                   </Grid.Column>
 
@@ -395,21 +373,11 @@ class SensorActual extends Component {
                       <label>Start Date</label>
                       <DatePicker
                         dataType='historical'
-                        dateType='start_date'
-                        dateCallbackSetter={this.dateCallbackSetter} />
-                      <Datetime compact
-                        value={hist.start_date}
-                        input={true}
-                        onChange={this.handleHistStartDate} />
+                        dateType='start_date' />
                       <label>End Date</label>
-                      <Datetime compact
-                        value={hist.end_date}
-                        input={true}
-                        onChange={this.handleHistEndDate} />
                       <DatePicker
                         dataType='historical'
-                        dateType='end_date'
-                        dateCallbackSetter={this.dateCallbackSetter} />
+                        dateType='end_date' />
                     </Form.Field>
                   </Grid.Column>
                 </Grid.Row>
@@ -429,7 +397,11 @@ class SensorActual extends Component {
 }
 
 const mapStateToProps = ( state ) => {
-  return { sensor: state.sensor, observations: state.observations }
+  return {
+    sensor: state.sensor,
+    observations: state.observations,
+    datePicker: state.datePicker,
+  }
 }
 
 export default connect(mapStateToProps)(SensorActual)

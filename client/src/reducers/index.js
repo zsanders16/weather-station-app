@@ -10,9 +10,11 @@ import sensor from './sensor'
 import stations from './stations'
 import observations from './observations'
 import humidities from './humidities'
+import datePicker from './datePicker'
 
 
 const rootReducer = combineReducers({
+  datePicker,
   observations,
   humidities,
   user,
