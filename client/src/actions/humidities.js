@@ -12,9 +12,9 @@ const postgresql = 'YYYY-MM-DD HH:mm:ss'
  * Helper Methods
  */
   const currentDates = ( dates = {} ) => {
-    if( !dates || !dates.startDate ) {
-      dates.endDate = moment().utc()
-      dates.startDate = dates.endDate.clone().subtract(1, 'hour')
+    if( !dates || !dates.start_date ) {
+      dates.end_date = moment().utc()
+      dates.start_date = dates.end_date.clone().subtract(1, 'hour')
     }
     return dates
   }
@@ -29,8 +29,8 @@ export const loadInitialSeriesData = ( dates = {}, callback = null ) => {
   // create the query string used in the url
   // let start = dates.startDate.format(postgresql)
   // let end = dates.endDate.format(postgresql)
-  let start = dates.startDate.format()
-  let end = dates.endDate.format()
+  let start = dates.start_date.format()
+  let end = dates.end_date.format()
   let url = `?start_date=${start}&end_date=${end}`
   // query the database
   return (dispatch) => {
@@ -60,8 +60,8 @@ export const loadHistoricalDataSeries = (stations, dates = {}, callback = null )
   // set the dates to be used
   dates = currentDates(dates)
   // create the query string used in the url
-  let start = dates.startDate.format(postgresql)
-  let end = dates.endDate.format(postgresql)
+  let start = dates.start_date.toISOString()
+  let end = dates.end_date.toISOString()
   stations = stations.join(',')
 
   let url = `?start_date=${start}&end_date=${end}&stations=${stations}`

@@ -31,22 +31,11 @@ export const settingsHumidities = {
   yAxis: {
     title: {
       text: 'Relative Humidity (%)',
-      plotlines: [{
-        value: 0,
-        width: 1,
-        color: '#808080',
-      }],
     },
   },
   tooltip: {
       headerFormat: '<b>{series.name}</b><br>',
-      pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
-  },
-  legend: {
-    enabled: true
-  },
-  exporting: {
-    enabled: false
+      pointFormat: '{point.x:%b %e @ %H:%M %P}<br/>{point.y:.2f} %RH'
   },
   plotOptions: {
     spline: {

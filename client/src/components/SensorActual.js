@@ -20,7 +20,7 @@ import {
   sensorSettings,
 } from '../charts/sensor'
 import Stations from './Stations'
-import GridArea from './GridArea'
+import { GridArea } from './ChartStyles'
 import DatePicker from './DatePicker'
 
 import 'react-datetime/css/react-datetime.css'

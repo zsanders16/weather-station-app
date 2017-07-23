@@ -2,8 +2,13 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Datetime from 'react-datetime'
 import moment from 'moment'
+import styled from 'styled-components'
 
 import { setDatePickerDate } from '../actions/datePicker'
+
+const DateTime = styled(Datetime)`
+  width: 30% !important;
+`
 
 class DatePicker extends Component {
   state = { date: null }
@@ -34,7 +39,7 @@ class DatePicker extends Component {
 
   render() {
     return (
-      <Datetime compact
+      <DateTime compact
         value={ this.state.date }
         input={true}
         onChange={this.handleDateChange} />

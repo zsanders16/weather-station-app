@@ -1,10 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Segment, Loader } from 'semantic-ui-react'
+import {
+  Grid, Segment,
+  Checkbox, Loader,
+  Form, Divider
+} from 'semantic-ui-react'
 import ReactHighcharts from 'react-highcharts'
 import styled from 'styled-components'
 import moment from 'moment'
 import Stations from './Stations'
+import DatePicker from './DatePicker'
 
 // Settings and Objects for HighChart
 import { settingsHumidities } from '../charts/humidities'
@@ -15,20 +20,21 @@ import {
 } from '../actions/humidities'
 
 // Custom Styled Elements
-import GridArea from './GridArea'
-const ChartArea = styled(Segment)`
-  width: 100% !important;
+import { GridArea, ChartArea, DatesArea } from './ChartStyles'
+const Line = styled(Divider)`
+  width: 30% !important;
 `
+
 
 class Humidities extends Component {
   state = {
+    checkbox: {
+      Actual: true,
+      Historical: false,
+    },
     stations: [],
     refreshPeriod: 60000, // 1 minute intervals
-    dates: {
-      startDate: null,
-      endDate: null,
-    },
-    ...settingsHumidities
+    ...settingsHumidities,
   }
   callback = null
 
@@ -38,7 +44,9 @@ class Humidities extends Component {
 
   componentDidMount = () => {
     let { series, dispatch } = this.props
-    let { dates } = this.state
+    let dates = {}
+    dates.end_date = moment.utc()
+    dates.start_date = dates.end_date.clone().subtract(1,'hours')
     if( !series || series.length <= 0 ) {
       dispatch(loadInitialSeriesData(dates, this.refreshDataSeries))
     }
@@ -46,18 +54,13 @@ class Humidities extends Component {
 
   refreshDataSeries = () => {
     let { dispatch } = this.props
-    let { dates } = this.state
-    if( !dates.startDate ) {
-      dates.endDate = moment().utc()
-      dates.startDate = dates.endDate.clone().subtract(2, 'minutes')
-    } else if( dates.endDate ){
-      // set time span to just the last dataset
-      dates.startDate = dates.endDate.clone()
-      dates.endDate = moment().utc()
+    let { dates } = this.props.datePicker.humidity
+    let { Actual: showActual } = this.state.checkbox
+    if( showActual ){
+      dispatch(loadNewData(dates))
+      this.updateDataSeries(dates)
+      this.callback = setTimeout(this.refreshDataSeries, this.state.refreshPeriod)
     }
-    dispatch(loadNewData(dates))
-    this.updateDataSeries(dates)
-    this.callback = setTimeout(this.refreshDataSeries, this.state.refreshPeriod)
   }
 
   updateDataSeries = ( dates ) => {
@@ -88,7 +91,7 @@ class Humidities extends Component {
         {
           name: 'Actual',
           data: [
-            ...actual.data,
+            ...(actual ? actual.data : []),
             ...newHumidities
           ].sort(this.sortDates)
         }
@@ -115,12 +118,14 @@ class Humidities extends Component {
   }
 
   loadStations = () => {
-    let { dispatch } = this.props
-    let { stations, dates } = this.state
-    let stationSet = stations.map( sta => sta.id )
-    dispatch(loadHistoricalDataSeries(stationSet, dates, () => {
-      this.updateHistoricalDataSeries()
-    }))
+    let { dispatch, datePicker: { humidity } } = this.props
+    let { stations, checkbox: { Historical: showHistorical } } = this.state
+    if( showHistorical ){
+      let stationSet = stations.map( sta => sta.id )
+      dispatch(loadHistoricalDataSeries(stationSet, humidity, () => {
+        this.updateHistoricalDataSeries()
+      }))
+    }
   }
 
   updateHistoricalDataSeries = () => {
@@ -152,6 +157,36 @@ class Humidities extends Component {
     console.log(`Updating the historical data seriesl locally`)
   }
 
+handleCheckbox = ( event, data ) => {
+  this.setState({
+    ...this.state,
+    checkbox: {
+      ...this.state.checkbox,
+      [data.name]: data.checked
+    },
+  }, () => {
+    if( !data.checked ){
+      this.cleanUpSeriesData(data.name)
+    } else {
+      if( data.name === 'Actual' ) {
+        this.refreshDataSeries()
+      } else if( data.name === 'Historical' ) {
+        this.loadStations()
+      }
+    }
+  })
+}
+
+cleanUpSeriesData = ( dataType ) => {
+  const { series } = this.state
+  const new_series = series.filter( set => {
+    set.name !== dataType
+  })
+  this.setState({
+    ...this.state,
+    series: new_series
+  })
+}
 
   render(){
     return (
@@ -166,6 +201,32 @@ class Humidities extends Component {
               }
               <ReactHighcharts config={this.state} />
             </ChartArea>
+            <DatesArea>
+              <Form>
+                <Checkbox
+                  name='Actual'
+                  value='Actual'
+                  label='Actual'
+                  checked={this.state.checkbox.Actual}
+                  onChange={this.handleCheckbox} />
+                &nbsp;
+                <Checkbox
+                  name='Historical'
+                  value='Historical'
+                  label='Historical'
+                  checked={this.state.checkbox.Historical}
+                  onChange={this.handleCheckbox} />
+                <Line />
+                <label>Start Date</label>
+                <DatePicker
+                  dataType='humidity'
+                  dateType='start_date'/>
+                <label>End Date</label>
+                <DatePicker
+                  dataType='humidity'
+                  dateType='end_date'/>
+              </Form>
+            </DatesArea>
           </Grid.Column>
           <Grid.Column width={6}>
             <Stations
@@ -179,6 +240,9 @@ class Humidities extends Component {
 }
 
 const mapStateToProps = ( state ) => {
-  return { humidities: state.humidities }
+  return {
+    humidities: state.humidities,
+    datePicker: state.datePicker,
+  }
 }
 export default connect(mapStateToProps)(Humidities)

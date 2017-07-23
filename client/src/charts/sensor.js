@@ -46,7 +46,7 @@ export const sensorChartConfig = {
   },
   tooltip: {
       headerFormat: '<b>{series.name}</b><br>',
-      pointFormat: '{point.x:%e. %b @ %H:%M}: {point.y:.2f} m'
+      pointFormat: '{point.x:%b %e @ %H:%M %P}<br/>{point.y:.2f} (Deg.)'
   },
   plotOptions: {
     spline: {
@@ -99,40 +99,3 @@ export const sensorSettings = {
     },
   },
 }
-
-
-/*
- * Methods for running the actual Sensor Graph manupilations
- */
-// export const validDates = ( that ) => {
-//   let { settings: { actual: act, historical: hist }} = that.state
-//   let sameStartMonth = act.start_date.month() === hist.start_date.month()
-//   let sameStartDay = act.start_date.date() === hist.start_date.date()
-//   return sameStartMonth && sameStartDay
-// }
-//
-// export const setHistoricalChartType = ( that ) => {
-//   if(validDates(that)){
-//     let { dispatch } = that.props
-//     let { display, start_date, end_date } = that.state.settings.historical
-//     if( display.state ) {
-//       dispatch(display.callback({
-//         start_date: start_date.format(that.postgresql),
-//         end_date: end_date.format(that.postgresql),
-//       }))
-//     }
-//   }
-// }
-//
-// export const setActualChartType = ( that ) => {
-//   if(validDates(that)){
-//     let { dispatch } = that.props
-//     let { display, start_date, end_date } = that.state.settings.actual
-//     if( display.state ) {
-//       dispatch(display.callback({
-//         start_date: start_date.format(that.postgresql),
-//         end_date: end_date.format(that.postgresql),
-//       }))
-//     }
-//   }
-// }
