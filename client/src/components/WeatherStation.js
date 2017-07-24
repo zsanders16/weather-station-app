@@ -47,7 +47,7 @@ class WeatherStation extends Component {
   //calls you currently don't have weather for current location it call setCurrentLocation action
   setPosition = (latitude, longitude) => {
     let { dispatch } = this.props
-    dispatch(setCurrentLocation(latitude, longitude, () => this.checkWeather(latitude, longitude))) 
+    dispatch(setCurrentLocation(latitude, longitude, () => this.checkWeather(latitude, longitude)))
   }
 
   checkWeather = (latitude, longitude) => {
@@ -63,7 +63,7 @@ class WeatherStation extends Component {
     this.updateForecastCity()
   }
 
-  
+
 
   updateForecastCity = () => {
     let { addresses, dispatch, weatherForecasts} = this.props
@@ -89,7 +89,7 @@ class WeatherStation extends Component {
     return (
       <Grid.Row >
         <Grid.Column width={12} >
-           <WeeklyForecast cityView={this.state.cityView}/> 
+           <WeeklyForecast cityView={this.state.cityView}/>
         </Grid.Column>
         <Grid.Column width={4} className='ws_area'>
              <SavedLocations />
@@ -112,7 +112,7 @@ class WeatherStation extends Component {
     })
 
     if(exists){
-      
+
       let index = citySeries.indexOf(changedCity)
       if (index !== -1) {
         citySeries.splice(index, 1)
@@ -171,7 +171,7 @@ class WeatherStation extends Component {
         tempData.push(
           {
             name: forecastData[0].city,
-            startTime: formattedTime, 
+            startTime: formattedTime,
             data: [...dayInfo],
           }
         )
@@ -213,7 +213,7 @@ class WeatherStation extends Component {
         <Grid>
           <Grid.Row >
             <Grid.Column width={16}>
-               <CurrentLocation /> 
+               <CurrentLocation />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
@@ -232,7 +232,7 @@ class WeatherStation extends Component {
               </Button.Group>
             </Grid.Column>
           </Grid.Row>
-           { view ? this.showForecast() : this.showCompare()} 
+           { view ? this.showForecast() : this.showCompare()}
         </Grid>
       </Container>
     )
@@ -240,8 +240,8 @@ class WeatherStation extends Component {
   }
 }
 
-const mapStateToProps = (state) => {  
-  return { 
+const mapStateToProps = (state) => {
+  return {
             weather: state.weatherForecasts.weekly[0],
             currentLocation: state.currentLocation,
             addresses: state.addresses,
