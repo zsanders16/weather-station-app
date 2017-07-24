@@ -1,35 +1,27 @@
 import React, { Component } from 'react';
 import TodaysWeather from './TodaysWeather'
-import { Header, Segment, Dimmer, Loader, Image } from 'semantic-ui-react'
+import { Header, Segment } from 'semantic-ui-react'
 import WeeklyForecast from './WeeklyForecast'
-import { connect } from 'react-redux';
 import { set_lat_long } from '../actions/locations'
 import { weatherForecastWeekly } from '../actions/weatherForecasts'
-
+import { connect } from 'react-redux'
+import { setCityView } from '../actions/weatherForecasts'
 
 
 class HomePage extends Component {
-  state = { setLocation: false }
 
   componentDidMount() {
-    this.checkWeatherAvailability()
+    this.determineIfLocation()
   }
 
-  checkWeatherAvailability = () => {
-    if(this.props.weatherForecasts.weekly == 0)
-        this.GetLocation()
-    else{
-      this.setState({setLocation: true})
+  determineIfLocation = () => {
+    let { currentLocation } = this.props
+    if(!currentLocation.latitude){
+      this.getLocation()
     }
   }
   
-  setPosition = (latitude, longitude) => {
-    let { dispatch } = this.props
-    set_lat_long([latitude, longitude], dispatch)
-    dispatch(weatherForecastWeekly([latitude, longitude], '', () => this.checkWeatherAvailability()))
-  }
-  
-  GetLocation = () => {
+  getLocation = () => {
     if (navigator.geolocation) {
        navigator.geolocation.getCurrentPosition( (position) => {
        let latitude = position.coords.latitude;
@@ -41,37 +33,33 @@ class HomePage extends Component {
     }
   }
 
-  displayCurrentLocation = () => {
-
-    let { setLocation } = this.state
-    if(setLocation){
-      return (<TodaysWeather/>)
-    }else{
-      return (
-        <Segment style={{height: '150px'}}>
-          <Dimmer active>
-            <Loader indeterminate>Getting Current Location Weather</Loader>
-          </Dimmer>
-        </Segment>
-      )
+  setPosition = (latitude, longitude) => {
+    let { dispatch, weatherForecasts } = this.props
+    dispatch(set_lat_long([latitude, longitude], dispatch))
+    if(!weatherForecasts.weekly[0]){
+      dispatch(weatherForecastWeekly([latitude, longitude], 'Current Location', this.setCityView ))
     }
-  } 
+  }
 
+  setCityView = () => {
+    let { dispatch } = this.props
+    setCityView( 'Current Location', dispatch)
+  }
 
   render() {
     return(
       <Segment basic>
-        <Header as='h2'>HomePage</Header> 
-         { this.displayCurrentLocation() }
-         <WeeklyForecast /> 
+        <Header as='h2'>HomePage</Header>
+        <TodaysWeather/>
+        <WeeklyForecast />
       </Segment>
     )
   }
 }
 
 
-const mapStateToProps= (state) => {
-  return { weatherForecasts: state.weatherForecasts }
+const mapStateToProps = (state) => {
+  return { weatherForecasts: state.weatherForecasts, currentLocation: state.currentLocation }
 }
 
 export default connect(mapStateToProps)(HomePage)

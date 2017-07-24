@@ -1,69 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Grid, Segment, Header, Button } from 'semantic-ui-react'
+import { Grid, Segment, Header, Dimmer, Loader } from 'semantic-ui-react'
 import CurrentForecast from './CurrentForecast'
-import moment from 'moment'
-
 
 class TodaysWeather extends Component {
-  state = {city: this.props.cities[0], view: 0, time: 'day'}
 
-  componentDidMount() {
-    this.selectCity();
-    if(moment().hour() >= 18){
-        this.setState({view: 1, time: 'night'})
-
-    }
-  }
-
-
-  selectCity = () => {
-    let { cities, cityView } = this.props
-    let index = 0
-    cities.forEach( (city, i) => {
-      if(city.city === cityView){
-        index = i
-      }
-    })
-    this.setState({city: cities[index]})
-  }
-
-  changeView = ( flag ) => {
-    let { view } = this.state
-    if( flag === 'Night' ){
-      this.setState({view: 1, time: 'night'})
-    }else if ( flag === 'Day') {
-      this.setState({view: 0, time: 'day'})
-    }
-  }
-
-  buttonValue = () => {
-    let { time } = this.state
-    if( time === 'day'){
-      return 'Night'
-    }else if( time === 'night'){
-      return 'Day'
-    }
-  }
-
-  displayCurrentForecast = () => {
-    let { city, view } = this.state
-    return(
-      <CurrentForecast 
-        data={city.days[view]}
-        changeView={this.changeView}
-        buttonValue={this.buttonValue} />  
-    )
-  }
-
-  displayLoader = () => {
-    debugger
-  }
-
-  render(){
+  displayWeather = () => {
     let { cityView } = this.props
-    let { city, view, weather } = this.state
-    debugger
     return(
       <Segment raised>
         <Grid centered >
@@ -74,21 +17,37 @@ class TodaysWeather extends Component {
           </Grid.Row>
           <Grid.Row centered columns={1}>
             <Grid.Column width={16}>
-              { weather > 0 ? this.displayCurrentForecast() : this.displayLoader()}
+              <CurrentForecast />
             </Grid.Column>
           </Grid.Row>
         </Grid>
       </Segment>
     )
+  } 
+
+  displayLoader = () => {
+    return(
+      <Segment style={ {height: "500px"}}>
+        <Dimmer active>
+          <Loader size='medium'>Loading Current Weather</Loader>
+        </Dimmer>
+      </Segment>
+    )
+  }
+
+  render(){
+    let { cityView } = this.props
+    return(
+      <div>
+        { cityView.length > 0 ? this.displayWeather() : this.displayLoader() }  
+      </div>
+    )
   }
 }
 
 
-const mapStateToProps = (state) => {  
-  debugger
-  return{ cities: state.weatherForecasts.weekly, 
-          cityView: state.weatherForecasts.cityView,
-          weather: state.weekly[0] }
+const mapStateToProps = (state) => {
+  return{ cityView: state.weatherForecasts.cityView }
 }
 
 

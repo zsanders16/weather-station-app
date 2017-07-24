@@ -16,10 +16,6 @@ const options = [
 class WeeklyForecast extends React.Component {
   state = { forecastDays: 1, city: this.props.cities[0]}
 
-  componentDidMount() {
-
-  }
-
   //display each forecasted day
   displayDays = (days) => {
     return days.map( (day) => {
@@ -33,10 +29,9 @@ class WeeklyForecast extends React.Component {
     });
   }
 
-
   //remove the current day from the api forecast
-  selectDays = (city = null) => {
-    let { forecastDays, viewState } = this.state
+  selectDays = (city) => {
+    let { forecastDays } = this.state
     let totalViews = forecastDays * 2
 
     let days = []
@@ -56,27 +51,13 @@ class WeeklyForecast extends React.Component {
   //pull the correct city to display out of all cities in redux state
   selectCity = () => {
     let { cities, cityView } = this.props
-    if(cities.length > 0){
-      let index = 0
-      cities.forEach( (city, i) => {
-        if(city.city === cityView){
-          index = i
-        }
-      })
-      return this.selectDays(cities[index])
-    }else{
-      return(
-        <Grid.Column width={16}>
-          <Segment style={{height: '150px'}}>
-          <Dimmer active>
-            <Loader indeterminate>Getting Forecast Data</Loader>
-          </Dimmer>
-        </Segment>
-        </Grid.Column>
-      )
-    }
-
-    
+    let index = 0
+    cities.forEach( (city, i) => {
+      if(city.city === cityView){
+        index = i
+      }
+    })
+    return this.selectDays(cities[index])
   }
 
   handleChange = (e, data) => {
@@ -104,9 +85,22 @@ class WeeklyForecast extends React.Component {
     )
   }
 
-  render(){
+  displayLoader = () => {
     return(
-      this.displayForecast()
+      <Segment style={ {height: "120px"}}>
+        <Dimmer active>
+          <Loader size='medium'>Loading Location Forecast</Loader>
+        </Dimmer>
+      </Segment>
+    )
+  }
+
+  render(){
+    let { cityView } = this.props
+    return(
+      <div>
+        { cityView ? this.displayForecast() : this.displayLoader() }
+      </div>
     )
   }
 }

@@ -45,6 +45,7 @@ export const addressEdit = (address_id) => {
 }
 
 export const addCurrentToAddress = (combinedAddress, dispatch) => {
+  debugger
   let fullAddress = combinedAddress.split(',')
   let locAddress = fullAddress[0]
   let city = fullAddress[1].substring(1)
@@ -70,6 +71,7 @@ export const addressUpdate = (address, id) => {
 
 export const addressDelete = (address_id) => {
   return (dispatch) => {
+    debugger
     axios.delete(`/api/addresses/${address_id}`)
       .then( resp => {
         if( resp.status === 204 ) {
