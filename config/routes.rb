@@ -41,6 +41,11 @@
 #      api_humidities_actual GET      /api/humidities/actual(.:format)       api/humidities#actual
 #  api_humidities_historical GET      /api/humidities/historical(.:format)   api/humidities#historical
 #  api_humidities_comparison GET      /api/humidities/comparison(.:format)   api/humidities#comparison
+#    api_humidity_recordings GET      /api/humidity_recordings(.:format)     api/humidity_recordings#index
+#     api_humidity_recording GET      /api/humidity_recordings/:id(.:format) api/humidity_recordings#show
+#                            PATCH    /api/humidity_recordings/:id(.:format) api/humidity_recordings#update
+#                            PUT      /api/humidity_recordings/:id(.:format) api/humidity_recordings#update
+#                            DELETE   /api/humidity_recordings/:id(.:format) api/humidity_recordings#destroy
 #           open_weather_api POST     /open_weather_api(.:format)            open_weather_api#location_forecast
 #                            GET      /*other(.:format)                      static#index
 # 
@@ -67,6 +72,9 @@ Rails.application.routes.draw do
     get '/humidities/historical', to: 'humidities#historical', as: 'humidities_historical'
     get '/humidities/comparison', to: 'humidities#comparison', as: 'humidities_comparison'
 
+    # Routes for Humdity Records extracted from the Weather models
+    resources :humidity_recordings, except: [ :new, :create ]
+    
   end
 
   post '/open_weather_api', to: 'open_weather_api#location_forecast'
