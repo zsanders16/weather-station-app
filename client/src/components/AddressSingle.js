@@ -49,14 +49,14 @@ class AddressSingle extends React.Component {
         <Segment basic>
           <Button.Group  size='tiny' style={{marginLeft: '40px'}}>
             <Popup
-              trigger={<Button color='teal' icon onClick={() => this.getWeather(address)}>
+              trigger={<Button color='blue' icon onClick={() => this.getWeather(address)}>
                         <Icon name='world' />
                       </Button>}
               content='Get Weather'
             />
 
             <Modal trigger={<Popup
-                            trigger={<Button color='teal' icon onClick={() => this.handleOpen()} >
+                            trigger={<Button color='instagram' icon onClick={() => this.handleOpen()} >
                                       <Icon name='edit' />
                                     </Button>}
                             content='Edit Location'

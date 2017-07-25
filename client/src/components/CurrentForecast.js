@@ -112,7 +112,7 @@ class CurrentForecast extends React.Component {
             </Button>
             <Button.Or />
             <Button
-              positive
+              color='blue'
               onClick={() => this.changeView('Night')}>
               Night
             </Button>

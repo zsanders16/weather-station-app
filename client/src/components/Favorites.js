@@ -38,7 +38,7 @@ class Favorites extends Component {
       <Segment basic >
         <Header as='h2' textAlign='center'>Saved Locations</Header>
         <Modal trigger={<Button
-            color='teal'
+            color='blue'
             icon='add'
             content='Add'
             fluid

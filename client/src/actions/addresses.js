@@ -45,7 +45,6 @@ export const addressEdit = (address_id) => {
 }
 
 export const addCurrentToAddress = (combinedAddress, dispatch) => {
-  debugger
   let fullAddress = combinedAddress.split(',')
   let locAddress = fullAddress[0]
   let city = fullAddress[1].substring(1)

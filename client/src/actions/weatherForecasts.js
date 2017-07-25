@@ -48,7 +48,7 @@ export const weatherForecastWeekly = ( geolocation, city = '', cb = null) => {
       })
       .then( () => cb() )
       .catch( resp => {
-        dispatch(setFlash('Weather Forecast Not Found!', 'error'))
+        console.log('error getting weather')
       })
   }
 }
