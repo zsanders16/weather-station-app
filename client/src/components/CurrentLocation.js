@@ -7,9 +7,9 @@ class CurrentLocation extends React.Component{
 
   dimmer = () => {
     return(
-      <Segment style={ {height: "100px"}}>
+      <Segment style={ {height: "120px"}}>
         <Dimmer active>
-          <Loader size='medium'>Loading</Loader>
+          <Loader size='medium'>Loading Current Location</Loader>
         </Dimmer>
       </Segment>
     )
@@ -18,7 +18,7 @@ class CurrentLocation extends React.Component{
   location = () => {
     return(
     <Segment padded='very' style={ {height: "100px"}} >
-      <CurrentAddress address={this.props.currentLocation.address} />
+      <CurrentAddress address={this.props.currentLocation.currentLocation.address} />
     </Segment>
   )
 }
@@ -27,7 +27,7 @@ class CurrentLocation extends React.Component{
     let { loaded } = this.props.currentLocation
     return(
       <div>
-      { loaded ? this.location() : this.dimmer() }
+        { loaded ? this.location() : this.dimmer() }
       </div>
     )
   }

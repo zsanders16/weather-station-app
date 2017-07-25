@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Segment, Message, Button, Header, Divider, Modal } from 'semantic-ui-react'
+import { Grid, Segment, Message, Button, Header, Divider, Modal, Dimmer, Loader } from 'semantic-ui-react'
 import { addressesGet, addCurrentToAddress } from '../actions/addresses'
 import AddressSingle from './AddressSingle'
 import AddressForm from './AddressForm'
@@ -9,13 +9,12 @@ class Favorites extends Component {
   state = { favorites: [], modalOpen: false }
 
   componentDidMount = () => {
-    let { addresses, dispatch, currentLocation } = this.props
+    let { addresses, dispatch } = this.props
     // load addresses from the database
-    if( addresses.length === 0 ) {
-      dispatch(addCurrentToAddress(currentLocation.address, dispatch))
+    if( addresses.length <= 1 ) {
+      // dispatch(addCurrentToAddress(currentLocation.address, dispatch))
       dispatch(addressesGet())
     }
-
   }
 
   displayFavorites = () => {
@@ -34,14 +33,12 @@ class Favorites extends Component {
     }
   }
 
-
-
   displayButtons = () => {
     return(
       <Segment basic >
         <Header as='h2' textAlign='center'>Saved Locations</Header>
         <Modal trigger={<Button
-            primary
+            color='teal'
             icon='add'
             content='Add'
             fluid
@@ -53,7 +50,7 @@ class Favorites extends Component {
           <Modal.Header>Add a New Contact</Modal.Header>
           <Modal.Content>
             <Modal.Description>
-              <AddressForm handleClose={this.handleClose} handleOpen={this.handleOpen}/>
+               <AddressForm handleClose={this.handleClose} handleOpen={this.handleOpen}/> 
             </Modal.Description>
           </Modal.Content>
         </Modal>
@@ -69,19 +66,30 @@ class Favorites extends Component {
     modalOpen: false,
   })
 
+
+  displayLoader = () => {
+    return(
+      <Segment style={ {height: "120px"}}>
+        <Dimmer active>
+          <Loader size='medium'>Loading Saved Locations</Loader>
+        </Dimmer>
+      </Segment>
+    )
+  }
+
   render(){
+    let { addresses } = this.props
     return (
       <Grid>
         <Grid.Row>
           <Grid.Column>
             <Segment raised>
-            { this.displayButtons() }
+               { this.displayButtons() }  
             <Divider />
-            { this.displayFavorites() }
+               { addresses.length > 0 ? this.displayFavorites() : this.displayLoader() } 
             </Segment>
           </Grid.Column>
         </Grid.Row>
-
       </Grid>
     )
   }

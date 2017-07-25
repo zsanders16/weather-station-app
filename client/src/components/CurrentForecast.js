@@ -1,127 +1,150 @@
 import React from 'react'
 import { Segment, Image, Button, Header, List, Icon } from 'semantic-ui-react'
 import moment from 'moment'
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-const CurrentForecast = ({ data, changeView }) => {
-  const date = moment(data.startTime)
+// const BackGroundStyle = styled.div`
+//     background-repeat: no-repeat;
+//     background-position: center; 
+//   `
 
-  let background = ''
-  
-  if(data.isDaytime){
-    if(data.detailedForecast.includes('rain')){
-      background = 'rainyDay'
-    }else if(data.detailedForecast.includes('snow')){
-      background = 'snowyDay'
-    }else if(data.detailedForecast.includes('windy')){
-      background = 'windyDay'
-    }else{
-      background = 'clearDay'
+class CurrentForecast extends React.Component {
+  state = {city: this.props.cities[0], view: 0, time: 'day'}
+
+  componentDidMount() {
+    this.selectCity()
+    if(moment().hour() >= 18){
+        this.setState({view: 1, time: 'night'})
     }
-  }else{
-    if(data.detailedForecast.includes('rain')){
-      background = 'rainyNight'
-    }else if(data.detailedForecast.includes('snow')){
-      background = 'snowyNight'
-    }else if(data.detailedForecast.includes('windy')){
-      background = 'windyNight'
-    }else{
-      background = 'clearNight'
+    // selectBackgroundImage()
+    
+  }
+
+  // selectBackgroundImage = () => {
+  //   let { city, view } = this.state
+  //   let data = city.days[view]
+  //   let background = ''
+    
+  //   if(data.isDaytime){
+  //     if(data.detailedForecast.includes('rain')){
+  //       background = 'rainyDay'
+  //     }else if(data.detailedForecast.includes('snow')){
+  //       background = 'snowyDay'
+  //     }else if(data.detailedForecast.includes('windy')){
+  //       background = 'windyDay'
+  //     }else{
+  //       background = 'clearDay'
+  //     }
+  //   }else{
+  //     if(data.detailedForecast.includes('rain')){
+  //       background = 'rainyNight'
+  //     }else if(data.detailedForecast.includes('snow')){
+  //       background = 'snowyNight'
+  //     }else if(data.detailedForecast.includes('windy')){
+  //       background = 'windyNight'
+  //     }else{
+  //       background = 'clearNight'
+  //     }
+  //   }
+
+  //   let imgString = require(`../images/${background}.gif`)
+  //   this.setState({imgString})
+  // }
+
+  
+  // const BackGroundStyle = styled.div`
+  //   background: url(${this.state.imgString});
+  //   background-repeat: no-repeat;
+  //   background-position: center; 
+  // `
+
+
+
+
+
+
+  selectCity = () => {
+    let { cities, cityView } = this.props
+    let index = 0
+    cities.forEach( (city, i) => {
+      if(city.city === cityView){
+        index = i
+      }
+    })
+    this.setState({city: cities[index]})
+  }
+
+  changeView = ( flag ) => {
+    let { view } = this.state
+    if( flag === 'Night' ){
+      this.setState({view: 1, time: 'night'})
+    }else if ( flag === 'Day') {
+      this.setState({view: 0, time: 'day'})
     }
   }
 
-  let imgString = require(`../images/${background}.gif`)
-
-  const BackGroundStyle = styled.div`
-    background: url(${imgString});
-    background-repeat: no-repeat;
-    background-position: center; 
-  `
+  buttonValue = () => {
+    let { time } = this.state
+    if( time === 'day'){
+      return 'Night'
+    }else if( time === 'night'){
+      return 'Day'
+    }
+  }
   
-  return(
-    <BackGroundStyle basic>
-      <Image src={data.icon} width={100} centered shape='circular'/>
-      <Segment basic textAlign='center'>
-        <Button.Group size='mini' compact>
-          <Button
-            onClick={() => changeView('Day')}>
-            Day
-          </Button>
-          <Button.Or />
-          <Button
-            positive
-            onClick={() => changeView('Night')}>
-            Night
-          </Button>
-        </Button.Group>
+  render(){
+    let { city, view } = this.state
+    let data = city.days[view]
+    let date = moment(data.startTime)
+    return(
+      <Segment>
+        <Image src={data.icon} width={100} centered shape='circular'/>
+        <Segment basic textAlign='center'>
+          <Button.Group size='mini' compact>
+            <Button
+              onClick={() => this.changeView('Day')}>
+              Day
+            </Button>
+            <Button.Or />
+            <Button
+              positive
+              onClick={() => this.changeView('Night')}>
+              Night
+            </Button>
+          </Button.Group>
+        </Segment>
+        <Segment basic textAlign='center'>
+          <Header as='h3'>{ data.detailedForecast }</Header>
+        </Segment>
+        <Segment basic textAlign='center'>
+          <List>
+            <List.Item>
+              { date.calendar().trim() }
+              &nbsp;Between:&nbsp;{ data.isDaytime ? <span>6 am to 6 pm</span> : <span>6 pm to 6 am</span> }
+            </List.Item>
+            <List.Item>
+              <Icon name='thermometer three quarters' />&nbsp;
+                { data.isDaytime ? 'Daily High' : 'Nightly Low' }&nbsp;
+              Temperature:&nbsp;{ data.temperature }&deg;{ data.temperatureUnit }
+            </List.Item>
+            <List.Item>
+              <Icon name='flag outline' />&nbsp;
+                Wind Dirrection: { data.windDirection }
+            </List.Item>
+            <List.Item>
+              <Icon name='bathtub' />&nbsp;
+              Wind Speed: { data.windSpeed }
+            </List.Item>
+          </List>
+        </Segment>
       </Segment>
-      <Segment basic textAlign='center'>
-        <Header as='h3'>{ data.detailedForecast }</Header>
-      </Segment>
-      <Segment basic textAlign='center'>
-        <List>
-          <List.Item>
-            { date.calendar().trim() }
-            &nbsp;Between:&nbsp;{ data.isDaytime ? <span>6 am to 6 pm</span> : <span>6 pm to 6 am</span> }
-          </List.Item>
-          <List.Item>
-            <Icon name='thermometer three quarters' />&nbsp;
-              { data.isDaytime ? 'Daily High' : 'Nightly Low' }&nbsp;
-            Temperature:&nbsp;{ data.temperature }&deg;{ data.temperatureUnit }
-          </List.Item>
-          <List.Item>
-            <Icon name='flag outline' />&nbsp;
-              Wind Dirrection: { data.windDirection }
-          </List.Item>
-          <List.Item>
-            <Icon name='bathtub' />&nbsp;
-            Wind Speed: { data.windSpeed }
-          </List.Item>
-        </List>
-      </Segment>
-    </BackGroundStyle>
-  )
+    )
+  }
 }
 
-export default CurrentForecast;
+const mapStateToProps = (state) => {
+  return{ cities: state.weatherForecasts.weekly, cityView: state.weatherForecasts.cityView }
+}
 
-// Object {number: 1, name: "Today", startTime: "2017-07-11T08:00:00-06:00", endTime: "2017-07-11T18:00:00-06:00", isDaytime: true…}
-// detailedForecast
-// :
-// "Mostly sunny, with a high near 95. South southwest wind around 7 mph."
-// endTime
-// :
-// "2017-07-11T18:00:00-06:00"
-// icon
-// :
-// "https://api.weather.gov/icons/land/day/sct?size=medium"
-// isDaytime
-// :
-// true
-// name
-// :
-// "Today"
-// number
-// :
-// 1
-// shortForecast
-// :
-// "Mostly Sunny"
-// startTime
-// :
-// "2017-07-11T08:00:00-06:00"
-// temperature
-// :
-// 95
-// temperatureTrend
-// :
-// null
-// temperatureUnit
-// :
-// "F"
-// windDirection
-// :
-// "SSW"
-// windSpeed
-// :
-// "7 mph"
+export default connect(mapStateToProps)(CurrentForecast);

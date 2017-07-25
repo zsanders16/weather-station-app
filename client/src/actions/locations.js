@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { setFlash } from '../actions/flash';
 import { weatherForecastWeekly } from '../actions/weatherForecasts'
+import { addCurrentToAddress } from './addresses'
 
 
 const LOCATIONS = 'LOCATIONS'
@@ -13,22 +14,22 @@ export const locations = () => {
 }
 
 export const setCurrentLocation = (latitude, longitude, cb = null) => {
-
   return(dispatch) =>
     axios.post(`/api/current_location`, {current_location: {latitude: latitude, longitude: longitude}})
     .then( res => {
       dispatch({type: 'SET_CURRENT_LOCATION', data: res.data, loaded: true, headers: res.headers })
+      addCurrentToAddress(res.data.address, dispatch)
+      // if(hasWeather){
+      //   dispatch(weatherForecastWeekly([latitude, longitude], 'current'))
+      // }
     })
-    .then(() => cb())
+    .then( () => cb() )
     .catch( res => {
         dispatch(setFlash('Failed To Set Current Location.', 'error'));
   });
 }
 
 
- 
-
 export const set_lat_long = (location, dispatch) => {
-
   dispatch({type: 'SET_CURRENT_LOCATION', data: location})
 }

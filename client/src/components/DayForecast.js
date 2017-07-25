@@ -23,7 +23,7 @@ class DayForecast extends React.Component{
           </Card.Content>
           <Card.Content extra>
           <Popup
-              trigger={<Button primary >Detailed Forecast</Button>}
+              trigger={<Button color='teal'>Detailed Forecast</Button>}
               content={data.detailedForecast}
           />
           </Card.Content>

@@ -5,7 +5,7 @@ const addresses = ( state = [], action ) => {
 
     case 'ADDRESS_CREATE':
       // insert new address at the top of the list
-      return [ ...state,  action.address]
+      return [ action.address, ...state ]
 
     case 'ADDRESS_SHOW':
       // ids should be integers

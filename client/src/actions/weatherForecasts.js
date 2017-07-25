@@ -39,14 +39,14 @@ const forecast = ( geolocation ) => {
 // }
 
 /* Global Methods */
-export const weatherForecastWeekly = ( geolocation, city = '', cb = null ) => {
+export const weatherForecastWeekly = ( geolocation, city = '', cb = null) => {
   let api = forecast(geolocation)
   return (dispatch) => {
     axios.post('/open_weather_api', {api: api})
       .then( resp => {
         dispatch({ type: WEATHER_FORECAST_WEEKLY, data: resp.data.properties.periods, city: city, headers: resp.headers })
       })
-      .then(() => cb())
+      .then( () => cb() )
       .catch( resp => {
         dispatch(setFlash('Weather Forecast Not Found!', 'error'))
       })
@@ -56,6 +56,10 @@ export const weatherForecastWeekly = ( geolocation, city = '', cb = null ) => {
 
 export const setCityView = (city, dispatch) => {
   dispatch( {type: 'SET_CITY_VIEW', city: city} )
+}
+
+export const updateCurrentLoctions = (dispatch, forecasts) => {
+  dispatch( { type: 'UPDATE_CURRENT_LOCATION_WEATHER',  forecasts} );
 }
 // export const weatherForecastHourly = ( geolocation ) => {
 //   return (dispatch) => {
