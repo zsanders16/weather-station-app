@@ -4,59 +4,63 @@ import moment from 'moment'
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-// const BackGroundStyle = styled.div`
-//     background-repeat: no-repeat;
-//     background-position: center; 
-//   `
+const BackGroundStyle = styled.div`
+  background: url(${props => props.imgString});
+  background-repeat: no-repeat;
+  background-position: center;
+`
+const DetailedForecast = styled(Segment)`
+  width: 60% !important;
+  margin: 0 20% !important;
+`
 
 class CurrentForecast extends React.Component {
-  state = {city: this.props.cities[0], view: 0, time: 'day'}
+  state = { city: this.props.cities[0], view: 0, time: 'day', imgString: '' }
 
   componentDidMount() {
     this.selectCity()
     if(moment().hour() >= 18){
         this.setState({view: 1, time: 'night'})
     }
-    // selectBackgroundImage()
-    
+    this.selectBackgroundImage()
   }
 
-  // selectBackgroundImage = () => {
-  //   let { city, view } = this.state
-  //   let data = city.days[view]
-  //   let background = ''
-    
-  //   if(data.isDaytime){
-  //     if(data.detailedForecast.includes('rain')){
-  //       background = 'rainyDay'
-  //     }else if(data.detailedForecast.includes('snow')){
-  //       background = 'snowyDay'
-  //     }else if(data.detailedForecast.includes('windy')){
-  //       background = 'windyDay'
-  //     }else{
-  //       background = 'clearDay'
-  //     }
-  //   }else{
-  //     if(data.detailedForecast.includes('rain')){
-  //       background = 'rainyNight'
-  //     }else if(data.detailedForecast.includes('snow')){
-  //       background = 'snowyNight'
-  //     }else if(data.detailedForecast.includes('windy')){
-  //       background = 'windyNight'
-  //     }else{
-  //       background = 'clearNight'
-  //     }
-  //   }
+  selectBackgroundImage = () => {
+    let { city, view } = this.state
+    let data = city.days[view]
+    let background = ''
 
-  //   let imgString = require(`../images/${background}.gif`)
-  //   this.setState({imgString})
-  // }
+    if(data.isDaytime){
+      if(data.detailedForecast.includes('rain')){
+        background = 'rainyDay'
+      }else if(data.detailedForecast.includes('snow')){
+        background = 'snowyDay'
+      }else if(data.detailedForecast.includes('windy')){
+        background = 'windyDay'
+      }else{
+        background = 'clearDay'
+      }
+    }else{
+      if(data.detailedForecast.includes('rain')){
+        background = 'rainyNight'
+      }else if(data.detailedForecast.includes('snow')){
+        background = 'snowyNight'
+      }else if(data.detailedForecast.includes('windy')){
+        background = 'windyNight'
+      }else{
+        background = 'clearNight'
+      }
+    }
 
-  
+    let imgString = require(`../images/${background}.gif`)
+    this.setState({imgString})
+  }
+
+
   // const BackGroundStyle = styled.div`
   //   background: url(${this.state.imgString});
   //   background-repeat: no-repeat;
-  //   background-position: center; 
+  //   background-position: center;
   // `
 
 
@@ -92,13 +96,13 @@ class CurrentForecast extends React.Component {
       return 'Day'
     }
   }
-  
+
   render(){
     let { city, view } = this.state
     let data = city.days[view]
     let date = moment(data.startTime)
     return(
-      <Segment>
+      <BackGroundStyle imgString={this.state.imgString} >
         <Image src={data.icon} width={100} centered shape='circular'/>
         <Segment basic textAlign='center'>
           <Button.Group size='mini' compact>
@@ -114,9 +118,9 @@ class CurrentForecast extends React.Component {
             </Button>
           </Button.Group>
         </Segment>
-        <Segment basic textAlign='center'>
+        <DetailedForecast basic textAlign='center'>
           <Header as='h3'>{ data.detailedForecast }</Header>
-        </Segment>
+        </DetailedForecast>
         <Segment basic textAlign='center'>
           <List>
             <List.Item>
@@ -138,7 +142,7 @@ class CurrentForecast extends React.Component {
             </List.Item>
           </List>
         </Segment>
-      </Segment>
+      </BackGroundStyle>
     )
   }
 }
