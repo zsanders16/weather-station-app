@@ -37,7 +37,7 @@ const Station = ({ name, stationIdentifier, id, coords, handleShow, handleHide }
               </Button>
               <Button.Or />
               <Button
-                onClick={() => handleHide(stationIdentifier,coords)}>
+                onClick={() => handleHide(stationIdentifier,coords)} color='blue'>
                 Sub
               </Button>
             </Button.Group>

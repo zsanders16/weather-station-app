@@ -80,7 +80,7 @@ class Stations extends Component {
           <Grid.Row columns={2}>
             <Grid.Column width={6}>
               <Button size='mini'
-                onClick={this.props.loadStations}>Load Stations</Button>
+                onClick={this.props.loadStations} color='blue'>Load Stations</Button>
             </Grid.Column>
             <Grid.Column width={10}>
               <Output>
