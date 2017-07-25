@@ -32,7 +32,7 @@ class WeatherReadings extends Component {
     }
     debugger
     if( tableData && tableData.length > 0 ){
-      return series.map( (data,index) => {
+      return tableData.map( (data,index) => {
         return (
           <WeatherRecRow key={index} data={data} />
         )
@@ -58,9 +58,11 @@ class WeatherReadings extends Component {
   hasMore = () => {
     let { tableData} = this.state
     let { series } = this.props
-    if( tableData.length < series.length )
-      return true
-    return false
+    if( tableData && series ){
+      if( tableData.length < series.length )
+        return true
+      return false
+    }
   }
 
   render() {

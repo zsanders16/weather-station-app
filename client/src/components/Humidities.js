@@ -244,7 +244,7 @@ cleanUpSeriesData = ( dataType ) => {
         </Grid.Row>
         <Grid.Row columns={1}>
           <Grid.Column width={16}>
-            <WeatherReadings  series={this.props.series} />
+            {/*<WeatherReadings  series={this.props.series} />*/}
           </Grid.Column>
         </Grid.Row>
       </GridArea>
