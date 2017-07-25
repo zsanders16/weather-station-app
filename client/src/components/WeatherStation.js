@@ -53,12 +53,17 @@ class WeatherStation extends Component {
   checkWeather = (latitude, longitude) => {
     let { dispatch, weather, addresses } = this.props
     if(!weather){
-      dispatch(weatherForecastWeekly([latitude, longitude], addresses[0].city))
+      dispatch(weatherForecastWeekly([latitude, longitude], addresses[0].city, () => this.updateCityView(addresses)))
     }
-    
+  }
+
+  updateCityView = (addresses) => {
+    let { dispatch } = this.props
     setCityView(addresses[0].city, dispatch)
     this.updateForecastCity()
   }
+
+  
 
   updateForecastCity = () => {
     let { addresses, dispatch, weatherForecasts} = this.props
@@ -69,7 +74,6 @@ class WeatherStation extends Component {
         location.city = addresses[0].city
       }
     })
-    debugger
     updateCurrentLoctions(dispatch, updatedForecasts)
   }
 
