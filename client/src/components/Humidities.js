@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import moment from 'moment'
 import Stations from './Stations'
 import DatePicker from './DatePicker'
+import WeatherReadings from './WeatherReadings'
 
 // Settings and Objects for HighChart
 import { settingsHumidities } from '../charts/humidities'
@@ -30,7 +31,7 @@ class Humidities extends Component {
   state = {
     checkbox: {
       Actual: true,
-      Historical: false,
+      Historical: true,
     },
     stations: [],
     refreshPeriod: 60000, // 1 minute intervals
@@ -53,8 +54,7 @@ class Humidities extends Component {
   }
 
   refreshDataSeries = () => {
-    let { dispatch } = this.props
-    let { dates } = this.props.datePicker.humidity
+    let { dispatch, datePicker: { humidity: dates } } = this.props
     let { Actual: showActual } = this.state.checkbox
     if( showActual ){
       dispatch(loadNewData(dates))
@@ -82,7 +82,6 @@ class Humidities extends Component {
     if( actual && series )
       historical = series.filter( set => set.name !== 'Actual' )
     // update the entire dataset
-    // TODO: update the existing dataset and shorten it, so length is same
     this.setState({
       series: [
         // reload the historical data sets
@@ -177,14 +176,23 @@ handleCheckbox = ( event, data ) => {
   })
 }
 
+/**
+ * Removes unwanted data from the charts displayed data series
+ * @param {String} dataType - String representation of the removed dataType
+ */
 cleanUpSeriesData = ( dataType ) => {
   const { series } = this.state
-  const new_series = series.filter( set => {
-    set.name !== dataType
-  })
+  let newSeries = []
+  if( dataType === 'Actual' ) {
+    newSeries = series.filter( (data) => {
+      return data.name !== dataType
+    })
+  } else {
+    newSeries = series.filter( data => { return data.name === 'Actual' })
+  }
   this.setState({
     ...this.state,
-    series: new_series
+    series: newSeries
   })
 }
 
@@ -232,6 +240,11 @@ cleanUpSeriesData = ( dataType ) => {
             <Stations
               handleStation={this.handleStation}
               loadStations={this.loadStations} />
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row columns={1}>
+          <Grid.Column width={16}>
+            <WeatherReadings  series={this.props.series} dataType='humidities' dataSet='actual' />
           </Grid.Column>
         </Grid.Row>
       </GridArea>
