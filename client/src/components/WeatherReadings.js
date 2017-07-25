@@ -21,25 +21,17 @@ import styled from 'styled-components'
 class WeatherReadings extends Component {
   state = { itemsPerPage: 5, tableData: [] }
 
-  // componentDidMount = () => {
-  //   let { tableData, itemsPerPage } = this.state
-  //   let { series } = this.props
-  //   if( series && series.length > 0 ) {
-  //     this.setState({
-  //       ...tableData,
-  //       ...series.slice( 0, itemsPerPage )
-  //     })
-  //   }
-  // }
-
   /**
    * Renders each row of the data series. Inserts values and sets markers
    * @return {Array} Component Sets for the table body
    */
   displayDataSeries = () => {
-    let { tableData: series } = this.state
-    // let { series } = this.props
-    if( series && series.length > 0 ){
+    let { tableData } = this.state
+    if( !tableData || tableData.length <= 0 ){
+      this.loadMoreRecords()
+    }
+    debugger
+    if( tableData && tableData.length > 0 ){
       return series.map( (data,index) => {
         return (
           <WeatherRecRow key={index} data={data} />
@@ -49,25 +41,25 @@ class WeatherReadings extends Component {
   }
 
   loadMoreRecords = () => {
-    // let { series } = this.props
-    // let { tableData, itemsPerPage } = this.state
-    // let leftOver = series.length - tableData.length
-    // let newItems = []
-    // if( leftOver <= itemsPerPage ) {
-    //   newItems = series.slice(tableData.length, series.length)
-    // } else if ( leftOver >= itemsPerPage ) {
-    //   newItems = series.slice( tableData.length, tableData.length + itemsPerPage )
-    // }
-    // this.setState({
-    //   ...tableData, ...newItems
-    // })
+    let { series } = this.props
+    let { tableData, itemsPerPage } = this.state
+    let leftOver = series.length - tableData.length
+    let newItems = []
+    if( leftOver <= itemsPerPage ) {
+      newItems = series.slice(tableData.length, series.length)
+    } else if ( leftOver >= itemsPerPage ) {
+      newItems = series.slice( tableData.length, tableData.length + itemsPerPage )
+    }
+    this.setState({
+      tableData: [ ...tableData, ...newItems ]
+    })
   }
 
   hasMore = () => {
-    // let { tableData} = this.state
-    // let { series } = this.props
-    // if( tableData.length < series.length )
-    //   return true
+    let { tableData} = this.state
+    let { series } = this.props
+    if( tableData.length < series.length )
+      return true
     return false
   }
 
@@ -93,10 +85,7 @@ class WeatherReadings extends Component {
  * @param {Obect} props = properties passed down from parent component
  */
 const mapStateToProps = ( state, props ) => {
-  // let { dataType = 'humidities', dataSet = 'actual' } = props
-  return {
-    // series: state[dataType][dataSet] || [],
-  }
+  return {}
 }
 
 export default connect(mapStateToProps)(WeatherReadings)
