@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Segment, Loader } from 'semantic-ui-react'
+import { Grid, Segment, Loader } from 'semantic-ui-react'
 import WeatherRecRow from './WeatherRecRow'
 import InfiniteScroll from 'react-infinite-scroller'
 import styled from 'styled-components'
@@ -10,10 +10,19 @@ import { humidityRecords } from '../actions/weatherRecordings'
 /**
  * Custom Styed Components
  */
-  const ScrollArea = styled(Segment)`
-    height: 200px;
-    overflow: auto;
-  `
+const ScrollArea = styled(Segment)`
+  margin: 0 0 !important;
+  height: 300px;
+  overflow: auto;
+`
+const TableArea = styled(Segment)`
+  width: 50% !important;
+  margin: 0 25% !important;
+`
+const Header = styled(Grid.Column)`
+  font-weight: bold;
+  font-size: 1.2rem;
+`
 
 /**
  * Component for displaying data readings in table format
@@ -56,17 +65,26 @@ class WeatherReadings extends Component {
 
   render() {
     return (
-      <ScrollArea>
-        <InfiniteScroll
-          pageStart={0}
-          loadMore={this.loadMoreRecords}
-          hasMore={this.state.hasMore}
-          loader={<div>Loading...</div>}
-          useWindow={false}
-        >
-          { this.displayDataSeries() }
-        </InfiniteScroll>
-      </ScrollArea>
+      <TableArea>
+        <Grid>
+          <Grid.Row columns={3}>
+            <Header width={6}>%RH</Header>
+            <Header width={6}>Date</Header>
+            <Header width={4}>&nbsp;</Header>
+          </Grid.Row>
+        </Grid>
+        <ScrollArea basic>
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={this.loadMoreRecords}
+            hasMore={this.state.hasMore}
+            loader={<div>Loading...</div>}
+            useWindow={false}
+            >
+            { this.displayDataSeries() }
+          </InfiniteScroll>
+        </ScrollArea>
+      </TableArea>
     )
   }
 }

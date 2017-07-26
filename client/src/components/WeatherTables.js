@@ -2,8 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
 import { humidityRecords } from '../actions/weatherRecordings'
+import styled from 'styled-components'
 
 import WeatherReadings from './WeatherReadings'
+
+const TableArea = styled.div`
+  height: 125vh !important;
+  padding: 3% 0 !important;
+`
 
 class WeatherTables extends Component {
 
@@ -18,9 +24,9 @@ class WeatherTables extends Component {
 
   render() {
     return (
-      <div>
+      <TableArea>
         <Route exact path='/tables/humidity' component={WeatherReadings} />
-      </div>
+      </TableArea>
     )
   }
 }

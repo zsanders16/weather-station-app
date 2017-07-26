@@ -3,6 +3,14 @@ import { connect } from 'react-redux'
 import { Grid, Segment, Button, Input, Form } from 'semantic-ui-react'
 import axios from 'axios'
 import { updateHumidityRecord } from '../actions/weatherRecordings'
+import styled from 'styled-components'
+
+/**
+ * Custom Styled Components
+ */
+const InputColumn = styled(Grid.Column)`
+  padding-left: 0 !important;
+`
 
 class WeatherRowForm extends Component {
   state = { id: '', rel_humidity: '', created_at: '' }
@@ -32,22 +40,20 @@ class WeatherRowForm extends Component {
         <Form onSubmit={this.handleSubmit}>
           <Grid>
             <Grid.Row columns={3} >
-              <Grid.Column width={6}>
+              <InputColumn width={6}>
                 <Input
-                  label='%RH'
                   id='rel_humidity'
                   value={rel_humidity}
                   onChange={this.handleInputChange} />
-              </Grid.Column>
-              <Grid.Column width={6}>
+              </InputColumn>
+              <InputColumn width={8}>
                 <Input
-                  label='Date'
                   id='created_at'
                   value={created_at}
                   onChange={this.handleInputChange} />
-              </Grid.Column>
-              <Grid.Column width={4}>
-                <Button.Group size='mini' floated='right'>
+              </InputColumn>
+              <Grid.Column width={2}>
+                <Button.Group size='mini' floated='left'>
                   <Button icon='save' />
                   <Button
                     icon='close'
