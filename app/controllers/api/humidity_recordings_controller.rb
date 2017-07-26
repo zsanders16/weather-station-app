@@ -39,7 +39,8 @@ class Api::HumidityRecordingsController < ApplicationController
   private
 
   def weather_params
-    params.required(:weather).permit(:id, :rel_humidity,:created_at)
+    binding.pry
+    params.require(:weather).permit(:id, :rel_humidity, :created_at)
   end
 
   def set_weather
