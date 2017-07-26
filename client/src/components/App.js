@@ -12,6 +12,7 @@ import HomePage from './HomePage';
 import Charts from './Charts'
 import { Link } from 'react-router-dom'
 import Humidities from './Humidities'
+import WeatherTables from './WeatherTables'
 import styled from 'styled-components'
 
 const AppContainer = styled.div`
@@ -41,6 +42,7 @@ class App extends Component {
             <ProtectedRoute exact path='/weatherstation' component={WeatherStation} />
             <ProtectedRoute path='/charts/temperatures' component={Charts} />
             <ProtectedRoute path='/charts/humidities' component={Humidities} />
+            <ProtectedRoute path='/tables/:name' component={WeatherTables} />
             <Route component={NoMatch} />
           </Switch>
         </FetchUser>

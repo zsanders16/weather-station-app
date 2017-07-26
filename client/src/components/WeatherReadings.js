@@ -4,6 +4,7 @@ import { Segment, Loader } from 'semantic-ui-react'
 import WeatherRecRow from './WeatherRecRow'
 import InfiniteScroll from 'react-infinite-scroller'
 import styled from 'styled-components'
+import { humidityRecords } from '../actions/weatherRecordings'
 
 
 /**
@@ -19,20 +20,21 @@ import styled from 'styled-components'
  * @extends {React.Component}
  */
 class WeatherReadings extends Component {
-  state = { itemsPerPage: 5, tableData: [] }
+  state = { itemsPerPage: 5, tableData: [], hasMore: true }
+
+  componentDidMount = () => {
+    this.setState({ dataType: this.props.match.params.name })
+  }
 
   /**
    * Renders each row of the data series. Inserts values and sets markers
    * @return {Array} Component Sets for the table body
    */
   displayDataSeries = () => {
-    let { tableData } = this.state
-    if( !tableData || tableData.length <= 0 ){
-      this.loadMoreRecords()
-    }
-    debugger
-    if( tableData && tableData.length > 0 ){
-      return tableData.map( (data,index) => {
+    let { dataType = 'humidity' } = this.state
+    let { weatherRecordings: wc } = this.props
+    if( wc[dataType] && wc[dataType].records.length > 0 ){
+      return wc[dataType].records.map( (data,index) => {
         return (
           <WeatherRecRow key={index} data={data} />
         )
@@ -40,28 +42,15 @@ class WeatherReadings extends Component {
     }
   }
 
-  loadMoreRecords = () => {
-    let { series } = this.props
-    let { tableData, itemsPerPage } = this.state
-    let leftOver = series.length - tableData.length
-    let newItems = []
-    if( leftOver <= itemsPerPage ) {
-      newItems = series.slice(tableData.length, series.length)
-    } else if ( leftOver >= itemsPerPage ) {
-      newItems = series.slice( tableData.length, tableData.length + itemsPerPage )
-    }
-    this.setState({
-      tableData: [ ...tableData, ...newItems ]
-    })
-  }
-
-  hasMore = () => {
-    let { tableData} = this.state
-    let { series } = this.props
-    if( tableData && series ){
-      if( tableData.length < series.length )
-        return true
-      return false
+  loadMoreRecords = ( page ) => {
+    let { dataType = 'humidity' } = this.props
+    let { weatherRecordings: wc, dispatch } = this.props
+    if( wc[dataType] && wc[dataType].pagination.total_pages ) {
+      if( page <= wc[dataType].pagination.total_pages ) {
+        dispatch(humidityRecords(page))
+      } else {
+        this.setState({ hasMore: false })
+      }
     }
   }
 
@@ -71,9 +60,10 @@ class WeatherReadings extends Component {
         <InfiniteScroll
           pageStart={0}
           loadMore={this.loadMoreRecords}
-          hasMore={this.hasMore()}
-          loader={<Loader active />}
-          useWindow={false} >
+          hasMore={this.state.hasMore}
+          loader={<div>Loading...</div>}
+          useWindow={false}
+        >
           { this.displayDataSeries() }
         </InfiniteScroll>
       </ScrollArea>
@@ -84,10 +74,10 @@ class WeatherReadings extends Component {
 /**
  * Maps Redux state values to local component state
  * @param {Object} state - reference to redux state
- * @param {Obect} props = properties passed down from parent component
+ * @param {Obect} props - properties passed down from parent component
  */
 const mapStateToProps = ( state, props ) => {
-  return {}
+  return { weatherRecordings: state.weatherRecordings }
 }
 
 export default connect(mapStateToProps)(WeatherReadings)

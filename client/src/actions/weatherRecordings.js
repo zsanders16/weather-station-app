@@ -10,13 +10,14 @@ import { setFlash } from './flash'
  */
 export const humidityRecords = ( page = 1, numPages = 5, callback = null ) => {
   return (dispatch) => {
-    axios.get(`/api/humidty_recordings?page=${page}&num_pages=${numPages}`)
+    axios.get(`/api/humidity_recordings?page=${page}&num_pages=${numPages}`)
       .then( resp => {
         dispatch({
           type: 'HUMIDITY_RECORDS',
-          data: resp.data
+          data: resp.data,
+          headers: resp.headers,
         })
-        dispatch(setFlash('Humidity Records Found!', 'success'))
+        // dispatch(setFlash('Humidity Records Found!', 'success'))
       })
       .then( () => {
         if( callback )
@@ -25,5 +26,21 @@ export const humidityRecords = ( page = 1, numPages = 5, callback = null ) => {
       .catch( resp => {
         dispatch(setFlash('Humidity Records not Found!', 'error'))
       })
+  }
+}
+
+export const updateHumidityRecord = ( record ) => {
+  return (dispatch) => {
+    axios.patch(`/api/humidity_recordings/${record.id}`, { weather: record })
+    .then( resp => {
+      dispatch({
+        type: 'UPDATE_HUMIDITY_RECORD',
+        data: resp.data,
+        headers: resp.headers,
+      })
+    })
+    .catch( resp => {
+      dispatch(setFlash('Humidity Record Not Updated!','error'))
+    })
   }
 }

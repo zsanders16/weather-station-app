@@ -53,6 +53,12 @@ class NavBar2 extends Component {
           :
           null
          }
+        <Menu.Item
+          name='tables'
+          as={ Link }
+          to='/tables/humidity'
+          active={activeItem === 'tables'}
+          onClick={this.handleItemClick} />
 
         { this.props.auth ?
           <Menu.Menu position='right'>

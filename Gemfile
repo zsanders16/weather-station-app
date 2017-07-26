@@ -32,6 +32,7 @@ gem 'dotenv-rails'
 gem 'geocoder'
 gem 'httparty'
 gem 'timezone'
+gem 'kaminari'
 
 # Will Paginate
 gem 'will_paginate'

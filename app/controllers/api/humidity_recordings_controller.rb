@@ -2,9 +2,18 @@ class Api::HumidityRecordingsController < ApplicationController
   before_action :set_weather, except: [ :index ]
 
   def index
-    records = current_user.weathers.select(:rel_humidity, :created_at)
-      .page(params[:page]).num_pages(params[:num_pages])
-    render json: records
+    records = current_user.weathers.select(:id, :rel_humidity, :created_at)
+      .page(params[:page]).per_page(params[:num_pages])
+    render json: {
+      records: records,
+      pagination: {
+        total_pages: records.total_pages,
+        current_page: records.current_page,
+        next_page: records.next_page,
+        count: records.count
+      }
+    }
+    # render json: records
   end
 
   def show
@@ -30,7 +39,7 @@ class Api::HumidityRecordingsController < ApplicationController
   private
 
   def weather_params
-    params.required(:weather).permit(:rel_humidity,:created_at)
+    params.required(:weather).permit(:id, :rel_humidity,:created_at)
   end
 
   def set_weather

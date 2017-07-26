@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Grid, Segment, Button, Input, Form } from 'semantic-ui-react'
 import axios from 'axios'
+import { updateHumidityRecord } from '../actions/weatherRecordings'
 
 class WeatherRowForm extends Component {
-  state = { rel_humidity: '', created_at: '' }
+  state = { id: '', rel_humidity: '', created_at: '' }
 
   componentDidMount = () => {
     this.setState({
@@ -18,16 +20,9 @@ class WeatherRowForm extends Component {
 
   handleSubmit = ( event ) => {
     event.preventDefault()
-    axios.post(`/api/weather/update`, { weather: this.state })
-      .then( resp => {
-        // TODO update redux
-      })
-      .then( () => {
-        // TODO run callback to close the form
-      })
-      .catch( resp => {
-        // TODO display the errors
-      })
+    let { dispatch } = this.props
+    dispatch(updateHumidityRecord(this.state))
+    this.props.toggleForm()
   }
 
   render() {
@@ -67,4 +62,4 @@ class WeatherRowForm extends Component {
   }
 }
 
-export default WeatherRowForm
+export default connect()(WeatherRowForm)
