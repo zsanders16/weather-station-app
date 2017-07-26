@@ -34,9 +34,9 @@ class WeatherReadings extends Component {
     let { dataType = 'humidity' } = this.state
     let { weatherRecordings: wc } = this.props
     if( wc[dataType] && wc[dataType].records.length > 0 ){
-      return wc[dataType].records.map( (data,index) => {
+      return wc[dataType].records.map( (data) => {
         return (
-          <WeatherRecRow key={index} data={data} />
+          <WeatherRecRow key={data.id} data={data} />
         )
       })
     }

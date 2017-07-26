@@ -29,9 +29,9 @@ export const humidityRecords = ( page = 1, numPages = 5, callback = null ) => {
   }
 }
 
-export const updateHumidityRecord = ( weather ) => {
+export const updateHumidityRecord = ( record ) => {
   return (dispatch) => {
-    axios.patch(`/api/humidity_recordings/${record.id}`, { weather })
+    axios.patch(`/api/humidity_recordings/${record.id}`, { weather: record })
     .then( resp => {
       dispatch({
         type: 'UPDATE_HUMIDITY_RECORD',
