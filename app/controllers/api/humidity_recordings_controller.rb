@@ -1,5 +1,5 @@
 class Api::HumidityRecordingsController < ApplicationController
-  before_action :set_weather, except: [ :index ]
+  before_action :set_weather, except: [ :index, :query ]
 
   def index
     records = current_user.weathers.select(:id, :rel_humidity, :created_at)
@@ -14,6 +14,23 @@ class Api::HumidityRecordingsController < ApplicationController
       }
     }
     # render json: records
+  end
+
+  def query
+    # All Dates should be a UTC timestamp
+    records = current_user.weathers.select(:id, :rel_humidity, :created_at)
+      .where('created_at >= ? AND created_at <= ?',
+        params[:startDate], params[:endDate])
+    paginated = records.page(params[:page]).per_page(params[:num_pages])
+    render json: {
+      records: paginated,
+      pagination: {
+        total_pages: records.total_pages,
+        current_page: records.current_page,
+        next_page: records.next_page,
+        count: records.count
+      }
+    }
   end
 
   def show

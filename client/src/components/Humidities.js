@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {
-  Grid, Segment,
+  Grid,
   Checkbox, Loader,
   Form, Divider
 } from 'semantic-ui-react'
@@ -10,7 +10,6 @@ import styled from 'styled-components'
 import moment from 'moment'
 import Stations from './Stations'
 import DatePicker from './DatePicker'
-import WeatherReadings from './WeatherReadings'
 
 // Settings and Objects for HighChart
 import { settingsHumidities } from '../charts/humidities'
@@ -240,11 +239,6 @@ cleanUpSeriesData = ( dataType ) => {
             <Stations
               handleStation={this.handleStation}
               loadStations={this.loadStations} />
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row columns={1}>
-          <Grid.Column width={16}>
-            {/*<WeatherReadings  series={this.props.series} />*/}
           </Grid.Column>
         </Grid.Row>
       </GridArea>

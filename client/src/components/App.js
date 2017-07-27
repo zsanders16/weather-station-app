@@ -10,7 +10,6 @@ import { Switch, Route } from 'react-router-dom';
 import FetchUser from './FetchUser';
 import HomePage from './HomePage';
 import Charts from './Charts'
-import { Link } from 'react-router-dom'
 import Humidities from './Humidities'
 import WeatherTables from './WeatherTables'
 import styled from 'styled-components'

@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container, Grid, Button, Divider, Segment, Checkbox, Label } from 'semantic-ui-react';
-import Compare from './Compare';
 import SavedLocations from './SavedLocations'
-import SensorActual from './SensorActual'
 import CurrentLocation from './CurrentLocation'
 import WeeklyForecast from './WeeklyForecast'
 import { setCurrentLocation } from '../actions/locations'
@@ -99,7 +97,6 @@ class WeatherStation extends Component {
   }
 
   catchToggle = (e) => {
-    let { weatherForecasts } = this.props
     let { citySeries } = this.state
     let exists = false
     let changedCity = e.target.innerText
@@ -190,7 +187,6 @@ class WeatherStation extends Component {
   }
 
   showCompare = () => {
-    let { weekly } = this.props.weatherForecasts
     let { byTemp, series } = this.state
     return(
       <Grid.Row >

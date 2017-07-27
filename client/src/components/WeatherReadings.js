@@ -5,7 +5,7 @@ import WeatherRecRow from './WeatherRecRow'
 import InfiniteScroll from 'react-infinite-scroller'
 import styled from 'styled-components'
 import { humidityRecords } from '../actions/weatherRecordings'
-
+import WeatherQueryForm from './WeatherQueryForm'
 
 /**
  * Custom Styed Components
@@ -67,6 +67,7 @@ class WeatherReadings extends Component {
     return (
       <TableArea>
         <Grid>
+          <WeatherQueryForm />
           <Grid.Row columns={3}>
             <Header width={6}>%RH</Header>
             <Header width={6}>Date</Header>

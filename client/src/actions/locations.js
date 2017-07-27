@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { setFlash } from '../actions/flash';
-import { weatherForecastWeekly } from '../actions/weatherForecasts'
 import { addCurrentToAddress } from './addresses'
 
 

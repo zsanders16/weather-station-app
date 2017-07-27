@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Switch, Route } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import { humidityRecords } from '../actions/weatherRecordings'
 import styled from 'styled-components'
 
@@ -14,7 +14,7 @@ const TableArea = styled.div`
 class WeatherTables extends Component {
 
   componentDidMount = () => {
-    let { weatherRecordings: wc, match: { params: { name }}, dispatch } = this.props
+    let { match: { params: { name }}, dispatch } = this.props
     if( name === 'humidity' ){
       // if( !wc.humidities || wc.humidities.records.length <= 0)
         // get the first page of humidity data points
