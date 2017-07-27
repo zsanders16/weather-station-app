@@ -9,11 +9,10 @@ import {
 import {
   // sensorActual,
   // sensorHistorical,
-  sensorReset,
+  // sensorReset,
 } from '../actions/sensor'
 import { clearObservations } from '../actions/observations'
 import ReactHighcharts from 'react-highcharts'
-import Datetime from 'react-datetime'
 import moment from 'moment'
 import {
   sensorChartConfig,
@@ -22,8 +21,6 @@ import {
 import Stations from './Stations'
 import { GridArea } from './ChartStyles'
 import DatePicker from './DatePicker'
-
-import 'react-datetime/css/react-datetime.css'
 
 class SensorActual extends Component {
 
@@ -177,7 +174,7 @@ class SensorActual extends Component {
         let point = data[view]
         return [ created_at.valueOf(), point ]
       } else {
-        null
+        return null
       }
     })
     .filter( set => set !== null )

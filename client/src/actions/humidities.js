@@ -5,9 +5,6 @@ import { setFlash } from './flash'
 const HUMIDITIES_MOST_RECENT = 'HUMIDITIES_MOST_RECENT'
 const HUMIDITIES_HISTORICAL = 'HUMIDITIES_HISTORICAL'
 
-// timestamp format for querying the remote database
-const postgresql = 'YYYY-MM-DD HH:mm:ss'
-
 /*
  * Helper Methods
  */

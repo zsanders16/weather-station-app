@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { setFlash } from './flash'
-import moment from 'moment'
 
 const SENSOR_ACTUAL = 'SENSOR_ACTUAL'
 const SENSOR_DATA = 'SENSOR_DATA'

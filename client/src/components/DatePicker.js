@@ -3,8 +3,9 @@ import { connect } from 'react-redux'
 import Datetime from 'react-datetime'
 import moment from 'moment'
 import styled from 'styled-components'
-
 import { setDatePickerDate } from '../actions/datePicker'
+
+import 'react-datetime/css/react-datetime.css'
 
 const DateTime = styled(Datetime)`
   width: 30% !important;

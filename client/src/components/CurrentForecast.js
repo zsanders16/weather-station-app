@@ -80,7 +80,6 @@ class CurrentForecast extends React.Component {
   }
 
   changeView = ( flag ) => {
-    let { view } = this.state
     if( flag === 'Night' ){
       this.setState({view: 1, time: 'night'})
     }else if ( flag === 'Day') {

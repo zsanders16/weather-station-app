@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactHighcharts from 'react-highcharts'
 import { Grid } from 'semantic-ui-react';
-import moment from 'moment'
 
 class ForecastChart extends React.Component{
   state = {
@@ -9,7 +8,7 @@ class ForecastChart extends React.Component{
     title: {text: 'Comparison of Temperature by City'},
     xAxis: {allowDecimals: false,
             type: 'datetime',
-            
+
             },
     yAxis: {title: {text: 'Degrees in Fahrenheit'},
                     labels: {formatter: function () {
@@ -41,7 +40,7 @@ class ForecastChart extends React.Component{
                                       radius: 2,
                                       states: {hover: {nabled: true}}
                                     }
-                          
+
                       }
                 }
         let displayString = `{series.name} will hava a ${nextProps.byTemp} of <b>{point.y:,.0f}° F`

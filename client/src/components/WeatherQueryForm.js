@@ -5,6 +5,8 @@ import Datetime from 'react-datetime'
 import moment from 'moment'
 import { queryHumidityRecords } from '../actions/weatherRecordings'
 
+import 'react-datetime/css/react-datetime.css'
+
 class WeatherQueryForm extends Component {
   state={ startDate: moment.utc(), endDate: moment.utc() }
 

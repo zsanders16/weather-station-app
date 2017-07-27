@@ -159,12 +159,12 @@ class WeatherStation extends Component {
         let month = time.substring(5,7)
         let day = time.substring(8, 10)
         let formattedTime = Date.UTC(year, month, day)
-        let type = ''
-        if(byTemp){
-          type = 'high'
-        }else{
-          type = 'low'
-        }
+        // let type = ''
+        // if(byTemp){
+        //   type = 'high'
+        // }else{
+        //   type = 'low'
+        // }
         tempData.push(
           {
             name: forecastData[0].city,

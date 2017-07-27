@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Segment, Button, Input, Form } from 'semantic-ui-react'
-import axios from 'axios'
 import { updateHumidityRecord } from '../actions/weatherRecordings'
 import styled from 'styled-components'
 

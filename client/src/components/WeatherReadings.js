@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Segment, Loader } from 'semantic-ui-react'
+import { Grid, Segment } from 'semantic-ui-react'
 import WeatherRecRow from './WeatherRecRow'
 import InfiniteScroll from 'react-infinite-scroller'
 import styled from 'styled-components'

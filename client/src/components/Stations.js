@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Segment, Button, Divider } from 'semantic-ui-react'
+import { Grid, Segment, Button } from 'semantic-ui-react'
 import Station from './Station'
 import { listStationsAll } from '../actions/stations'
 import styled from 'styled-components'

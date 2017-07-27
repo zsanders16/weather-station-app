@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Segment, Message, Button, Header, Divider, Modal, Dimmer, Loader } from 'semantic-ui-react'
-import { addressesGet, addCurrentToAddress } from '../actions/addresses'
+import { addressesGet } from '../actions/addresses'
 import AddressSingle from './AddressSingle'
 import AddressForm from './AddressForm'
 
@@ -50,7 +50,7 @@ class Favorites extends Component {
           <Modal.Header>Add a New Contact</Modal.Header>
           <Modal.Content>
             <Modal.Description>
-               <AddressForm handleClose={this.handleClose} handleOpen={this.handleOpen}/> 
+               <AddressForm handleClose={this.handleClose} handleOpen={this.handleOpen}/>
             </Modal.Description>
           </Modal.Content>
         </Modal>
@@ -84,9 +84,9 @@ class Favorites extends Component {
         <Grid.Row>
           <Grid.Column>
             <Segment raised>
-               { this.displayButtons() }  
+               { this.displayButtons() }
             <Divider />
-               { addresses.length > 0 ? this.displayFavorites() : this.displayLoader() } 
+               { addresses.length > 0 ? this.displayFavorites() : this.displayLoader() }
             </Segment>
           </Grid.Column>
         </Grid.Row>
