@@ -78,3 +78,13 @@ export const queryHumidityRecords = ( dates, page = 1, numPage = 5, callback = n
     })
   }
 }
+
+/**
+ * Clear all the weather table records
+ */
+export const clearHumidityRecords = () => {
+  return {
+    type: 'CLEAR_HUMIDITY_RECORDS',
+    data: []
+  }
+}

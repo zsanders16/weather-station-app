@@ -27,9 +27,19 @@ const weatherRecordings = ( state = { humidity: { records: [], pagination: {} }}
     case 'QUERIED_HUMIDITY_RECORDS':
       return {
         humidity: {
-          records: action.data.records
+          records: [
+            ...state.humidity.records,
+            ...action.data.records
+          ],
+          pagination: action.data.pagination
+        }
+      }
+    case 'CLEAR_HUMIDITY_RECORDS':
+      return {
+        humidity: {
+          records: [],
+          pagination: {},
         },
-        pagination: action.data.pagination
       }
     default:
       return state

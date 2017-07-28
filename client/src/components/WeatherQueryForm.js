@@ -24,8 +24,7 @@ class WeatherQueryForm extends Component {
 
   handleSubmit = ( event ) => {
     event.preventDefault()
-    let { dispatch } = this.props
-    dispatch(queryHumidityRecords(this.state))
+    this.props.handleQuery(this.state, queryHumidityRecords)
   }
 
   render() {
