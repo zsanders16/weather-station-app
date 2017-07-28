@@ -29,7 +29,7 @@ class WeatherQueryForm extends Component {
 
   render() {
     return (
-      <Grid.Row columns={1}>
+      <Grid.Row columns={1} style={{ paddingBottom: '0'}}>
         <Grid.Column width={16}>
           <Form onSubmit={this.handleSubmit}>
             <Form.Group>

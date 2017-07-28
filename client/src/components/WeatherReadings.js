@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Segment } from 'semantic-ui-react'
+import { Grid, Segment, Divider } from 'semantic-ui-react'
 import WeatherRecRow from './WeatherRecRow'
 import InfiniteScroll from 'react-infinite-scroller'
 import styled from 'styled-components'
@@ -22,6 +22,9 @@ const TableArea = styled(Segment)`
 const Header = styled(Grid.Column)`
   font-weight: bold;
   font-size: 1.2rem;
+  border-top: 1px solid lightgrey;
+  border-bottom: 1px solid lightgrey;
+  padding: 0.5rem 0.5rem !important;
 `
 
 /**
@@ -29,7 +32,7 @@ const Header = styled(Grid.Column)`
  * @extends {React.Component}
  */
 class WeatherReadings extends Component {
-  state = { itemsPerPage: 5, hasMore: true, dates: null, loader: humidityRecords }
+  state = { dataType: null, itemsPerPage: 5, hasMore: true, dates: null, loader: humidityRecords }
 
   componentDidMount = () => {
     this.setState({ dataType: this.props.match.params.name })
@@ -80,7 +83,7 @@ class WeatherReadings extends Component {
       <TableArea>
         <Grid>
           <WeatherQueryForm handleQuery={this.handleQuery} />
-          <Grid.Row columns={3}>
+          <Grid.Row columns={3} style={{ paddingTop: '0'}}>
             <Header width={6}>%RH</Header>
             <Header width={6}>Date</Header>
             <Header width={4}>&nbsp;</Header>
