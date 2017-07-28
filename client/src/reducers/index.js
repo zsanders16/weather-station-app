@@ -12,6 +12,7 @@ import observations from './observations'
 import humidities from './humidities'
 import datePicker from './datePicker'
 import weatherRecordings from './weatherRecordings'
+import tempData from './tempData'
 
 
 const rootReducer = combineReducers({
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   weatherForecasts,
   sensor,
   stations,
+  tempData,
 })
 
 export default rootReducer

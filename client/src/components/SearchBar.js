@@ -1,36 +1,48 @@
 import React from 'react'
-import Select from 'react-select';
-import 'react-select/dist/react-select.css';
-import { Segment } from 'semantic-ui-react'
+import { Segment, Dropdown } from 'semantic-ui-react'
 import { getSearchRequest } from '../actions/searchBar'
-
+import axios from 'axios'
+import { getSearchWeather } from '../actions/weatherForecasts'
+import { connect } from 'react-redux'
 
 class SearchBar extends React.Component {
-    state = { searchInput: '', results: []} 
+    state = { results: []} 
 
 
-    searchInputChange = (e) => {
-        this.setState({ searchInput: e})
+    getOptions = (e, value) => {
+
+        if(value.length >= 3){
+            getSearchRequest(value, this.createDropdowns)
+        }
     }
 
-    getOptions = () => {
-        let { searchInput } = this.state
-        return getSearchRequest(searchInput)
+    createDropdowns = (cities) => {
+        this.setState( {results: cities})
+    }
+
+    onClick = (e,{value}) => {
+        let { dispatch } = this.props
+        dispatch(getSearchWeather(value))
     }
 
     render(){
-        let { searchInput } = this.state
+        let { searchInput, results } = this.state
         return(
             <Segment basic > 
-                 <Select.Async
-                    placeholder='Search by City...' 
-                    onInputChange={this.searchInputChange}
-                    loadOptions={this.getOptions}
-                 /> 
+                <Dropdown
+                    search={true}
+                    scrolling
+                    selection
+                    placeholder='Input City Name...'
+                    onSearchChange={this.getOptions}
+                    options={results}
+                    onChange={this.onClick}
+                />
             </Segment>
         )
     }
 }
 
 
-export default SearchBar
+
+export default connect()(SearchBar)

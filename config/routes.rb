@@ -77,15 +77,10 @@ Rails.application.routes.draw do
     resources :humidity_recordings, except: [ :new, :create ]
     get '/humidity_recordings_query', to: 'humidity_recordings#query', as: 'humidity_recordings_query'
 
+    get '/open_city_state', to: 'open_city_state#get_city_state', as: 'city_state'
+    post '/open_weather_api', to: 'open_weather_api#location_forecast'
+    post '/open_weather_forecast', to: 'open_weather_api#get_lat_long'
   end
-
-
-<<<<<<< HEAD
-  get '/open_city_state', to: 'open_city_state#get_city_state', as: 'city_state'
-=======
-  get '/open_city_state', to: 'open_city_state#get_city_state'
->>>>>>> add search bar axios call
-  post '/open_weather_api', to: 'open_weather_api#location_forecast'
 
   #Do not place any routes below this one
   get '*other', to: 'static#index'

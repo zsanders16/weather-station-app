@@ -1,4 +1,4 @@
-class OpenCityStateController < ApplicationController
+class Api::OpenCityStateController < ApplicationController
     skip_before_action :authenticate_user!, raise: false
 
   # Runs short quick queries matching string partials from the
@@ -10,12 +10,16 @@ class OpenCityStateController < ApplicationController
   def get_city_state
     city_states = State.select("concat(cities.city,', ',states.ab) as city_state")
       .joins(:cities)
-      .where("cities.city LIKE ? ", "#{params[:city_name]}%")
+      .where("LOWER(cities.city) LIKE LOWER(?) ", "#{params[:city_name]}%")
       .order(:state)
     # TODO: order by state
     # TODO: return 'label' as a string with city_name, state_abv
     # TODO: json = { name: '', value: '', label: '' }
-    render json: city_states.map { |value| { value: value['city_state'], label: value['city_state'] } }
+    
+    render json: city_states.map { |value| { key: value['city_state'], value: value['city_state'], text: value['city_state'] } }
+
+  
+
   end
 
 end

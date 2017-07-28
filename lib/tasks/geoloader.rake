@@ -11,14 +11,6 @@ namespace :geoloader do
       cities = CS.get :us, :"#{k}"
 
       cities.each do |city| 
-
-        # api = "https://maps.googleapis.com/maps/api/geocode/json?address=#{city}, #{state.ab}"
-        # response = HTTParty.get(api)
-        # jsonBody = JSON.parse(response.body)
-
-        # lat = jsonBody['results'][0]['geometry']['location']['lat']
-        # long = jsonBody['results'][0]['geometry']['location']['lng']
-
         state.cities.create(city: city)
       end
     end

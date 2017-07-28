@@ -16,6 +16,12 @@ const options = [
 class WeeklyForecast extends React.Component {
   state = { forecastDays: 1, city: this.props.cities[0]}
 
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.tempData !== this.props.tempData){
+     this.selectCity(nextProps.tempData)
+    }
+  }
+
   //display each forecasted day
   displayDays = (days) => {
     return days.map( (day) => {
@@ -50,14 +56,18 @@ class WeeklyForecast extends React.Component {
 
   //pull the correct city to display out of all cities in redux state
   selectCity = () => {
-    let { cities, cityView } = this.props
-    let index = 0
-    cities.forEach( (city, i) => {
-      if(city.city === cityView){
-        index = i
-      }
-    })
-    return this.selectDays(cities[index])
+    let { cities, cityView, tempData } = this.props
+    if(tempData.days){
+      return this.selectDays(tempData)
+    }else{
+      let index = 0
+      cities.forEach( (city, i) => {
+        if(city.city === cityView){
+          index = i
+        }
+      })
+      return this.selectDays(cities[index])
+    }
   }
 
   handleChange = (e, data) => {
@@ -106,7 +116,7 @@ class WeeklyForecast extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  return { cities: state.weatherForecasts.weekly, cityView: state.weatherForecasts.cityView }
+  return { cities: state.weatherForecasts.weekly, cityView: state.weatherForecasts.cityView, tempData: state.tempData }
 
 }
 

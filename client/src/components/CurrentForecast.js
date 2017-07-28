@@ -29,6 +29,13 @@ class CurrentForecast extends React.Component {
     if(nextProps.cityView !== this.props.cityView){
       this.selectCity(nextProps.cityView)
     }
+    if(nextProps.tempData !== this.props.tempData){
+      if(nextProps.tempData.days){
+        this.setState({city: nextProps.tempData})
+      }else{
+        this.selectCity()
+      }
+    }
   }
 
   selectBackgroundImage = () => {
@@ -36,7 +43,7 @@ class CurrentForecast extends React.Component {
     let data = city.days[view]
     let background = ''
 
-    if(data.isDaytime){
+    if(view === 0){
       if(data.detailedForecast.includes('rainy')){
         background = 'rainyDay'
       }else if(data.detailedForecast.includes('snowy')){
@@ -63,21 +70,22 @@ class CurrentForecast extends React.Component {
   }
 
   selectCity = (cityView = this.props.cityView) => {
-    let { cities } = this.props
-    let index = 0
-    cities.forEach( (city, i) => {
-      if(city.city === cityView){
-        index = i
-      }
-    })
-    this.setState({city: cities[index]})
+    let { cities, tempData } = this.props
+      let index = 0
+      cities.forEach( (city, i) => {
+        if(city.city === cityView){
+          index = i
+        }
+      })
+      this.setState({city: cities[index]})
+    
   }
 
   changeView = ( flag ) => {
     if( flag === 'Night' ){
-      this.setState({view: 1, time: 'night'})
+      this.setState({view: 1, time: 'night'}, this.selectBackgroundImage)
     }else if ( flag === 'Day') {
-      this.setState({view: 0, time: 'day'})
+      this.setState({view: 0, time: 'day'}, this.selectBackgroundImage)
     }
   }
 
@@ -141,7 +149,7 @@ class CurrentForecast extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  return{ cities: state.weatherForecasts.weekly, cityView: state.weatherForecasts.cityView }
+  return{ cities: state.weatherForecasts.weekly, cityView: state.weatherForecasts.cityView, tempData: state.tempData }
 }
 
 export default connect(mapStateToProps)(CurrentForecast);

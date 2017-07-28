@@ -23,9 +23,9 @@ const forecast = ( geolocation ) => {
 export const weatherForecastWeekly = ( geolocation, city = '', cb = null) => {
   let api = forecast(geolocation)
   return (dispatch) => {
-    axios.post('/open_weather_api', {api: api})
+    axios.post('api/open_weather_api', {api: api})
       .then( resp => {
-        dispatch({ type: WEATHER_FORECAST_WEEKLY, data: resp.data.properties.periods, city: city, headers: resp.headers })
+        dispatch({ type: 'WEATHER_FORECAST_WEEKLY', data: resp.data.properties.periods, city: city, headers: resp.headers })
       })
       .then( () => cb() )
       .catch( resp => {
@@ -41,4 +41,25 @@ export const setCityView = (city, dispatch) => {
 
 export const updateCurrentLoctions = (dispatch, forecasts) => {
   dispatch( { type: 'UPDATE_CURRENT_LOCATION_WEATHER',  forecasts} );
+}
+
+
+export const getSearchWeather = (city) => {
+  return (dispatch) => {
+    axios.post('api/open_weather_forecast', {city_state: city})
+      .then( resp => {
+        dispatch({ type: 'SET_TEMP_FORECAST', data: resp.data.properties.periods, city: city})
+      })
+      .then(
+        dispatch({type: 'SET_CITY_VIEW', city: city})
+      )
+      .catch( resp => {
+        console.log('error getting weather')
+      })
+  }
+}
+
+export const clearSearchWeather = () => {
+  return {type: 'CLEAR_TEMP_DATA', data: {} }
+
 }

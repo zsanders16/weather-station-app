@@ -2,7 +2,7 @@ import React from 'react'
 import { Segment, Message, Button, Icon, Popup, Modal } from 'semantic-ui-react'
 import { setCityView } from '../actions/weatherForecasts'
 import { connect } from 'react-redux'
-import { weatherForecastWeekly } from '../actions/weatherForecasts'
+import { weatherForecastWeekly, clearSearchWeather  } from '../actions/weatherForecasts'
 import AddressForm from './AddressForm'
 import { addressDelete } from '../actions/addresses'
 
@@ -23,8 +23,14 @@ class AddressSingle extends React.Component {
   }
 
   getWeather = (address) => {
+    let { dispatch, tempData } = this.props
+    dispatch(clearSearchWeather())
+    this.resetCityView(address)
+  }
+
+  resetCityView = (address) => {
     let { dispatch } = this.props
-    this.props.dispatch(setCityView(address.city, dispatch))
+    dispatch(setCityView(address.city, dispatch))
   }
 
   removeFavorite = (id) => {
@@ -88,7 +94,7 @@ class AddressSingle extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  return { weatherForecasts: state.weatherForecasts}
+  return { weatherForecasts: state.weatherForecasts, tempData: state.tempdata}
 }
 
 export default connect(mapStateToProps)(AddressSingle);

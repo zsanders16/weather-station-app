@@ -9,6 +9,7 @@ import TodaysWeather from './TodaysWeather'
 import ToggleFavoriteLocation  from './ToggleFavoriteLocation'
 import ForecastChart from './ForecastChart'
 import { weatherForecastWeekly, setCityView, updateCurrentLoctions } from '../actions/weatherForecasts'
+import SearchBar from './SearchBar'
 
 
 
@@ -214,6 +215,9 @@ class WeatherStation extends Component {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={16}>
+              <Container style={{width: '300px' }} textAlign='center'>
+                <SearchBar />
+              </Container>
               <TodaysWeather/>
             </Grid.Column>
           </Grid.Row>
