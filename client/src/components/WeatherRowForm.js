@@ -36,10 +36,10 @@ class WeatherRowForm extends Component {
     let { rel_humidity, created_at } = this.state
     return (
       <Segment basic>
-        <Form onSubmit={this.handleSubmit}>
+        <Form onBlur={this.handleSubmit}>
           <Grid>
             <Grid.Row columns={3} >
-              <InputColumn width={6}>
+              <InputColumn width={8}>
                 <Input
                   id='rel_humidity'
                   value={rel_humidity}
@@ -51,14 +51,6 @@ class WeatherRowForm extends Component {
                   value={created_at}
                   onChange={this.handleInputChange} />
               </InputColumn>
-              <Grid.Column width={2}>
-                <Button.Group size='mini' floated='left'>
-                  <Button icon='save' />
-                  <Button
-                    icon='close'
-                    onClick={this.props.toggleForm} />
-                </Button.Group>
-              </Grid.Column>
             </Grid.Row>
           </Grid>
         </Form>
