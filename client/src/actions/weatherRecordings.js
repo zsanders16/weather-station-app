@@ -58,7 +58,7 @@ export const updateHumidityRecord = ( record ) => {
  * @param {Function} callback - Optional, Callback method
  */
 export const queryHumidityRecords = ( dates, page = 1, numPage = 5, callback = null ) => {
-  let searchStr = `page=${page}&num_page=${numPage}&` +
+  let searchStr = `page=${page}&num_pages=${numPage}&` +
     `startDate=${dates.startDate.format()}&endDate=${dates.endDate.format()}`
   return (dispatch) => {
     // TODO create a custom route for doing custom date queries

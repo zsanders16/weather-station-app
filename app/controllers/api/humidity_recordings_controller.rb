@@ -21,9 +21,9 @@ class Api::HumidityRecordingsController < ApplicationController
     records = current_user.weathers.select(:id, :rel_humidity, :created_at)
       .where('created_at >= ? AND created_at <= ?',
         params[:startDate], params[:endDate])
-    paginated = records.page(params[:page]).per_page(params[:num_pages])
+      .page(params[:page]).per_page(params[:num_pages])
     render json: {
-      records: paginated,
+      records: records,
       pagination: {
         total_pages: records.total_pages,
         current_page: records.current_page,

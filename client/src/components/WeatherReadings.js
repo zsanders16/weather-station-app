@@ -52,6 +52,7 @@ class WeatherReadings extends Component {
   }
 
   loadMoreRecords = ( page ) => {
+    debugger
     let { dataType = 'humidity' } = this.props
     let { weatherRecordings: wc, dispatch } = this.props
     if( wc[dataType] && wc[dataType].pagination.total_pages ) {
