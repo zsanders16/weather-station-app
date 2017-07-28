@@ -4,7 +4,7 @@ import { Grid, Segment } from 'semantic-ui-react'
 import WeatherRecRow from './WeatherRecRow'
 import InfiniteScroll from 'react-infinite-scroller'
 import styled from 'styled-components'
-import { humidityRecords } from '../actions/weatherRecordings'
+import { humidityRecords, clearHumidityRecords } from '../actions/weatherRecordings'
 import WeatherQueryForm from './WeatherQueryForm'
 
 /**
@@ -29,7 +29,7 @@ const Header = styled(Grid.Column)`
  * @extends {React.Component}
  */
 class WeatherReadings extends Component {
-  state = { itemsPerPage: 5, tableData: [], hasMore: true }
+  state = { itemsPerPage: 5, hasMore: true, dates: null, loader: humidityRecords }
 
   componentDidMount = () => {
     this.setState({ dataType: this.props.match.params.name })
@@ -52,22 +52,34 @@ class WeatherReadings extends Component {
   }
 
   loadMoreRecords = ( page ) => {
-    let { dataType = 'humidity' } = this.props
-    let { weatherRecordings: wc, dispatch } = this.props
+    let { dates, loader } = this.state
+    let { weatherRecordings: wc, dispatch, dataType = 'humidity' } = this.props
     if( wc[dataType] && wc[dataType].pagination.total_pages ) {
       if( page <= wc[dataType].pagination.total_pages ) {
-        dispatch(humidityRecords(page))
+        // debugger
+        dates ? dispatch(loader(dates,page)) : dispatch(loader(page))
       } else {
         this.setState({ hasMore: false })
       }
     }
   }
 
+  handleQuery = ( dates, loader ) => {
+    let { dispatch } = this.props
+    this.setState({
+      dates,
+      loader,
+    }, () => {
+      dispatch(clearHumidityRecords())
+      dispatch(loader(dates,1))
+    })
+  }
+
   render() {
     return (
       <TableArea>
         <Grid>
-          <WeatherQueryForm />
+          <WeatherQueryForm handleQuery={this.handleQuery} />
           <Grid.Row columns={3}>
             <Header width={6}>%RH</Header>
             <Header width={6}>Date</Header>

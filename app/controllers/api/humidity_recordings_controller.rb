@@ -19,11 +19,12 @@ class Api::HumidityRecordingsController < ApplicationController
   def query
     # All Dates should be a UTC timestamp
     records = current_user.weathers.select(:id, :rel_humidity, :created_at)
-      .where('created_at >= ? AND created_at <= ?',
-        params[:startDate], params[:endDate])
-    paginated = records.page(params[:page]).per_page(params[:num_pages])
+      .page(params[:page]).per_page(params[:num_pages])
+      
+      # .where('created_at >= ? AND created_at <= ?',
+      #   params[:startDate], params[:endDate])
     render json: {
-      records: paginated,
+      records: records,
       pagination: {
         total_pages: records.total_pages,
         current_page: records.current_page,
