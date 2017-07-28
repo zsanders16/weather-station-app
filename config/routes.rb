@@ -49,7 +49,7 @@
 # api_humidity_recordings_query GET      /api/humidity_recordings_query(.:format) api/humidity_recordings#query
 #              open_weather_api POST     /open_weather_api(.:format)              open_weather_api#location_forecast
 #                               GET      /*other(.:format)                        static#index
-# 
+#
 
 Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'api/auth'
@@ -80,7 +80,7 @@ Rails.application.routes.draw do
   end
 
 
-  get '/open_city_state', to: 'open_city_state#get_states'
+  get '/open_city_state', to: 'open_city_state#get_city_state', as: 'city_state'
   post '/open_weather_api', to: 'open_weather_api#location_forecast'
 
   #Do not place any routes below this one
