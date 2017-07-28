@@ -97,7 +97,9 @@ class WeatherReadings extends Component {
             loader={<div>Loading...</div>}
             useWindow={false}
             >
-            { this.displayDataSeries() }
+            <div>
+              {this.displayDataSeries()}
+            </div>
           </InfiniteScroll>
         </ScrollArea>
       </TableArea>
