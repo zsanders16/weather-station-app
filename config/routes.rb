@@ -80,7 +80,11 @@ Rails.application.routes.draw do
   end
 
 
+<<<<<<< HEAD
   get '/open_city_state', to: 'open_city_state#get_city_state', as: 'city_state'
+=======
+  get '/open_city_state', to: 'open_city_state#get_city_state'
+>>>>>>> add search bar axios call
   post '/open_weather_api', to: 'open_weather_api#location_forecast'
 
   #Do not place any routes below this one
