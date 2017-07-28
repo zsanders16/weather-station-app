@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170714121907) do
+ActiveRecord::Schema.define(version: 20170727223216) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,14 @@ ActiveRecord::Schema.define(version: 20170714121907) do
     t.float "latitude"
     t.float "longitude"
     t.index ["favorite_id"], name: "index_addresses_on_favorite_id"
+  end
+
+  create_table "cities", force: :cascade do |t|
+    t.string "city"
+    t.bigint "state_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["state_id"], name: "index_cities_on_state_id"
   end
 
   create_table "current_locations", force: :cascade do |t|
@@ -61,6 +69,13 @@ ActiveRecord::Schema.define(version: 20170714121907) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["station_id"], name: "index_historicals_on_station_id"
+  end
+
+  create_table "states", force: :cascade do |t|
+    t.string "ab"
+    t.string "state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "stations", force: :cascade do |t|
@@ -114,5 +129,6 @@ ActiveRecord::Schema.define(version: 20170714121907) do
   end
 
   add_foreign_key "addresses", "favorites"
+  add_foreign_key "cities", "states"
   add_foreign_key "current_locations", "users"
 end

@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import TodaysWeather from './TodaysWeather'
-import { Header, Segment } from 'semantic-ui-react'
+import { Header, Segment, Button, Container } from 'semantic-ui-react'
 import WeeklyForecast from './WeeklyForecast'
 import { set_lat_long } from '../actions/locations'
 import { weatherForecastWeekly } from '../actions/weatherForecasts'
 import { connect } from 'react-redux'
 import { setCityView } from '../actions/weatherForecasts'
+import { getStates } from '../actions/cityState'
+import SearchBar from './SearchBar'
 
 
 class HomePage extends Component {
+  
 
   componentDidMount() {
     this.determineIfLocation()
@@ -45,11 +48,18 @@ class HomePage extends Component {
     let { dispatch } = this.props
     setCityView( 'Current Location', dispatch)
   }
-
+  
+  searchInputChange = (e) => {
+    this.setState({searchInput: e.target.value})
+  }
+  
   render() {
     return(
       <Segment basic>
         <Header as='h2'>HomePage</Header>
+        <Container style={{width: '300px' }} textAlign='center'>
+          <SearchBar />
+        </Container>
         <TodaysWeather/>
         <WeeklyForecast />
       </Segment>

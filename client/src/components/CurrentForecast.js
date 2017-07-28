@@ -25,15 +25,21 @@ class CurrentForecast extends React.Component {
     this.selectBackgroundImage()
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.cityView !== this.props.cityView){
+      this.selectCity(nextProps.cityView)
+    }
+  }
+
   selectBackgroundImage = () => {
     let { city, view } = this.state
     let data = city.days[view]
     let background = ''
 
     if(data.isDaytime){
-      if(data.detailedForecast.includes('rain')){
+      if(data.detailedForecast.includes('rainy')){
         background = 'rainyDay'
-      }else if(data.detailedForecast.includes('snow')){
+      }else if(data.detailedForecast.includes('snowy')){
         background = 'snowyDay'
       }else if(data.detailedForecast.includes('windy')){
         background = 'windyDay'
@@ -56,20 +62,8 @@ class CurrentForecast extends React.Component {
     this.setState({imgString})
   }
 
-
-  // const BackGroundStyle = styled.div`
-  //   background: url(${this.state.imgString});
-  //   background-repeat: no-repeat;
-  //   background-position: center;
-  // `
-
-
-
-
-
-
-  selectCity = () => {
-    let { cities, cityView } = this.props
+  selectCity = (cityView = this.props.cityView) => {
+    let { cities } = this.props
     let index = 0
     cities.forEach( (city, i) => {
       if(city.city === cityView){

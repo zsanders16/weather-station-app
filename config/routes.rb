@@ -79,6 +79,8 @@ Rails.application.routes.draw do
 
   end
 
+
+  get '/open_city_state', to: 'open_city_state#get_states'
   post '/open_weather_api', to: 'open_weather_api#location_forecast'
 
   #Do not place any routes below this one

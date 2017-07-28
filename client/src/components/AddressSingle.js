@@ -44,7 +44,7 @@ class AddressSingle extends React.Component {
   render(){
     let { address } = this.props
     return(
-      <Message color='olive' key={address.id}>
+      <Message color='blue' key={address.id}>
         <Message.Header >{address.city}, {address.state} {address.zipcode}</Message.Header>
         <Segment basic>
           <Button.Group  size='tiny' style={{marginLeft: '40px'}}>

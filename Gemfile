@@ -33,6 +33,8 @@ gem 'geocoder'
 gem 'httparty'
 gem 'timezone'
 gem 'kaminari'
+gem 'city-state'
+
 
 # Will Paginate
 gem 'will_paginate'
@@ -57,3 +59,5 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+gem 'mocha', group: :test

@@ -13,6 +13,7 @@
     "react-infinite-scroller": "^1.0.14",
     "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.1",
+    "react-select": "^1.0.0-rc.5",
     "redux": "^3.7.1",
     "redux-devise-axios": "^0.0.2",
     "redux-thunk": "^2.2.0",
