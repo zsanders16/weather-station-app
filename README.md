@@ -1,24 +1,26 @@
-# README
+# Weather Station Application
+Weather Station is an application that displays realtime weather information take
+from remote sensors that were designed and developed using both arduino and
+Raspberry Pi electronics. In conjunction with the remote sensors, correlative
+weather data, actual and historical, are acquired from remote Api services such
+as NOAA. The Services are designed to provide users with the ability to correlate
+local and remote weather information using simple electronical units. 
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Weather Station is powered by:
+ - Rails
+ - React
+ - Semantic UI
+ - Postgresql
+ - Johnny-Five
+ - Raspberry Pi
 
-Things you may want to cover:
+# GitHub Repo
+* [weather-station-app] - link to actual github repo
 
-* Ruby version
+### License
+----
 
-* System dependencies
+MIT
 
-* Configuration
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+[weather-station-app]: <https://github.com/zsanders16/weather-station-app>
