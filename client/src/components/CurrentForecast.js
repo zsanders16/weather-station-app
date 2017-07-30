@@ -8,6 +8,7 @@ const BackGroundStyle = styled.div`
   background: url(${props => props.imgString});
   background-repeat: no-repeat;
   background-position: center;
+  color: white;
 `
 const DetailedForecast = styled(Segment)`
   width: 60% !important;
@@ -120,7 +121,7 @@ class CurrentForecast extends React.Component {
           </Button.Group>
         </Segment>
         <DetailedForecast basic textAlign='center'>
-          <Header as='h3'>{ data.detailedForecast }</Header>
+          <Header as='h3' style={{color: 'white'}}>{ data.detailedForecast }</Header>
         </DetailedForecast>
         <Segment basic textAlign='center'>
           <List>
@@ -138,7 +139,7 @@ class CurrentForecast extends React.Component {
                 Wind Dirrection: { data.windDirection }
             </List.Item>
             <List.Item>
-              <Icon name='bathtub' />&nbsp;
+              <Icon name='pied piper hat' />&nbsp;
               Wind Speed: { data.windSpeed }
             </List.Item>
           </List>

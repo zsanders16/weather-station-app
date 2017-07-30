@@ -33,7 +33,7 @@ class SearchBar extends React.Component {
                     search={true}
                     scrolling
                     selection
-                    placeholder='Input City Name...'
+                    placeholder='Search by City Name...'
                     onSearchChange={this.getOptions}
                     options={results}
                     onChange={this.onClick}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Segment, Message, Button, Icon, Popup, Modal } from 'semantic-ui-react'
+import { Segment, Message, Button, Icon, Popup, Modal, Grid } from 'semantic-ui-react'
 import { setCityView } from '../actions/weatherForecasts'
 import { connect } from 'react-redux'
 import { weatherForecastWeekly, clearSearchWeather  } from '../actions/weatherForecasts'
@@ -52,43 +52,44 @@ class AddressSingle extends React.Component {
     return(
       <Message color='blue' key={address.id}>
         <Message.Header >{address.city}, {address.state} {address.zipcode}</Message.Header>
-        <Segment basic>
-          <Button.Group  size='tiny' style={{marginLeft: '40px'}}>
-            <Popup
-              trigger={<Button color='blue' icon onClick={() => this.getWeather(address)}>
-                        <Icon name='world' />
-                      </Button>}
-              content='Get Weather'
-            />
+        <Grid columns={6}>
+          <Grid.Column>
+            <Button.Group size='tiny' style={{marginLeft: '40px'}}>
+              <Popup
+                trigger={<Button color='blue' icon onClick={() => this.getWeather(address)}>
+                          <Icon name='world' />
+                        </Button>}
+                content='Get Weather'
+              />
 
-            <Modal trigger={<Popup
-                            trigger={<Button color='instagram' icon onClick={() => this.handleOpen()} >
-                                      <Icon name='edit' />
-                                    </Button>}
-                            content='Edit Location'
-                            />}
-              open={this.state.modalOpen}
-              onClose={this.handleClose}
-              >
-              <Modal.Header>Edit Contact</Modal.Header>
-              <Modal.Content>
-                <Modal.Description>
-                  <AddressForm handleClose={this.handleClose} handleOpen={this.handleOpen} item={address}/>
-                </Modal.Description>
-              </Modal.Content>
-            </Modal>
+              <Modal trigger={<Popup
+                              trigger={<Button color='instagram' icon onClick={() => this.handleOpen()} >
+                                        <Icon name='edit' />
+                                      </Button>}
+                              content='Edit Location'
+                              />}
+                open={this.state.modalOpen}
+                onClose={this.handleClose}
+                >
+                <Modal.Header>Edit Contact</Modal.Header>
+                <Modal.Content>
+                  <Modal.Description>
+                    <AddressForm handleClose={this.handleClose} handleOpen={this.handleOpen} item={address}/>
+                  </Modal.Description>
+                </Modal.Content>
+              </Modal>
 
 
-            <Popup
-              trigger={<Button color='red' icon onClick={() => this.removeFavorite(address.id)}>
-                        <Icon name='trash' />
-                      </Button>}
-              content='Delete Location'
-            />
-          </Button.Group>
-        </Segment>
+              <Popup
+                trigger={<Button color='red' icon onClick={() => this.removeFavorite(address.id)}>
+                          <Icon name='trash' />
+                        </Button>}
+                content='Delete Location'
+              />
+            </Button.Group>
+          </Grid.Column>
+        </Grid>
       </Message>
-
     )
   }
 }
