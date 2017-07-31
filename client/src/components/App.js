@@ -15,7 +15,7 @@ import WeatherTables from './WeatherTables'
 import styled from 'styled-components'
 
 const AppContainer = styled.div`
-  height: 100% !important;
+  height: 120vh !important;
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#1e5799+34,1e5799+34,2989d8+50,7db9e8+59,207cca+70 */
   background: #1e5799; /* Old browsers */
   background: -moz-linear-gradient(45deg, #1e5799 34%, #1e5799 34%, #2989d8 50%, #7db9e8 59%, #207cca 70%); /* FF3.6-15 */

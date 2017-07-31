@@ -25,8 +25,10 @@ export const handleLogout = (history) => {
         history.push('/login');
       })
       .catch( res => {
-        const message = res.response.data.errors.join(',');
-        dispatch(setFlash(message, 'error'));
+        if(res.data){
+          const message = res.data.errors.join(',');
+          dispatch(setFlash(message, 'error'));
+        }
       });
     }
 }
