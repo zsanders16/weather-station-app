@@ -14,8 +14,12 @@ import Humidities from './Humidities'
 import WeatherTables from './WeatherTables'
 import styled from 'styled-components'
 
+const FooterComp = styled.div`
+  height: 200px;
+`
+
 const AppContainer = styled.div`
-  height: 120vh !important;
+  height: 230vh !important;
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#1e5799+34,1e5799+34,2989d8+50,7db9e8+59,207cca+70 */
   background: #1e5799; /* Old browsers */
   background: -moz-linear-gradient(45deg, #1e5799 34%, #1e5799 34%, #2989d8 50%, #7db9e8 59%, #207cca 70%); /* FF3.6-15 */
@@ -45,6 +49,7 @@ class App extends Component {
             <Route component={NoMatch} />
           </Switch>
         </FetchUser>
+        <FooterComp />
       </AppContainer>
     );
   }

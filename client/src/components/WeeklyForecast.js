@@ -97,7 +97,7 @@ class WeeklyForecast extends React.Component {
 
   displayLoader = () => {
     return(
-      <Segment style={ {height: "120px"}}>
+      <Segment style={ {height: "200px"}}>
         <Dimmer active>
           <Loader size='medium'>Loading Location Forecast</Loader>
         </Dimmer>

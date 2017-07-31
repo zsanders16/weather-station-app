@@ -190,7 +190,7 @@ class WeatherStation extends Component {
   showCompare = () => {
     let { byTemp, series } = this.state
     return(
-      <Grid.Row >
+      <Grid.Row columns={2} >
         <ForecastChart series={series} byTemp={byTemp} />
         <Grid.Column width={4}>
           <Segment textAlign='center'>
@@ -206,7 +206,7 @@ class WeatherStation extends Component {
   render(){
     let { view } = this.state
     return (
-      <Container>
+      <Container >
         <Grid>
           <Grid.Row >
             <Grid.Column width={16}>
