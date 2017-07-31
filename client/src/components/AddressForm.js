@@ -35,7 +35,6 @@ class AddressForm extends Component {
 
   onSubmit = () => {
     let { dispatch, item, handleClose } = this.props
-    debugger
     if( !item){
       dispatch(addressCreate(this.state))
       this.setState({...this.defaults })

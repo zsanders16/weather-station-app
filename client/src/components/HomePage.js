@@ -55,14 +55,17 @@ class HomePage extends Component {
   
   render() {
     return(
-      <Segment basic>
-        <Header as='h2'>HomePage</Header>
+      <Container basic>
         <Container style={{width: '300px' }} textAlign='center'>
           <SearchBar />
         </Container>
-        <TodaysWeather/>
-        <WeeklyForecast />
-      </Segment>
+        <Segment basic>
+          <TodaysWeather style={{margin: '20px'}}/>
+        </Segment>
+        <Segment basic>
+          <WeeklyForecast />
+        </Segment>
+      </Container>
     )
   }
 }

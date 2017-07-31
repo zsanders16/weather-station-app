@@ -70,11 +70,10 @@ export const addressUpdate = (address, id) => {
 
 export const addressDelete = (address_id) => {
   return (dispatch) => {
-    debugger
     axios.delete(`/api/addresses/${address_id}`)
       .then( resp => {
         if( resp.status === 204 ) {
-          dispatch({ type: ADDRESS_DELETE, address_id, headers: resp.headers })
+          dispatch({ type: ADDRESS_DELETE, address_id: address_id, headers: resp.headers })
           dispatch(setFlash('Address deleted!', 'success'))
         }
       })
