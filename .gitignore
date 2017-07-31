@@ -19,5 +19,7 @@
 /arduino/node_modules
 /arduino/src/node_modules
 /client/node_modules
+/arduino/db_zack
+/arduino/db
 
 .env
